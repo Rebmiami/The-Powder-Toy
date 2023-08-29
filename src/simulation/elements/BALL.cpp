@@ -71,7 +71,7 @@ static int update(UPDATE_FUNC_ARGS)
 
 static int graphics(GRAPHICS_FUNC_ARGS)
 {
-	//ren->BlendEllipse((int)(cpart->x), (int)(cpart->y), 3, 3, 210, 4, 45, 255);
-	//ren->BlendFilledEllipse((int)(cpart->x), (int)(cpart->y), 2, 2, 210, 4, 45, 200);
+	ren->BlendEllipse(Vec2((int)(cpart->x), (int)(cpart->y)),Vec2(3,3), 0xd2042d_rgb .WithAlpha(0xFF));
+	ren->BlendFilledEllipse(Vec2((int)(cpart->x), (int)(cpart->y)),Vec2(2, 2), 0xd2042d_rgb.WithAlpha(0xDD));
 	return 0;
 }

@@ -136,8 +136,8 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 {
 	if (cpart->tmp == 2 && cpart->temp >= 275.15f)// Infinity Seeds.
 	{
-		//ren->BlendEllipse((int)(cpart->x+1), (int)(cpart->y),2,2,0x964B00_rgb);
-	}                            
+	 ren->BlendFilledEllipse(Vec2((int)(cpart->x+1.0f),(int)(cpart->y)),Vec2(2,2),0x964B00_rgb.WithAlpha(0xFF));
+	}                    
 	else if (cpart->temp < 275.15f) //Cold seeds.
 	{
 		*colr = 30;

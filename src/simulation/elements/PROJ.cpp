@@ -101,7 +101,7 @@ static int graphics(GRAPHICS_FUNC_ARGS) //Flare when activated.
 {
 	if (cpart->life == 10)
 	{
-		//ren->BlendEllipse((int)(cpart->x), (int)(cpart->y), 4, 4, 255, 100, 0, 255);
+		ren->BlendEllipse(Vec2((int)(cpart->x), (int)(cpart->y)),Vec2(4, 4),0xff6400_rgb .WithAlpha(0xFF));
 		*pixel_mode |= PMODE_LFLARE;
 	}
 	return 0;

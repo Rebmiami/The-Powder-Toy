@@ -80,7 +80,6 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 		*colr = (int)(sin(frequency * cpart->tmp + 4) * 127 + 150);
 		*colg = (int)(sin(frequency * cpart->tmp + 8) * 127 + 150);
 		*colb = (int)(sin(frequency * cpart->tmp + 5) * 127 + 150);
-		//ren->DrawLine((int)(cpart->x), (int)(cpart->y), sim->rng.between((int)(cpart->x - 6.0f), (int)(cpart->x + 6.0f)), sim->rng.between((int)(cpart->y - 6.0f), (int)(cpart->y + 6.0f)), *colr, *colg, *colb, 255);
 	}
 	if (cpart->temp < 373.15f)
 	{

@@ -344,7 +344,7 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 			mr = 250;
 			mg = 50;
 			mb = 50;
-			//ren->BlendText((int)(cpart->x + 9.0f), (int)(cpart->y - 17.0f), "!", 255, 0, 0, 255);
+		//ren->BlendText((int)(cpart->x + 9.0f), (int)(cpart->y - 17.0f), "!", 255, 0, 0, 255);
 	}
 	if (cpart->tmp > 0 && cpart->tmp <5)
 	{
