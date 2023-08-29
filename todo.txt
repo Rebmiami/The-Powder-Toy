@@ -1,0 +1,11 @@
+Elements done, minor fixes left ( Plus SPRK and BTRY etc)
+Scripts : Done
+Votes
+Comments
+
+Make all settings save and load on startup
+Slowmotion mode
+Hud and minor interface stuff
+Merge commits from master branch before final release
+update URS to support new versions
+Update icon and other github release process parameters.
