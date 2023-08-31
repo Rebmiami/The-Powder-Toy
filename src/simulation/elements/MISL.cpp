@@ -155,31 +155,31 @@ static int graphics(GRAPHICS_FUNC_ARGS) //Flare when activated.
 
 	if (cpart->tmp4 > 0) // pointer
 	{
-		//ren->DrawRect(cpart->tmp - 2, cpart->tmp2, 5, 1, cr, cg, cb, 255);
-		//ren->DrawRect(cpart->tmp, cpart->tmp2 - 2, 1, 5, cr, cg, cb, 255);
+		ren->DrawRect(RectSized(Vec2((int)(cpart->tmp - 2), (int)(cpart->tmp2)),Vec2(5, 1)), RGB<uint8_t>(cr, cg, cb));
+		ren->DrawRect(RectSized(Vec2(cpart->tmp, cpart->tmp2 - 2),Vec2(1, 5)), RGB<uint8_t>(cr, cg, cb));
 	}
 	//Body
 	if (cpart->life == 0)
 	{
-		//ren->draw_line((int)(cpart->x), (int)(cpart->y - 1), (int)(cpart->x), (int)(cpart->y - 4), cr, cg, cb, 255);
+		ren->DrawLine(Vec2((int)(cpart->x), (int)(cpart->y - 1)),Vec2((int)(cpart->x), (int)(cpart->y - 4)), RGB<uint8_t>(cr, cg, cb));
 	}
 	else
 	{
 		if (cpart->vy < 0)
 		{
-			//ren->DrawLine((int)(cpart->x), (int)(cpart->y - 1), (int)(cpart->x), (int)(cpart->y - 4), cr, cg, cb, 255);
+			ren->DrawLine(Vec2((int)(cpart->x), (int)(cpart->y - 1)),Vec2((int)(cpart->x), (int)(cpart->y - 4)), RGB<uint8_t>(cr, cg, cb));
 		}
 		else if (cpart->vy > 0)
 		{
-			//ren->DrawLine((int)(cpart->x), (int)(cpart->y - 1), (int)(cpart->x), (int)(cpart->y + 4), cr, cg, cb, 255);
+			ren->DrawLine(Vec2((int)(cpart->x), (int)(cpart->y - 1)),Vec2((int)(cpart->x), (int)(cpart->y + 4)), RGB<uint8_t>(cr, cg, cb));
 		}
 		if (cpart->vx < 0)
 		{
-			//ren->DrawLine((int)(cpart->x+1), (int)(cpart->y), (int)(cpart->x + 4),(int)(cpart->y), cr, cg, cb, 255);
+			ren->DrawLine(Vec2((int)(cpart->x+1), (int)(cpart->y)), Vec2((int)(cpart->x + 4),(int)(cpart->y)), RGB<uint8_t>(cr, cg, cb));
 		}
 		else if (cpart->vx > 0)
 		{
-			//ren->DrawLine((int)(cpart->x - 1), (int)(cpart->y), (int)(cpart->x - 4), (int)(cpart->y), cr, cg, cb, 255);
+			ren->DrawLine(Vec2((int)(cpart->x - 1), (int)(cpart->y)), Vec2((int)(cpart->x - 4), (int)(cpart->y)), RGB<uint8_t>(cr, cg, cb));
 		}
 	}
 	return 0;
@@ -187,6 +187,6 @@ static int graphics(GRAPHICS_FUNC_ARGS) //Flare when activated.
 
 static void create(ELEMENT_CREATE_FUNC_ARGS) //Default range and ctype settings.
 {
-	//sim->parts[i].tmp = sim->rng.between(1, 610);
-	//sim->parts[i].tmp2 = sim->rng.between(1, 380);
+	sim->parts[i].tmp = sim->rng.between(1, 610);
+	sim->parts[i].tmp2 = sim->rng.between(1, 380);
 }

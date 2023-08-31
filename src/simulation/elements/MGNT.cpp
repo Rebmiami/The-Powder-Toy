@@ -193,7 +193,7 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	{
 		if (ren->rng.chance(1, 3))
 		{
-			//ren->drawcircle((int)(cpart->x), (int)(cpart->y), cpart->life, cpart->life, 40 + cpart->tmp * 70, 0, 40 + cpart->tmp2 * 70, 40);
+			ren->BlendEllipse(Vec2((int)(cpart->x), (int)(cpart->y)), Vec2(cpart->life, cpart->life), RGBA<uint8_t>(40 + cpart->tmp * 70, 0, 40 + cpart->tmp2 * 70, 40));
 		}
 	}
 	return 0;

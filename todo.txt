@@ -1,6 +1,6 @@
 Elements done, minor fixes left
 Scripts : Done
-Votes
+Votes: Done
 Comments
 
 Make all settings save and load on startup
