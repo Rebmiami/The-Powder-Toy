@@ -118,14 +118,14 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	*colb = ((cpart->dcolour) & 0xFF);
 	int angle = 0;
 	angle = cpart->life/13;
-	//ren->drawcircle((int)(cpart->x), (int)(cpart->y), cpart->tmp + 3, cpart->tmp + 3, *colr, *colg, *colb, 255);
-	//ren->drawcircle((int)(cpart->x), (int)(cpart->y), cpart->tmp + 4, cpart->tmp + 4, 60, 60, 60, 255);
-	//ren->drawcircle((int)(cpart->x), (int)(cpart->y), cpart->tmp + 5, cpart->tmp + 5, 60, 60, 60, 255);
-	//ren->draw_line((int)(cpart->x), (int)(cpart->y), (int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13)), *colr, *colg, *colb, 255);
-	//ren->draw_line((int)(cpart->x), (int)(cpart->y), (int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13 + 10)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13 + 10)), *colr, *colg, *colb, 255);
-	//ren->draw_line((int)(cpart->x), (int)(cpart->y), (int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13 + 20)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13 + 20)), *colr, *colg, *colb, 255);
-	//ren->draw_line((int)(cpart->x), (int)(cpart->y), (int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13 + 30)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13 + 30)), *colr, *colg, *colb, 255);
-	//ren->draw_line((int)(cpart->x), (int)(cpart->y), (int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13 + 40)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13 + 40)), *colr, *colg, *colb, 255);
+	ren->BlendEllipse(Vec2((int)(cpart->x), (int)(cpart->y)),Vec2(cpart->tmp + 3, cpart->tmp + 3), RGBA<uint8_t>(*colr, *colg, *colb, 255));
+	ren->BlendEllipse(Vec2((int)(cpart->x), (int)(cpart->y)),Vec2(cpart->tmp + 4, cpart->tmp + 4),RGBA<uint8_t>(60, 60, 60, 255));
+	ren->BlendEllipse(Vec2((int)(cpart->x), (int)(cpart->y)),Vec2(cpart->tmp + 5, cpart->tmp + 5),RGBA<uint8_t>(60, 60, 60, 255));
+	ren->DrawLine(Vec2((int)(cpart->x), (int)(cpart->y)), Vec2((int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13))), RGB<uint8_t>(*colr, *colg, *colb));
+	ren->DrawLine(Vec2((int)(cpart->x), (int)(cpart->y)), Vec2((int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13 + 10)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13 + 10))), RGB<uint8_t>(*colr, *colg, *colb));
+	ren->DrawLine(Vec2((int)(cpart->x), (int)(cpart->y)), Vec2((int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13 + 20)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13 + 20))), RGB<uint8_t>(*colr, *colg, *colb));
+	ren->DrawLine(Vec2((int)(cpart->x), (int)(cpart->y)), Vec2((int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13 + 30)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13 + 30))),RGB<uint8_t>( *colr, *colg, *colb));
+	ren->DrawLine(Vec2((int)(cpart->x), (int)(cpart->y)), Vec2((int)(cpart->x + cpart->tmp * cos(angle * cpart->life / 13 + 40)), (int)(cpart->y + cpart->tmp * sin(angle * cpart->life / 13 + 40))), RGB<uint8_t>(*colr, *colg, *colb));
 	return 0;
 }
 
