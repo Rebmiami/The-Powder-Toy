@@ -2483,7 +2483,7 @@ void GameView::OnDraw()
 
 		int textWidth = Graphics::TextSize(fpsInfo.Build()).X - 1;
 		int alpha = 255-introText*5;
-		g->BlendFilledRect(RectSized(Vec2{6,3}, Vec2{ textWidth+6, 15 }), RGBA<uint8_t>(40, 40, 40,120));
+		g->BlendFilledRect(RectSized(Vec2{6,3}, Vec2{ textWidth+6, 15 }), RGBA<uint8_t>(40, 40, 40,125));
 		g->BlendText({8,7}, fpsInfo.Build(), RGBA<uint8_t>(225, 225, 225,250));
 	}
 
