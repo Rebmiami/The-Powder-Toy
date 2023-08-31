@@ -1,5 +1,13 @@
-Comments
+Planned
+Heat absorber element
+realistic mode
+Quick options
+
+pending
+Comments and time stamps
 Make all settings save and load on startup
 Slowmotion mode
+
+Check before release
 Hud and minor interface stuff
 Other github release process parameters.

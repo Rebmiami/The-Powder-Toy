@@ -181,7 +181,7 @@ option(
 option(
 	'app_id',
 	type: 'string',
-	value: 'value: 'io.github.cracker1000.mod',
+	value: 'io.github.cracker1000.mod',
 	description: 'App ID, a D-Bus well-known name, used for desktop integration, change if you work on a mod'
 )
 option(
