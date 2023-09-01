@@ -4,6 +4,7 @@ Slowmotion mode
 Option to disable extra info for crosshair
 
 pending
+Fix reset, message_box, Confirm uses
 Comments and time stamps
 
 Check before release
