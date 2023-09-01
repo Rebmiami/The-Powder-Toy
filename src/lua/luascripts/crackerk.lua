@@ -1,7 +1,5 @@
 --Cracker1000 mod interface script--
-local passreal = "12345678"
 local crackversion = 55.0 --Next version: 55.1
-local passreal2 = "DMND"
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -273,54 +271,6 @@ gfx.drawText(16,310,"Signal lost",255,55,55,255)
 end
 end 
 --PLNE END
---Default theme for initial launch and resets
-if MANAGER.getsetting("CRK", "pass") == "1" then
-local passmenu = Window:new(200,150, 200, 100)
-local passok = Button:new(110,75,80,20,"Enter", "Hide.")
-local passok2 = Button:new(10,75,80,20,"Forgot", "Enter Elem.")
-local passok4 = Button:new(12,105,175,15,"Message here if problem persists", "Open Mod thread")
-local passok3 = Button:new(178,1,20,20,"X", "Close.")
-local passtime = Textbox:new(70, 30, 55, 20, '', 'Password..')
-local par,pag,pab = 80,250,0
-local passmesg = "Enter password to continue."
-function passglit()
-graphics.drawText(230,160,passmesg, par,pag,pab,255)
-ui.showWindow(passmenu)
-end
-
-passmenu:onDraw(passglit)
-passmenu:addComponent(passok)
-passmenu:addComponent(passok2)
-passmenu:addComponent(passok3)
-passmenu:addComponent(passtime)
-tpt.register_step(passglit)
-
-passok:action(function(sender)
-if passtime:text() == MANAGER.getsetting("CRK", "passreal") or passtime:text() == "xkcd-xyza" or passtime:text() == MANAGER.getsetting("CRK", "passreal2")   then
-tpt.unregister_step(passglit)
-ui.closeWindow(passmenu)
-else 
-par,pag,pab = 255,0,0
-passmesg = "     Wrong, try again!"
-passtime:text("")
-end
-passmenu:removeComponent(passok4)
-end)
-
-passok2:action(function(sender)
-passmenu:addComponent(passok4)
-par,pag,pab = 80,250,0
-passmesg = "Enter your favourite element"
-passtime:text("")
-end)
-passok3:action(function(sender)
-tpt.unregister_step(passglit)
-os.exit()
-end)
-passok4:action(function(sender)
-platform.openLink("https://powdertoy.co.uk/Discussions/Thread/View.html?Thread=23279")
-end)
-end
 
 local toggle = Button:new(419,408,50,15, "Cr-Menu", "Open Mod Settings.")
 local newmenu = Window:new(-15,-15, 609, 255)
@@ -368,7 +318,7 @@ local edito = Button:new(396,124,80,25, "Editor", "Basic element editor.")
 
 local perfm = Button:new(396,156,80,25, "Performance", "For lower spec systems.")
 
-local passbut = Button:new(396,188,80,25, "Password", "Secure password protection.")
+local passbut = Button:new(396,188,80,25, "Quick Opt.", "Quick options.")
 
 local reminder = Button:new(396,220,80,25, "Notifications", "Maticzpl's notification stuff")
 local reminderhelp = Button:new(506,224,15,15, "?", "Help")
@@ -379,7 +329,6 @@ local hide= Button:new(578,5,25,25, "X", "Hide.")
 
 --Varoius Variables
 local borderval = "0"
-local rulval = "1"
 local timermp = 0
 local filterval = 0
 local perfmv = "1"
@@ -391,7 +340,6 @@ local autoval = "1"
 local hidval = "1"
 local shrtv = "1"
 local nmodv = "0"
-local invtoolv = "1"
 local focustime = 190
 
 function clearm()
@@ -739,102 +687,6 @@ event.unregister(event.mousedown,strtelem)
 event.register(event.mousedown,strtelem)
 end)
 
-passbut:action(function(sender)
-clearsb()
-if MANAGER.getsetting("CRK", "passreal") == nil then
-MANAGER.savesetting("CRK","passreal","12345678")
-end
-
-if MANAGER.getsetting("CRK", "passreal2") == nil then
-MANAGER.savesetting("CRK","passreal2","DMND")
-end
-
-local passwordstatus = 0
-function drawpassstat()
-if MANAGER.getsetting("CRK", "pass") == "1" then
-gfx.drawText(43,132,"Status: Running",105,255,105,255)
-else
-gfx.drawText(43,132,"Status: Turned Off",255,105,105,255)
-end
-end
-local passmen = Window:new(-15,-15, 610, 255)
-local pasmenmsg = Label:new(240,5,120, 10,"Welcome to the Password Manager V2.0")
-local pasmenmsg2 = Label:new(165,130,120, 10,"Current Password: "..MANAGER.getsetting("CRK","passreal"))
-local pasmenmsg6 = Label:new(365,130,120, 10,"Favorite element: "..MANAGER.getsetting("CRK","passreal2"))
-local pasmenmsg3 = Label:new(308,40,120, 10,"Can be upto 8 character long, case sensitive, blank spaces also count.")
-local pasmenmsg5 = Label:new(330,80,120, 10,"Security Question in case you forget password, favorite TPT element, eg. DMND.")
-local pasmenmsg7 = Label:new(270,240,120, 10,"Password/ Fav. element can't be blank!")
-local doned2 = Button:new(110,31,80,30, "Set password", "Save")
-local doned3 = Button:new(525,237,80,15, "Close", "Close")
-local doned4 = Button:new(40,155,90,20, "Password ON", "Save ON")
-local doned5 = Button:new(40,185,90,20, "Password OFF", "Save OFF")
-local doned7 = Button:new(40,215,90,20, "Reset", "Reset")
-local doned6 = Button:new(110,71,80,30, "Set Element", "Save")
-local passtime2 = Textbox:new(40, 30, 55, 30, '', 'Password..')
-local passtime3 = Textbox:new(40, 70, 35, 30, '', 'Elem.')
-
-ui.showWindow(passmen)
-passmen:addComponent(pasmenmsg)
-passmen:addComponent(pasmenmsg2)
-passmen:addComponent(pasmenmsg3)
-passmen:addComponent(pasmenmsg5)
-passmen:addComponent(pasmenmsg6)
-passmen:addComponent(doned2)
-passmen:addComponent(doned3)
-passmen:addComponent(doned4)
-passmen:addComponent(doned5)
-passmen:addComponent(doned6)
-passmen:addComponent(doned7)
-passmen:addComponent(passtime2)
-passmen:addComponent(passtime3)
-
-passmen:onDraw(drawpassstat)
-doned2 :action(function(sender)
-passmen:removeComponent(pasmenmsg7)
-if passtime2:text() == "" then
-passmen:addComponent(pasmenmsg7)
-else
-MANAGER.savesetting("CRK", "passreal",passtime2:text())
-pasmenmsg2:text("Current Password: "..MANAGER.getsetting("CRK","passreal"))
-end
-end)
-doned3 :action(function(sender)
-ui.closeWindow(passmen)
-end)
-
-doned6 :action(function(sender)
-passmen:removeComponent(pasmenmsg7)
-if passtime3:text() == "" then
-passmen:addComponent(pasmenmsg7)
-else
-MANAGER.savesetting("CRK", "passreal2",passtime3:text())
-pasmenmsg6:text("Favorite element: "..MANAGER.getsetting("CRK","passreal2"))
-end
-end)
-
-doned7 :action(function(sender)
-MANAGER.savesetting("CRK", "pass","0")
-MANAGER.savesetting("CRK", "passreal","12345678")
-MANAGER.savesetting("CRK", "passreal2","DMND")
-pasmenmsg2:text("Current Password: "..MANAGER.getsetting("CRK","passreal"))
-pasmenmsg6:text("Favorite element: "..MANAGER.getsetting("CRK","passreal2"))
-passtime2:text("")
-passtime3:text("")
-end)
-
-doned3 :action(function(sender)
-ui.closeWindow(passmen)
-end)
-
-doned4 :action(function(sender)
-MANAGER.savesetting("CRK", "pass","1")
-end)
-
-doned5 :action(function(sender)
-MANAGER.savesetting("CRK", "pass","0")
-end)
-end)
-
 function inverttool()
 local selc = tpt.selectedl
 if selc == "DEFAULT_TOOL_HEAT" then
@@ -868,14 +720,14 @@ end
 
 shrtpre:action(function(sender)
 clearsb()
-if invtoolv == "1" then
+if MANAGER.getsetting("CRK","invtoolv") == "0" then
 print("Invert-Tool: Automatically selects the opposite tool")
 event.unregister(event.tick,inverttool)
 event.register(event.tick,inverttool)
-invtoolv = "0"
-elseif invtoolv == "0" then
+MANAGER.savesetting("CRK","invtoolv","1")
+elseif MANAGER.getsetting("CRK","invtoolv") == "1" then
 event.unregister(event.tick,inverttool)
-invtoolv = "1"
+MANAGER.savesetting("CRK","invtoolv","0")
 end
 end)
 
@@ -1927,14 +1779,13 @@ tpt.el.rubr.menu=1
 elem.property(PLNE, "MenuVisible", 1)
 elem.property(MISLT, "MenuVisible", 1)
 end
-local modelemval = "0"
 bg:action(function(sender)
-if modelemval == "0" then
+if MANAGER.getsetting("CRK","modelemval") == "1" then
+MANAGER.savesetting("CRK","modelemval","0")
 hidemodelem()
-modelemval = "1"
-else
+elseif MANAGER.getsetting("CRK","modelemval") == "0" then
+MANAGER.savesetting("CRK","modelemval","1")
 showmodelem()
-modelemval = "0"
 end
 clearsb()
 end)
@@ -2499,10 +2350,25 @@ if MANAGER.getsetting("CRK","loadelem") == "1" then
 tpt.selectedl = MANAGER.getsetting("CRK","primaryele")
 tpt.selectedr = MANAGER.getsetting("CRK","secondaryele")
 end
+if MANAGER.getsetting("CRK","modelemval") == "0" then
+hidemodelem()
+end
+
+if MANAGER.getsetting("CRK","invtoolv") == "1" then
+event.unregister(event.tick,inverttool)
+event.register(event.tick,inverttool)
+end
+
+if MANAGER.getsetting("CRK","rulval") == "1" then
+tpt.setdebug(0X4)
+end
 
 if MANAGER.getsetting("CRK","al") == nil then --Defaults to prevent errors in script
 MANAGER.savesetting("CRK","loadelem","0")
 MANAGER.savesetting("CRK", "pass","0")
+MANAGER.savesetting("CRK", "rulval","0")
+MANAGER.savesetting("CRK", "invtoolv","0")
+MANAGER.savesetting("CRK", "modelemval","1")
 MANAGER.savesetting("CRK","notifval","1")
 MANAGER.savesetting("CRK", "fancurs","0")
 MANAGER.savesetting("CRK","savergb","0")
@@ -2534,13 +2400,13 @@ startupcheck()
 
 Ruler:action(function(sender)
 clearsb()
-if rulval == "1" then
-rulval = "0"
+if MANAGER.getsetting("CRK","rulval") == "0" then
+MANAGER.savesetting("CRK", "rulval","1")
 tpt.setdebug(0X4)
 print("Use shift + Drag to use Ruler")
-elseif rulval == "0" then
+elseif MANAGER.getsetting("CRK","rulval") == "1" then
 tpt.setdebug(0X0)
-rulval = "1"
+MANAGER.savesetting("CRK", "rulval","0")
 end
 end)
 
@@ -2650,7 +2516,7 @@ gfx.drawText(98,69,"ON",105,255,105,255)
 else
 gfx.drawText(98,69,"OFF",255,105,105,255)
 end
-if rulval == "0" then --Ruler
+if MANAGER.getsetting("CRK","rulval") == "1" then --Ruler
 gfx.drawText(98,165,"ON",105,255,105,255)
 else
 gfx.drawText(98,165,"OFF",255,105,105,255)
@@ -2665,7 +2531,7 @@ gfx.drawText(291,69,"ON",105,255,105,255)
 else
 gfx.drawText(291,69,"OFF",255,105,105,255)
 end
-if modelemval == "0" then --Mod elements
+if MANAGER.getsetting("CRK", "modelemval") == "1" then --Mod elements
 gfx.drawText(291,101,"ON",105,255,105,255)
 else
 gfx.drawText(291,101,"OFF",255,105,105,255)
@@ -2685,7 +2551,7 @@ gfx.drawText(484,165,"ON",105,255,105,255)
 else
 gfx.drawText(484,165,"OFF",255,105,105,255)
 end
-if MANAGER.getsetting("CRK", "pass") == "1" then --Password
+if MANAGER.getsetting("CRK", "pass") == "1" then --Password/ Now quick settings
 gfx.drawText(484,197,"ON",105,255,105,255)
 else
 gfx.drawText(484,197,"OFF",255,105,105,255)
@@ -2702,7 +2568,7 @@ else
 gfx.drawText(484,37,"OFF",255,105,105,255)
 end
 --Reserved
-if invtoolv == "0" then --Invert-tool
+if MANAGER.getsetting("CRK","invtoolv") == "1" then --Invert-tool
 gfx.drawText(484,101,"ON",105,255,105,255)
 else
 gfx.drawText(484,101,"OFF",255,105,105,255)
@@ -2711,6 +2577,14 @@ end
 
 hide:action(function(sender)
 close()
+end)
+--Quick settings
+passbut:action(function(sender)
+if MANAGER.getsetting("CRK", "pass") == "1" then --Now quick settings
+MANAGER.savesetting("CRK", "pass","0")
+elseif MANAGER.getsetting("CRK", "pass") == "0" then 
+MANAGER.savesetting("CRK", "pass","1")
+end
 end)
 
 function open()

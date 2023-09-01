@@ -1,13 +1,10 @@
 Planned
-Heat absorber element
-realistic mode
 Quick options
 Slowmotion mode
 Option to disable extra info for crosshair
 
 pending
 Comments and time stamps
-Make all settings save and load on startup
 
 Check before release
 changelog and other links
