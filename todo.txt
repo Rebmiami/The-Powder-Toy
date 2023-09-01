@@ -2,12 +2,13 @@ Planned
 Heat absorber element
 realistic mode
 Quick options
+Slowmotion mode
+Option to disable extra info for crosshair
 
 pending
 Comments and time stamps
 Make all settings save and load on startup
-Slowmotion mode
 
 Check before release
-Hud and minor interface stuff
+changelog and other links
 Other github release process parameters.

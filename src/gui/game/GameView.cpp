@@ -281,7 +281,7 @@ GameView::GameView():
 	currentX+=16;
 	AddComponent(downVoteButton);
 
-	tagSimulationButton = new ui::Button(ui::Point(currentX, Size.Y-16), ui::Point(227, 15), "[no tags set]", "Add simulation tags");
+	tagSimulationButton = new ui::Button(ui::Point(currentX, Size.Y-16), ui::Point(176, 15), "[no tags set]", "Add simulation tags");
 	tagSimulationButton->Appearance.HorizontalAlign = ui::Appearance::AlignLeft;
 	tagSimulationButton->SetIcon(IconTag);
 	//currentX+=252;
@@ -2414,9 +2414,8 @@ void GameView::OnDraw()
 		{
 			StringBuilder sampleInfo;
 			sampleInfo << Format::Precision(2);
-
+			sampleInfo << "X:" << sample.PositionX << ", Y:" << sample.PositionY;
 			if (type)
-			sampleInfo << "X:" << sample.PositionX << " Y:" << sample.PositionY;
 			sampleInfo << Format::Precision(1);
 					if (type)
 					{
