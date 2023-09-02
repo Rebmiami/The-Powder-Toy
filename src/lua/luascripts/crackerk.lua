@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 55.0 --Next version: 55.1
+local crackversion = 58.0 --Next version: 55.1
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -280,6 +280,7 @@ local deletesparkButton =  Button:new(10,28,80,25,"Focus Mode", "shows UI relate
 local FPS = Button:new(10,60,80,25, "Frame limiter", "Turns the frame limiter on/off.")
 
 local reset = Button:new(10,92,80,25,"Reset", "Reset.")
+local resethelp = Button:new(100,96,15,15, "?", "Help")
 
 local info = Button:new(10,124,80,25,"Stack tools", "Usefull for subframe.")
 
@@ -322,7 +323,6 @@ local passbut = Button:new(396,188,80,25, "Quick Opt.", "Quick options.")
 
 local reminder = Button:new(396,220,80,25, "Notifications", "Maticzpl's notification stuff")
 local reminderhelp = Button:new(506,224,15,15, "?", "Help")
-
 local upmp = Button:new(396,28,80,25, "Startup Elem.", "Update multiplayer")
 
 local hide= Button:new(578,5,25,25, "X", "Hide.")
@@ -366,6 +366,7 @@ newmenu:removeComponent(perfm)
 newmenu:removeComponent(passbut)
 newmenu:removeComponent(upmp)
 newmenu:removeComponent(reminderhelp)
+newmenu:removeComponent(resethelp)
 end
 
 function clearsb()
@@ -480,7 +481,7 @@ end
 end
 if clickcheck ~= 0 then --Changelogs
 if tpt.mousex > 299 and tpt.mousex < 386 and tpt.mousey > 284 and tpt.mousey < 296 then
-tpt.confirm("URS updater changelog. Your version: v."..crackversion,crdata, "Done reading")
+interface.beginMessageBox("URS updater changelog. Your version: v."..crackversion,crdata, "Done reading")
 end
 return false
 end
@@ -1105,7 +1106,10 @@ end)
 
 reminderhelp:action(function(sender)
 close()
-tpt.message_box(" Notification feature help", "Turning it on will notify you when:\n*There's a new vote or comment on your save\n*When your save reaches/ leaves FP.\n\nRefreshes every 5 minutes and works for first 60 saves (by votes + by dates).\n\nShows a red cross if something goes wrong.\n\nCredit: @Maticzpl")
+interface.beginMessageBox(" Notification feature help", "Turning it on will notify you when:\n*There's a new vote or comment on your save\n*When your save reaches/ leaves FP.\n\nRefreshes every 5 minutes and works for first 60 saves (by votes + by dates).\n\nShows a red cross if something goes wrong.\n\nCredit: @Maticzpl")
+end)
+resethelp:action(function(sender)
+interface.beginMessageBox(" Mod resetter","Resetting the mod changes the mod settings back to their default values and disables all the lua scripts. Saves and other important data will remain intact.")
 end)
 
 function cbrightness()
@@ -1962,12 +1966,11 @@ local mp10 = Button:new(420,92,45,25,"Split", "Half of the theme is inverted")
 local mpop = Button:new(530,347,75,20,"Done", "Close")
 
 local bg1 = Button:new(24,300,60,25,"Filters", "Toggle filters")
-local bog1 = Button:new(24,333,60,25,"Cross-Hair", "Draw Cross-hair")
+local bog1 = Button:new(24,333,60,25,"Update Mod", "Triggers the forced update mechanism.")
 local bogb1 = Button:new(124,333,60,25,"Borders", "Draw Borders")
 
 local jkey = Button:new(124,300,60,25,"J-Shortcut", "Toggle Shortcut")
 local neonmode = Button:new(224,300,60,25,"Neon Mode", "Toggle fire strength")
-local Forceup = Button:new(324,300,70,25,"Force Update", "Triggers the forced update mechanism.")
 local bg7 = Button:new(224,333,60,25,"Developer", "Disable inbuilt scripts")
 
 local baropa =  Button:new(24,250,35,20,"Short", "Short and moving")
@@ -2043,11 +2046,6 @@ if MANAGER.getsetting("CRK","split") == "1" then
 gfx.drawRect(420,92,47,27,32,216,255,255)
 end
 
-if MANAGER.getsetting("CRK", "fancurs") == "1" then
-graphics.drawText(90,342, "ON",105,255,105,255)
-else
-graphics.drawText(90,342, "OFF",255,105,105,255)
-end
 if filterval == 1 then
 graphics.drawText(90,309, "ON",105,255,105,255)
 else
@@ -2108,7 +2106,6 @@ newmenuth:addComponent(bog1)
 newmenuth:addComponent(bogb1)
 newmenuth:addComponent(jkey)
 newmenuth:addComponent(neonmode)
-newmenuth:addComponent(Forceup)
 
 newmenuth:addComponent(rSlider)
 newmenuth:addComponent(gSlider)
@@ -2151,11 +2148,11 @@ gSlider:value(MANAGER.getsetting("CRK", "ag"))
 bSlider:value(MANAGER.getsetting("CRK", "ab"))
 
 bog1:action(function(sender)
-if MANAGER.getsetting("CRK", "fancurs") == "0" then 
-MANAGER.savesetting("CRK", "fancurs","1") 
-elseif MANAGER.getsetting("CRK", "fancurs") == "1" then 
-MANAGER.savesetting("CRK", "fancurs","0") 
-end
+ui.closeWindow(newmenuth)
+ui.closeWindow(newmenu)
+updatestatus = 0
+print("Force updating the mod, click the update notification below.")
+runupdater()
 end)
 
 bogb1:action(function(sender)
@@ -2183,14 +2180,6 @@ elseif nmodv == "1" then
 nmodv = "0"
 tpt.setfire(1)
 end
-end)
-
-Forceup:action(function(sender)
-ui.closeWindow(newmenuth)
-ui.closeWindow(newmenu)
-updatestatus = 0
-print("Force updating the mod, click the update notification below.")
-runupdater()
 end)
 
 mpop:action(function(sender)
@@ -2337,8 +2326,76 @@ end)
 baropd:action(function(sender)
 MANAGER.savesetting("CRK","barval","4")
 end)
-
 end)
+
+--Quick settings
+local quickmenval, selectedelem, switchval = 0, tpt.selectedl,0
+local function quickset()
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
+gfx.fillCircle(5,175,8,8,105,255,105,200)
+gfx.drawText(16,173,"Quick options",105,255,105,255)
+else
+gfx.fillCircle(5,175,8,8,105,255,105,70)
+end
+gfx.drawCircle(5,175,8,8,105,255,105,200)
+
+if quickmenval == 0 then
+gfx.drawText(3,170,">",105,255,105,255)
+elseif quickmenval == 1 then
+gfx.drawText(3,170,"<",105,255,105,255)
+gfx.fillCircle(5,200,8,8,255,105,105,80)
+gfx.drawText(3,196,"C",255,105,105,255)
+
+gfx.fillCircle(5,225,8,8,105,255,105,80)
+gfx.drawText(3,221,"M",105,255,105,255)
+
+gfx.fillCircle(5,250,8,8,105,105,255,80)
+gfx.drawText(3,246,"E",105,105,255,255)
+
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
+gfx.drawText(16,197,"Cross-Hair",255,105,105,255)
+end
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
+gfx.drawText(16,247,"Eraser",105,105,255,255)
+end
+end
+end
+
+local function quicksetmouse()
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
+if quickmenval == 0 then
+quickmenval = 1
+elseif quickmenval == 1 then
+quickmenval = 0
+end
+return false
+end
+if quickmenval == 1 then
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
+if MANAGER.getsetting("CRK", "fancurs") == "0" then 
+MANAGER.savesetting("CRK", "fancurs","1") 
+elseif MANAGER.getsetting("CRK", "fancurs") == "1" then 
+MANAGER.savesetting("CRK", "fancurs","0") 
+end
+return false
+end
+
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
+if switchval == 0 then
+selectedelem = tpt.selectedl
+tpt.selectedl = "DEFAULT_PT_NONE"
+switchval = 1
+elseif switchval == 1 then
+tpt.selectedl = selectedelem
+switchval = 0
+end
+return false
+end
+end
+end
+
+
+--Quick settings end
 
 function startupcheck()
 event.register(event.tick,errormesg)
@@ -2361,6 +2418,11 @@ end
 
 if MANAGER.getsetting("CRK","rulval") == "1" then
 tpt.setdebug(0X4)
+end
+
+if MANAGER.getsetting("CRK","pass") == "1" then
+event.register(event.tick,quickset)
+event.register(event.mousedown,quicksetmouse)
 end
 
 if MANAGER.getsetting("CRK","al") == nil then --Defaults to prevent errors in script
@@ -2450,14 +2512,12 @@ end
 end)
 
 reset:action(function(sender)
-if tpt.confirm(" Mod resetter","Resetting the mod changes the mod settings back to their default values and disables all the lua scripts. Saves and other important data will remain intact. Click Full Reset to perform a hard mod reset.", "Full Reset") == true then
 os.remove("scripts/downloaded/2 LBPHacker-TPTMulti.lua")
 os.remove("scripts/downloaded/219 Maticzpl-Notifications.lua")
 os.remove("scripts/downloaded/scriptinfo.txt")
 os.remove("scripts/autorunsettings.txt")
 os.remove("oldmod")
 platform.restart()
-end
 end)
 
 function close()
@@ -2578,11 +2638,15 @@ end
 hide:action(function(sender)
 close()
 end)
---Quick settings
+
 passbut:action(function(sender)
 if MANAGER.getsetting("CRK", "pass") == "1" then --Now quick settings
+event.unregister(event.tick,quickset)
+event.unregister(event.mousedown,quicksetmouse)
 MANAGER.savesetting("CRK", "pass","0")
 elseif MANAGER.getsetting("CRK", "pass") == "0" then 
+event.register(event.tick,quickset)
+event.register(event.mousedown,quicksetmouse)
 MANAGER.savesetting("CRK", "pass","1")
 end
 end)
@@ -2620,6 +2684,7 @@ newmenu:addComponent(perfm)
 newmenu:addComponent(passbut)
 newmenu:addComponent(upmp)
 newmenu:addComponent(reminderhelp)
+newmenu:addComponent(resethelp)
 end
 
 hide:action(function(sender)
