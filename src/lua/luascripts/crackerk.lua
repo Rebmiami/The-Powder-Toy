@@ -449,7 +449,7 @@ return false
 end
 if clickcheck == 0 then
 clickcheck = 2
-crlog = http.get("https://raw.githubusercontent.com/cracker1000/The-Powder-Toy/master/Full%20changelog.txt")
+crlog = http.get("https://raw.githubusercontent.com/cracker1000/The-Powder-Toy/Bledge/Full%20changelog.txt")
 if checkos == "WIN64" then
 reqwin = http.get("https://github.com/cracker1000/The-Powder-Toy/releases/download/Latest/"..appname..".exe")
 elseif checkos == "LIN64" then
@@ -1082,7 +1082,7 @@ end)
 
 Help:action(function(sender)
 close()
-randsav = math.random(1,2939187)
+randsav = math.random(1,2963348)
 sim.loadSave(randsav, 0) 
 end)
 
