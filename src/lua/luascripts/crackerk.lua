@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 58.0 --Next version: 55.1
+local crackversion = 55.0 --Next version: 55.1
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -2414,8 +2414,10 @@ event.register(event.tick,slowmo)
 elseif slowval == 1 then
 slowval = 0
 event.unregister(event.tick,slowmo)
+end
 return false
 end
+
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
 if switchval == 0 then
 selectedelem = tpt.selectedl
@@ -2426,7 +2428,6 @@ tpt.selectedl = selectedelem
 switchval = 0
 end
 return false
-end
 end
 end
 end
