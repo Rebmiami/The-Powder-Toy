@@ -1082,7 +1082,7 @@ end)
 
 Help:action(function(sender)
 close()
-randsav = math.random(1,2963348)
+randsav = math.random(1,2939187)
 sim.loadSave(randsav, 0) 
 end)
 
@@ -2329,7 +2329,17 @@ end)
 end)
 
 --Quick settings
-local quickmenval, selectedelem, switchval = 0, tpt.selectedl,0
+local quickmenval, selectedelem, switchval, slowval,slo2 = 0, tpt.selectedl,0,0,0
+local function slowmo()
+if slo2 < 5 then
+slo2 = slo2 + 1
+end
+if slo2 > 4 then
+slo2 = 0
+sim.framerender(1)
+end
+end
+
 local function quickset()
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
 gfx.fillCircle(5,175,8,8,105,255,105,200)
@@ -2343,20 +2353,37 @@ if quickmenval == 0 then
 gfx.drawText(3,170,">",105,255,105,255)
 elseif quickmenval == 1 then
 gfx.drawText(3,170,"<",105,255,105,255)
-gfx.fillCircle(5,200,8,8,255,105,105,80)
+if MANAGER.getsetting("CRK", "fancurs") == "1" then 
+gfx.fillCircle(5,200,8,8,255,85,85,190)
+else
+gfx.fillCircle(5,200,8,8,255,105,105,70)
+end
 gfx.drawText(3,196,"C",255,105,105,255)
-
+if slowval == 0 then
 gfx.fillCircle(5,225,8,8,105,255,105,80)
-gfx.drawText(3,221,"M",105,255,105,255)
-
+else
+gfx.fillCircle(5,225,8,8,90,255,90,190)
+end
+gfx.drawText(3,221,"S",105,255,105,255)
+if switchval == 0 then
 gfx.fillCircle(5,250,8,8,105,105,255,80)
+else
+gfx.fillCircle(5,250,8,8,85,85,255,190)
+end
 gfx.drawText(3,246,"E",105,105,255,255)
 
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
 gfx.drawText(16,197,"Cross-Hair",255,105,105,255)
 end
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
+gfx.drawText(16,222,"Slow motion",105,255,105,255)
+end
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
+if switchval == 0 then
 gfx.drawText(16,247,"Eraser",105,105,255,255)
+else
+gfx.drawText(16,247,"Element",105,105,255,255)
+end
 end
 end
 end
@@ -2379,7 +2406,16 @@ MANAGER.savesetting("CRK", "fancurs","0")
 end
 return false
 end
-
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
+if slowval == 0 then
+slowval = 1
+tpt.set_pause(1)
+event.register(event.tick,slowmo)
+elseif slowval == 1 then
+slowval = 0
+event.unregister(event.tick,slowmo)
+return false
+end
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
 if switchval == 0 then
 selectedelem = tpt.selectedl
@@ -2393,8 +2429,7 @@ return false
 end
 end
 end
-
-
+end
 --Quick settings end
 
 function startupcheck()
