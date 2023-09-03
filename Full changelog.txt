@@ -3,6 +3,8 @@ Fix SING and ANTM destroying WALL element
 Add Vote background and counts to save browser (Thanks to Maticzpl)
 New additional stat option in quick settings (shows additional stats)
 Add Comment timestamps
+Make URS less colourful
+minor misc changes
 
 v55.0
 New quick options
