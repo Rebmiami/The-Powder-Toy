@@ -1,3 +1,9 @@
+v55.1
+Fix SING and ANTM destroying WALL element
+Add Vote background and counts to save browser (Thanks to Maticzpl)
+New additional stat option in quick settings
+Add Comment timestamps
+
 v55.0
 New quick options
 Removed password system

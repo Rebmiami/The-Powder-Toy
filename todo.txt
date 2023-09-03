@@ -1,2 +1,0 @@
-Option to disable extra info for crosshair
-Comments and time stamps

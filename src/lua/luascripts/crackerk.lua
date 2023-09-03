@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 55.0 --Next version: 55.1
+local crackversion = 55.1 --Next version: 55.2
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -1930,7 +1930,7 @@ if MANAGER.getsetting("CRK", "savergb") == "1" then
  end
  end
  --Cross-hair
-if MANAGER.getsetting("CRK", "fancurs") == "1" and (event.getmodifiers() == 0 or event.getmodifiers() == 4096 or event.getmodifiers() == 32768 or event.getmodifiers() == 8192 or event.getmodifiers() == 45056 or event.getmodifiers() == 40960 or event.getmodifiers() == 36864 or event.getmodifiers() == 12288) then 
+if MANAGER.getsetting("CRK", "fancurs") == "1" and MANAGER.getsetting("CRK", "pass") == "1" and (event.getmodifiers() == 0 or event.getmodifiers() == 4096 or event.getmodifiers() == 32768 or event.getmodifiers() == 8192 or event.getmodifiers() == 45056 or event.getmodifiers() == 40960 or event.getmodifiers() == 36864 or event.getmodifiers() == 12288) then 
 graphics.drawLine(tpt.mousex-6,tpt.mousey,tpt.mousex+6,tpt.mousey,ar,ag,ab,al+50)
 graphics.drawLine(tpt.mousex,tpt.mousey-6,tpt.mousex,tpt.mousey+6,ar,ag,ab,al+50)
 local crx, cry = 0,0 
@@ -2325,7 +2325,7 @@ end)
 end)
 
 --Quick settings
-local quickmenval, selectedelem, switchval, slowval,slo2,extraval = 0, tpt.selectedl,0,0,0,0
+local quickmenval, selectedelem, switchval, slowval,slo2= 0, tpt.selectedl,0,0,0
 local function slowmo()
 if slo2 < 5 then
 slo2 = slo2 + 1
@@ -2336,6 +2336,29 @@ sim.framerender(1)
 end
 end
 local timehr, timemin, timesec, starttime = 0, 0, 0, os.clock()
+local staty = 42
+local statstring 
+local function extstat()
+if MANAGER.getsetting("CRK","extraval") == "1" and MANAGER.getsetting("CRK", "pass") == "1" then
+timesec = os.difftime(os.clock(), starttime)
+if timesec > 59 then
+timemin = timemin + 1
+starttime = os.clock()
+end
+if timemin > 59 then
+timehr= timehr + 1
+end
+statstring = "Time elapsed: "..timehr.." Hr. "..timemin.." Min. "..timesec.." Sec, Elem. P:"..sim.elementCount(elem[tpt.selectedl])..", S:"..sim.elementCount(elem[tpt.selectedr])
+graphics.fillRect(7,staty-2,gfx.textSize(statstring)+1,11,10,10,10,120)
+graphics.drawText(8,staty,statstring,32,216,255,255)
+if ren.debugHUD() == 0 then
+staty = 42
+else
+staty = 52
+end
+end
+end
+
 local function quickset()
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
 gfx.fillCircle(5,175,8,8,105,255,105,200)
@@ -2348,17 +2371,6 @@ if quickmenval == 0 then
 gfx.drawText(3,170,">",105,255,105,255)
 elseif quickmenval == 1 then
 gfx.drawText(3,170,"<",105,255,105,255)
-if extraval == 1 then
-timesec = os.difftime(os.clock(), starttime)
-if timesec > 59 then
-timemin = timemin + 1
-starttime = os.clock()
-end
-if timemin > 59 then
-timehr= timehr + 1
-end
-graphics.drawText(9,62,"Time elapsed: "..timehr.." Hr. "..timemin.." Min. "..timesec.." Sec, Elem. Count: P:"..sim.elementCount(elem[tpt.selectedl])..", S:"..sim.elementCount(elem[tpt.selectedr]),ar,ag,ab,al)
-end
 if MANAGER.getsetting("CRK", "fancurs") == "1" then 
 gfx.fillCircle(5,200,8,8,255,85,85,190)
 else
@@ -2377,7 +2389,7 @@ else
 gfx.fillCircle(5,250,8,8,85,85,255,190)
 end
 gfx.drawText(3,246,"E",105,105,255,255)
-if extraval == 0 then
+if MANAGER.getsetting("CRK","extraval") == "0" then
 gfx.fillCircle(5,275,8,8,155,155,155,80)
 else
 gfx.fillCircle(5,275,8,8,255,255,255,190)
@@ -2433,10 +2445,12 @@ end
 return false
 end
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
-if extraval == 0 then
-extraval = 1
-elseif extraval == 1 then
-extraval = 0
+if MANAGER.getsetting("CRK","extraval") == "0" then
+MANAGER.savesetting("CRK","extraval","1")
+event.register(event.tick,extstat)
+elseif MANAGER.getsetting("CRK","extraval") == "1" then
+MANAGER.savesetting("CRK","extraval","0")
+event.unregister(event.tick,extstat)
 end
 return false
 end
@@ -2468,7 +2482,9 @@ end
 if MANAGER.getsetting("CRK","modelemval") == "0" then
 hidemodelem()
 end
-
+if MANAGER.getsetting("CRK","extraval") == "1" then
+event.register(event.tick,extstat)
+end
 if MANAGER.getsetting("CRK","invtoolv") == "1" then
 event.unregister(event.tick,inverttool)
 event.register(event.tick,inverttool)
@@ -2486,6 +2502,7 @@ end
 if MANAGER.getsetting("CRK","al") == nil then --Defaults to prevent errors in script
 MANAGER.savesetting("CRK","loadelem","0")
 MANAGER.savesetting("CRK", "pass","0")
+MANAGER.savesetting("CRK","extraval","0")
 MANAGER.savesetting("CRK", "rulval","0")
 MANAGER.savesetting("CRK", "invtoolv","0")
 MANAGER.savesetting("CRK", "modelemval","1")
