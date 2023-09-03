@@ -1,12 +1,2 @@
-Planned
-Quick options
-Slowmotion mode
 Option to disable extra info for crosshair
-
-pending
-Fix reset, message_box, Confirm uses
 Comments and time stamps
-
-Check before release
-changelog and other links
-Other github release process parameters.

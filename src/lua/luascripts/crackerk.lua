@@ -412,8 +412,8 @@ end
 local filesize, filedone = reqwin:progress()
 local downprog = math.floor((filedone/filesize)*100)
 if checkos ~= "MACOSARM" and checkos ~= "MACOSX" then
-gfx.fillRect(10,367,downprog*2,12,32,216,255,120)
-gfx.drawText(100,344,downprog.."%",32,216,255,255)
+gfx.fillRect(10,367,(downprog*2)-2,12,150,150,255,120)
+gfx.drawText(100,344,downprog.."%",150,150,255,255)
 updatertext = "Updating the mod"
 if reqwin:status() == "done" then
 local reqwindata, reqwincode = reqwin:finish()
@@ -481,7 +481,7 @@ end
 end
 if clickcheck ~= 0 then --Changelogs
 if tpt.mousex > 299 and tpt.mousex < 386 and tpt.mousey > 284 and tpt.mousey < 296 then
-interface.beginMessageBox("URS updater changelog. Your version: v."..crackversion,crdata, "Done reading")
+interface.beginMessageBox("URS updater changelog. Your version: v."..crackversion,crdata, "Intentionally left for increasing the width :P")
 end
 return false
 end
@@ -489,53 +489,51 @@ end
 
 function showmotdnot2() --Draw graphics when updater is running. 
 if clickcheck ~= 0 then
-gfx.fillRect(5,262,600,123,10,10,10,200) --Window space fill
-gfx.drawRect(5,262,600,123,190,190,190,255) --Window border
+gfx.fillRect(5,262,600,123,10,10,10,255) --Window space fill
+gfx.drawRect(5,262,600,123,50,50,50,255) --Window border
 if updatertext == "Done, click to restart." then
-gfx.drawText(100,344,"Completed Successfully.",55,255,55,255) -- When Completed
-gfx.drawRect(10,360,590,2,10,250,10,255)
+gfx.drawText(100,344,"Completed Successfully.",255,255,255,250) -- When Completed
 else
 if timeout == 1 and clickcheck ~= 1 then --When Error
 gfx.drawText(300,369,"Report the above error code in mod thread.",255,10,10,255)
-gfx.drawRect(10,360,590,2,255,55,55,255)
 else
-gfx.drawRect(10,360,590,2,32,216,255,255) --Normal
+gfx.drawRect(10,360,590,2,70,70,70,255) --Normal
 end
 end
 --System and URS info:
-gfx.drawText(190,270,"Welcome to the Cracker1000 Mod's URS Updater",32,216,255)
+gfx.drawText(190,270,"Welcome to the Cracker1000 Mod's URS Updater",150,150,250,255)
 gfx.drawText(10,284,"Platform detected: "..platform.platform())
 gfx.drawText(300,344,"Error code: "..errorcode,255,35,35)
 gfx.drawText(10,304,"Updating/ downgrading from")
-gfx.drawText(142,304,"v."..crackversion.." to v."..updatever,32,216,255)
+gfx.drawText(142,304,"v."..crackversion.." to v."..updatever,110,110,250,255)
 gfx.drawText(300,304,"Current Status: ")
-gfx.drawText(374,304,updatertext.." ("..onlinestatus..")",32,216,255)
+gfx.drawText(374,304,updatertext.." ("..onlinestatus..")",255,255,255)
 gfx.drawText(10,324,"Path to the mod: "..platform.exeName())
 gfx.drawText(10,344,"Download progress:")
 end
 -- Hover effects for URS buttons
 if tpt.mousex >10 and tpt.mousex < 205 and tpt.mousey > 367 and tpt.mousey < 380 then
 gfx.fillRect(10,366,197,14,10,10,10,255)
-gfx.fillRect(10,366,197,14,32,255,210,140)
+gfx.fillRect(10,366,197,14,150,150,255,140)
 else
 gfx.fillRect(10,366,197,14,10,10,10,255)
-gfx.fillRect(10,366,197,14,32,250,210,20)
+gfx.fillRect(10,366,197,14,150,150,255,20)
 end
 if clickcheck ~= 0 then
 --Changelog stuff
 if tpt.mousex > 299 and tpt.mousex < 386 and tpt.mousey > 284 and tpt.mousey < 296 then
 gfx.fillRect(300,284,87,14,10,10,10,255)
-gfx.fillRect(300,284,87,14,255,216,32,140)
+gfx.fillRect(300,284,87,14,116,116,250,140)
 else
 gfx.fillRect(300,284,87,14,10,10,10,255)
-gfx.fillRect(300,284,87,14,255,216,32,30)
+gfx.fillRect(300,284,87,14,116,116,250,30)
 end
-gfx.drawRect(300,284,87,14,255,216,32,100)
-gfx.drawText(305,287,"Show Changelog*",255,216,32,255)
+gfx.drawRect(300,284,87,14,116,116,250,100)
+gfx.drawText(305,287,"Show Changelog*",116,116,250,255)
 end
 --end
-gfx.drawRect(10,366,197,14,34,250,210,155)
-gfx.drawText(13,370,"V."..tonumber(updatever).." "..updatertext,32,250,210,255)
+gfx.drawRect(10,366,197,14,50,150,250,155)
+gfx.drawText(13,370,"V."..tonumber(updatever).." "..updatertext,150,150,250,255)
 if clickcheck == 0 then
 if tpt.mousex >209 and tpt.mousex < 221 and tpt.mousey > 367 and tpt.mousey < 380 then
 gfx.fillRect(208,366,14,14,250,50,50,150)
@@ -1941,10 +1939,8 @@ crx, cry = sim.adjustCoords(tpt.mousex,tpt.mousey)
 else
 crx, cry = tpt.mousex,tpt.mousey
 end
-graphics.drawText(tpt.mousex-40-tpt.brushx, tpt.mousey-12,"Lp:"..sim.elementCount(elem[tpt.selectedl]),ar,ag,ab,al)
 graphics.drawText(tpt.mousex-40-tpt.brushx, tpt.mousey-2,"X:"..crx,ar,ag,ab,al)
 graphics.drawText(tpt.mousex+15+tpt.brushx, tpt.mousey-2,"Y:"..cry,spr,spg,spb,al)
-graphics.drawText(tpt.mousex+15+tpt.brushx, tpt.mousey-12,"Rp:"..sim.elementCount(elem[tpt.selectedr]),spr,spg,spb,al)
 if tpt.brushx > 0 or tpt.brushy > 0 then
 graphics.drawText(tpt.mousex-40-tpt.brushx, tpt.mousey+8,"L:"..tpt.brushx,ar,ag,ab,al)
 graphics.drawText(tpt.mousex+15+tpt.brushx, tpt.mousey+8,"H:"..tpt.brushy,spr,spg,spb,al)
@@ -2329,7 +2325,7 @@ end)
 end)
 
 --Quick settings
-local quickmenval, selectedelem, switchval, slowval,slo2 = 0, tpt.selectedl,0,0,0
+local quickmenval, selectedelem, switchval, slowval,slo2,extraval = 0, tpt.selectedl,0,0,0,0
 local function slowmo()
 if slo2 < 5 then
 slo2 = slo2 + 1
@@ -2339,7 +2335,7 @@ slo2 = 0
 sim.framerender(1)
 end
 end
-
+local timehr, timemin, timesec, starttime = 0, 0, 0, os.clock()
 local function quickset()
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
 gfx.fillCircle(5,175,8,8,105,255,105,200)
@@ -2348,11 +2344,21 @@ else
 gfx.fillCircle(5,175,8,8,105,255,105,70)
 end
 gfx.drawCircle(5,175,8,8,105,255,105,200)
-
 if quickmenval == 0 then
 gfx.drawText(3,170,">",105,255,105,255)
 elseif quickmenval == 1 then
 gfx.drawText(3,170,"<",105,255,105,255)
+if extraval == 1 then
+timesec = os.difftime(os.clock(), starttime)
+if timesec > 59 then
+timemin = timemin + 1
+starttime = os.clock()
+end
+if timemin > 59 then
+timehr= timehr + 1
+end
+graphics.drawText(9,62,"Time elapsed: "..timehr.." Hr. "..timemin.." Min. "..timesec.." Sec, Elem. Count: P:"..sim.elementCount(elem[tpt.selectedl])..", S:"..sim.elementCount(elem[tpt.selectedr]),ar,ag,ab,al)
+end
 if MANAGER.getsetting("CRK", "fancurs") == "1" then 
 gfx.fillCircle(5,200,8,8,255,85,85,190)
 else
@@ -2371,6 +2377,12 @@ else
 gfx.fillCircle(5,250,8,8,85,85,255,190)
 end
 gfx.drawText(3,246,"E",105,105,255,255)
+if extraval == 0 then
+gfx.fillCircle(5,275,8,8,155,155,155,80)
+else
+gfx.fillCircle(5,275,8,8,255,255,255,190)
+end
+gfx.drawText(3,271,"A",255,255,255,255)
 
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
 gfx.drawText(16,197,"Cross-Hair",255,105,105,255)
@@ -2384,6 +2396,9 @@ gfx.drawText(16,247,"Eraser",105,105,255,255)
 else
 gfx.drawText(16,247,"Element",105,105,255,255)
 end
+end
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
+gfx.drawText(16,272,"Additional stats.",255,255,255,255)
 end
 end
 end
@@ -2417,7 +2432,14 @@ event.unregister(event.tick,slowmo)
 end
 return false
 end
-
+if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
+if extraval == 0 then
+extraval = 1
+elseif extraval == 1 then
+extraval = 0
+end
+return false
+end
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
 if switchval == 0 then
 selectedelem = tpt.selectedl
