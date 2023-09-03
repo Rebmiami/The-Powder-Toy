@@ -1494,7 +1494,8 @@ function autohidehud()
 if tpt.mousey <= 40 then 
 tpt.hud(0) 
 gfx.drawText(6,6,"Hidden",32,216,255,200)
-else tpt.hud(1)
+else
+tpt.hud(1)
 end
 end
 
@@ -2325,7 +2326,7 @@ end)
 end)
 
 --Quick settings
-local quickmenval, selectedelem, switchval, slowval,slo2= 0, tpt.selectedl,0,0,0
+local quickmenval, selectedelem, switchval, slowval,slo2 = 0, tpt.selectedl,0,0,0
 local function slowmo()
 if slo2 < 5 then
 slo2 = slo2 + 1
@@ -2339,7 +2340,7 @@ local timehr, timemin, timesec, starttime = 0, 0, 0, os.clock()
 local staty = 42
 local statstring 
 local function extstat()
-if MANAGER.getsetting("CRK","extraval") == "1" and MANAGER.getsetting("CRK", "pass") == "1" then
+if MANAGER.getsetting("CRK","extraval") == "1" and MANAGER.getsetting("CRK", "pass") == "1" and tpt.hud() == 1 then
 timesec = os.difftime(os.clock(), starttime)
 if timesec > 59 then
 timemin = timemin + 1

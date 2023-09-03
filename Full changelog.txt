@@ -1,7 +1,7 @@
 v55.1
 Fix SING and ANTM destroying WALL element
 Add Vote background and counts to save browser (Thanks to Maticzpl)
-New additional stat option in quick settings
+New additional stat option in quick settings (shows additional stats)
 Add Comment timestamps
 
 v55.0
