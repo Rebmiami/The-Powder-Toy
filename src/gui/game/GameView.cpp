@@ -2374,12 +2374,8 @@ void GameView::OnDraw()
 		if (wavelengthGfx)
 		{
 			int i, cr, cg, cb, j, h = 3, x = 6, y = 35;
-			if (showDebug)
-			{
-				y = 52;
-			}
 			int tmp;
-			g->BlendFilledRect(RectSized(Vec2{ x, y }, Vec2{ 30, h }), 0x404040_rgb .WithAlpha(alpha));
+			g->BlendFilledRect(RectSized(Vec2{ 570, 3 }, Vec2{ 30, h }), 0x404040_rgb .WithAlpha(alpha));
 			for (i = 0; i < 30; i++)
 			{
 				if ((wavelengthGfx >> i)&1)
@@ -2405,7 +2401,7 @@ void GameView::OnDraw()
 					cg *= tmp;
 					cb *= tmp;
 					for (j=0; j<h; j++)
-						g->BlendPixel({ x+29-i, y+j }, RGBA<uint8_t>(cr>255?255:cr, cg>255?255:cg, cb>255?255:cb, alpha));
+						g->BlendPixel({ 570+29-i, 3+j }, RGBA<uint8_t>(cr>255?255:cr, cg>255?255:cg, cb>255?255:cb, alpha));
 				}
 			}
 		}

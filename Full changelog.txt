@@ -1,14 +1,12 @@
-v55.2 (Not released yet)
-Update script manager to v3.13.
+v55.2
+Update script manager to v3.13, fixing search and other options not working in script manager.
 Fix errors with script using the older dialogue box functions.
 Fix stack tools crashing the game.
 Fix Additional stats blocking wavelengths in hud.
 Fix Neon mode not working because of a glitch in graphics code
-Fix various errors when using scripts in mod.
-Fix Search and other options not working in script manager.
 
 v55.1
-Fix SING and ANTM destroying WALL element
+Fix SING and AMTR destroying WALL element
 Add Vote background and counts to save browser (Thanks to Maticzpl)
 New additional stat option in quick settings (shows additional stats)
 Add Comment timestamps
