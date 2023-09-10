@@ -295,6 +295,7 @@ LuaScriptInterface::LuaScriptInterface(GameController * c, GameModel * m):
 	lua_atpanic(l, atPanic);
 	luaL_openlibs(l);
 	luaopen_bit(l);
+	lua_pop(l, 1);
 
 	lua_pushliteral(l, "Luacon_ci");
 	lua_pushlightuserdata(l, this);
@@ -542,29 +543,30 @@ tpt.partsdata = nil");
 	}
 	if (!Platform::FileExists("deleteme.txt"))
 	{
-		if (luaL_loadbuffer(l, (const char *)manager_lua, manager_lua_size, "@[built-in manager.lua]") || lua_pcall(l, 0, 0, 0))
+		if (luaL_loadbuffer(l, (const char *)manager_lua, manager_lua_size, "@[built-in manager.lua]") || tpt_lua_pcall(l, 0, 0, 0))
 		{
 			//Ignore;
 		}
 		if (!Platform::FileExists("scripts/downloaded/2 LBPHacker-TPTMulti.lua")) // Don't run inbuilt multiplayer when a newer version is already present, prevents the error on startup.
 		{
-			if (luaL_loadbuffer(l, (const char *)tptmp_lua, tptmp_lua_size, "@[built-in tptmp.lua]") || lua_pcall(l, 0, 0, 0))
+			if (luaL_loadbuffer(l, (const char *)tptmp_lua, tptmp_lua_size, "@[built-in tptmp.lua]") || tpt_lua_pcall(l, 0, 0, 0))
 			{
 				//Ignore;
 			}
 		}
 		if (!Platform::FileExists("debugmode.txt"))
 		{
-			if (luaL_loadbuffer(l, (const char *)crackerk_lua, crackerk_lua_size, "@[built-in crackerk.lua]") || lua_pcall(l, 0, 0, 0))
+			if (luaL_loadbuffer(l, (const char *)crackerk_lua, crackerk_lua_size, "@[built-in crackerk.lua]") || tpt_lua_pcall(l, 0, 0, 0))
 			{
 				//Ignore;
 			}
-			if (luaL_loadbuffer(l, (const char *)failsafe_lua, failsafe_lua_size, "@[built-in failsafe.lua]") || lua_pcall(l, 0, 0, 0))
+			if (luaL_loadbuffer(l, (const char *)failsafe_lua, failsafe_lua_size, "@[built-in failsafe.lua]") || tpt_lua_pcall(l, 0, 0, 0))
 			{
 				//Ignore;
 			}
 		}
 	}
+	lua_pop(l, 1);
 }
 
 void LuaScriptInterface::custom_init_can_move()
@@ -825,13 +827,14 @@ void LuaScriptInterface::initInterfaceAPI()
 		{NULL, NULL}
 	};
 	luaL_register(l, "interface", interfaceAPIMethods);
-
-	//Ren shortcut
-	lua_getglobal(l, "interface");
 	initLuaSDLKeys(l);
 	lua_pushinteger(l, GameController::mouseUpNormal); lua_setfield(l, -2, "MOUSE_UP_NORMAL");
 	lua_pushinteger(l, GameController::mouseUpBlur); lua_setfield(l, -2, "MOUSE_UP_BLUR");
 	lua_pushinteger(l, GameController::mouseUpDrawEnd); lua_setfield(l, -2, "MOUSE_UP_DRAW_END");
+	lua_pop(l, 1);
+
+	//Ren shortcut
+	lua_getglobal(l, "interface");
 	lua_setglobal(l, "ui");
 
 	Luna<LuaWindow>::Register(l);
@@ -1198,10 +1201,6 @@ void LuaScriptInterface::initSimulationAPI()
 	};
 	luaL_register(l, "simulation", simulationAPIMethods);
 
-	//Sim shortcut
-	lua_getglobal(l, "simulation");
-	lua_setglobal(l, "sim");
-
 	//Static values
 	SETCONST(l, CELL);
 	SETCONST(l, XCELLS);
@@ -1283,6 +1282,12 @@ void LuaScriptInterface::initSimulationAPI()
 	lua_pushcfunction(l, simulation_deletesign);
 	lua_setfield(l, -2, "delete");
 	lua_setfield(l, -2, "signs");
+
+	lua_pop(l, 1);
+
+	//Sim shortcut
+	lua_getglobal(l, "simulation");
+	lua_setglobal(l, "sim");
 }
 
 void LuaScriptInterface::set_map(int x, int y, int width, int height, float value, int map) // A function so this won't need to be repeated many times later
@@ -2774,10 +2779,6 @@ void LuaScriptInterface::initRendererAPI()
 	};
 	luaL_register(l, "renderer", rendererAPIMethods);
 
-	//Ren shortcut
-	lua_getglobal(l, "renderer");
-	lua_setglobal(l, "ren");
-
 	//Static values
 	//Particle pixel modes/fire mode/effects
 	SETCONST(l, PMODE);
@@ -2825,6 +2826,12 @@ void LuaScriptInterface::initRendererAPI()
 	SETCONST(l, DISPLAY_WARP);
 	SETCONST(l, DISPLAY_PERS);
 	SETCONST(l, DISPLAY_EFFE);
+
+	lua_pop(l, 1);
+
+	//Ren shortcut
+	lua_getglobal(l, "renderer");
+	lua_setglobal(l, "ren");
 }
 
 //get/set render modes list
@@ -3051,10 +3058,6 @@ void LuaScriptInterface::initElementsAPI()
 	};
 	luaL_register(l, "elements", elementsAPIMethods);
 
-	//elem shortcut
-	lua_getglobal(l, "elements");
-	lua_setglobal(l, "elem");
-
 	//Static values
 	//Element types/properties/states
 	SETCONST(l, TYPE_PART);
@@ -3124,6 +3127,12 @@ void LuaScriptInterface::initElementsAPI()
 			}
 		}
 	}
+
+	lua_pop(l, 1);
+
+	//elem shortcut
+	lua_getglobal(l, "elements");
+	lua_setglobal(l, "elem");
 }
 
 void LuaScriptInterface::LuaGetProperty(lua_State* l, StructProperty property, intptr_t propertyAddress)
@@ -3952,12 +3961,14 @@ void LuaScriptInterface::initGraphicsAPI()
 	};
 	luaL_register(l, "graphics", graphicsAPIMethods);
 
+	lua_pushinteger(l, WINDOWW);	lua_setfield(l, -2, "WIDTH");
+	lua_pushinteger(l, WINDOWH);	lua_setfield(l, -2, "HEIGHT");
+
+	lua_pop(l, 1);
+
 	//elem shortcut
 	lua_getglobal(l, "graphics");
 	lua_setglobal(l, "gfx");
-
-	lua_pushinteger(l, WINDOWW);	lua_setfield(l, -2, "WIDTH");
-	lua_pushinteger(l, WINDOWH);	lua_setfield(l, -2, "HEIGHT");
 }
 
 int LuaScriptInterface::graphics_textSize(lua_State * l)
@@ -4204,6 +4215,7 @@ void LuaScriptInterface::initFileSystemAPI()
 		{NULL, NULL}
 	};
 	luaL_register(l, "fileSystem", fileSystemAPIMethods);
+	lua_pop(l, 1);
 
 	//elem shortcut
 	lua_getglobal(l, "fileSystem");
@@ -4313,6 +4325,7 @@ void LuaScriptInterface::initPlatformAPI()
 		{NULL, NULL}
 	};
 	luaL_register(l, "platform", platformAPIMethods);
+	lua_pop(l, 1);
 
 	//elem shortcut
 	lua_getglobal(l, "platform");
@@ -4386,9 +4399,6 @@ void LuaScriptInterface::initEventAPI()
 	};
 	luaL_register(l, "event", eventAPIMethods);
 
-	lua_getglobal(l, "event");
-	lua_setglobal(l, "evt");
-
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, TextInputEvent  >()); lua_setfield(l, -2, "textinput"  );
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, TextEditingEvent>()); lua_setfield(l, -2, "textediting");
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, KeyPressEvent   >()); lua_setfield(l, -2, "keypress"   );
@@ -4402,6 +4412,11 @@ void LuaScriptInterface::initEventAPI()
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, CloseEvent      >()); lua_setfield(l, -2, "close"      );
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, BeforeSimEvent  >()); lua_setfield(l, -2, "beforesim"  );
 	lua_pushinteger(l, VariantIndex<GameControllerEvent, AfterSimEvent   >()); lua_setfield(l, -2, "aftersim"   );
+
+	lua_pop(l, 1);
+
+	lua_getglobal(l, "event");
+	lua_setglobal(l, "evt");
 }
 
 int LuaScriptInterface::event_register(lua_State * l)
