@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 55.1 --Next version: 55.2
+local crackversion = 55.2 --Next version: 55.3
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -568,7 +568,7 @@ onlinestatus = 1
 --Update checks
 errtext = ""
 updatever = string.sub(ret2,10,13)
-if tonumber(crackversion) ~= tonumber(updatever)  then
+if tonumber(crackversion) ~= tonumber(updatever) then
 runupdater()
 elseif tonumber(crackversion) == tonumber(updatever) then
 errtext = "URS Updater: Your mod is up to date."
@@ -786,7 +786,7 @@ event.unregister(event.tick,autosave)
 end
 end)
 
-local stv, stackposx, stackposy, stackposval, zx, zy = 0, 99, 99, 0,0,0
+local stv, stackposx, stackposy, stackposval, zx, zy = 0, 99, 99, 0, 0, 0
 
 function drawstack()
 zx,zy = sim.adjustCoords(tpt.mousex,tpt.mousey)
@@ -877,28 +877,27 @@ stackposval = 0
 return false
 end
 
-if tpt.mousex >47 and tpt.mousex < 91 and tpt.mousey > 365 and tpt.mousey < 378 then
+if tpt.mousex > 47 and tpt.mousex < 91 and tpt.mousey > 365 and tpt.mousey < 378 then
 for i in sim.parts() do
 		local x,y = sim.partProperty(i, sim.FIELD_X),sim.partProperty(i, sim.FIELD_Y)
 		if sim.pmap (x, y) == i then 
-                                tpt.delete(i)
+        tpt.delete(i)
 		end
 	end
 	print("Removed the outermost particle from stack")
 return false
 end
-
 if stv == 1 then
 if ren.zoomEnabled() then
 local bx,by = sim.adjustCoords(tpt.brushx,tpt.brushy)
 for i in sim.neighbors(zx,zy,bx,by) do
- sim.partProperty(i, sim.FIELD_X, stackposx)
-  sim.partProperty(i, sim.FIELD_Y, stackposy)
-  end
+sim.partProperty(i, sim.FIELD_X, stackposx)
+sim.partProperty(i, sim.FIELD_Y, stackposy)
+end
 else
 for i in sim.neighbors(tpt.mousex,tpt.mousey,tpt.brushx,tpt.brushy) do
- sim.partProperty(i, sim.FIELD_X, stackposx)
-  sim.partProperty(i, sim.FIELD_Y, stackposy)
+sim.partProperty(i, sim.FIELD_X, stackposx)
+sim.partProperty(i, sim.FIELD_Y, stackposy)
 end
 end
 print("Stacked the selected particles.")
@@ -2337,7 +2336,7 @@ sim.framerender(1)
 end
 end
 local timehr, timemin, timesec, starttime = 0, 0, 0, os.clock()
-local staty = 42
+local staty = 35
 local statstring 
 local function extstat()
 if MANAGER.getsetting("CRK","extraval") == "1" and MANAGER.getsetting("CRK", "pass") == "1" and tpt.hud() == 1 then
@@ -2350,12 +2349,12 @@ if timemin > 59 then
 timehr= timehr + 1
 end
 statstring = "Time elapsed: "..timehr.." Hr. "..timemin.." Min. "..timesec.." Sec, Elem. P:"..sim.elementCount(elem[tpt.selectedl])..", S:"..sim.elementCount(elem[tpt.selectedr])
-graphics.fillRect(7,staty-2,gfx.textSize(statstring)+1,11,10,10,10,120)
-graphics.drawText(8,staty,statstring,32,216,255,255)
+graphics.fillRect(6,staty-2,gfx.textSize(statstring)+1,11,10,10,10,120)
+graphics.drawText(7,staty,statstring,32,216,255,255)
 if ren.debugHUD() == 0 then
-staty = 42
+staty = 35
 else
-staty = 52
+staty = 49
 end
 end
 end
