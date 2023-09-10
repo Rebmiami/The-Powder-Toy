@@ -543,24 +543,24 @@ tpt.partsdata = nil");
 	}
 	if (!Platform::FileExists("deleteme.txt"))
 	{
-		if (luaL_loadbuffer(l, (const char *)manager_lua, manager_lua_size, "@[built-in manager.lua]") || tpt_lua_pcall(l, 0, 0, 0))
+		if (luaL_loadbuffer(l, (const char *)manager_lua, manager_lua_size, "@[built-in manager.lua]") || tpt_lua_pcall(l, 0, 0, 0, false))
 		{
 			//Ignore;
 		}
 		if (!Platform::FileExists("scripts/downloaded/2 LBPHacker-TPTMulti.lua")) // Don't run inbuilt multiplayer when a newer version is already present, prevents the error on startup.
 		{
-			if (luaL_loadbuffer(l, (const char *)tptmp_lua, tptmp_lua_size, "@[built-in tptmp.lua]") || tpt_lua_pcall(l, 0, 0, 0))
+			if (luaL_loadbuffer(l, (const char *)tptmp_lua, tptmp_lua_size, "@[built-in tptmp.lua]") || tpt_lua_pcall(l, 0, 0, 0, false))
 			{
 				//Ignore;
 			}
 		}
 		if (!Platform::FileExists("debugmode.txt"))
 		{
-			if (luaL_loadbuffer(l, (const char *)crackerk_lua, crackerk_lua_size, "@[built-in crackerk.lua]") || tpt_lua_pcall(l, 0, 0, 0))
+			if (luaL_loadbuffer(l, (const char *)crackerk_lua, crackerk_lua_size, "@[built-in crackerk.lua]") || tpt_lua_pcall(l, 0, 0, 0, false))
 			{
 				//Ignore;
 			}
-			if (luaL_loadbuffer(l, (const char *)failsafe_lua, failsafe_lua_size, "@[built-in failsafe.lua]") || tpt_lua_pcall(l, 0, 0, 0))
+			if (luaL_loadbuffer(l, (const char *)failsafe_lua, failsafe_lua_size, "@[built-in failsafe.lua]") || tpt_lua_pcall(l, 0, 0, 0, false))
 			{
 				//Ignore;
 			}
