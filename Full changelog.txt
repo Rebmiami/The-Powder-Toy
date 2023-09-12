@@ -1,3 +1,7 @@
+v55.3
+Fix EMBR showing weird graphics with high life values.
+Fix save browser and render options not working properly.
+
 v55.2
 Update script manager to v3.13, fixing search and other options not working in script manager.
 Fix errors with script using the older dialogue box functions.
