@@ -481,7 +481,7 @@ end
 end
 if clickcheck ~= 0 then --Changelogs
 if tpt.mousex > 299 and tpt.mousex < 386 and tpt.mousey > 284 and tpt.mousey < 296 then
-interface.beginMessageBox("URS updater changelog. Your version: v."..crackversion,crdata, "Intentionally left for increasing the width :P")
+interface.beginConfirm("URS updater changelog. Your Ver.: v."..crackversion,crdata)
 end
 return false
 end
@@ -2591,6 +2591,7 @@ os.remove("scripts/downloaded/2 LBPHacker-TPTMulti.lua")
 os.remove("scripts/downloaded/219 Maticzpl-Notifications.lua")
 os.remove("scripts/downloaded/scriptinfo.txt")
 os.remove("scripts/autorunsettings.txt")
+os.remove("autorun.lua")
 os.remove("oldmod")
 platform.restart()
 end)
