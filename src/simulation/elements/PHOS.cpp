@@ -64,12 +64,11 @@ static int update(UPDATE_FUNC_ARGS)
 	{
 		parts[i].tmp++;
 	}
-	int r, rx, ry;
-	for (rx = -2; rx < 3; rx++)
-		for (ry = -2; ry < 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -2; rx < 3; rx++)
+		for (auto ry = -2; ry < 3; ry++)
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 				continue;
 				switch (TYP(r))
@@ -115,7 +114,7 @@ static int update(UPDATE_FUNC_ARGS)
 				}
 			}
 
-	int rp = sim->photons[y + ry][x + rx];
+	int rp = sim->photons[y + ry][x + rx]; // Fix later
 	if (TYP(rp) == PT_UVRD)
 	{
 		parts[i].tmp3 = parts[i].tmp3+2;

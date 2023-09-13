@@ -59,12 +59,11 @@ static int update(UPDATE_FUNC_ARGS)
 	if (parts[i].life > 0)
 		parts[i].life--;
 
-		int r, rx, ry;
-			for (rx = -2; rx < 2; rx++)
-				for (ry = -2; ry < 2; ry++)
-					if (BOUNDS_CHECK && (rx || ry))
+			for (auto rx = -2; rx < 2; rx++)
+				for (auto ry = -2; ry < 2; ry++)
+					if (rx || ry)
 					{
-						r = pmap[y + ry][x + rx];
+						auto r = pmap[y + ry][x + rx];
 						if (!r || sim->parts_avg(ID(r), i, PT_INSL) == PT_INSL)
 							continue;
 						if (parts[ID(r)].type == PT_SPRK && parts[ID(r)].life > 0 && parts[ID(r)].ctype == PT_PSCN)

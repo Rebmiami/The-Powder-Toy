@@ -62,12 +62,11 @@ static int update(UPDATE_FUNC_ARGS)
 		sim->kill_part(i);
 	}
 	
-	int r, rx, ry;
-	for (rx = -2; rx < 3; rx++)
-		for (ry = -2; ry < 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -2; rx < 3; rx++)
+		for (auto ry = -2; ry < 3; ry++)
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				{

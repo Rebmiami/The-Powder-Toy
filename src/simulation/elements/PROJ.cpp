@@ -59,11 +59,11 @@ static int update(UPDATE_FUNC_ARGS)
 	if (parts[i].temp <= 273.15f || parts[i].temp > 373.15f )
 		parts[i].temp = 293.15f;
 
-	for (int rx = -1; rx <= 1; rx++)
-		for (int ry = -1; ry <= 1; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -1; rx <= 1; rx++)
+		for (auto ry = -1; ry <= 1; ry++)
+			if (rx || ry)
 			{
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				if (parts[ID(r)].type == PT_SPRK && parts[ID(r)].ctype == PT_PSCN && parts[ID(r)].life == 3) //Check for a sprk with ctype PSCN to activate and store the direction.
@@ -73,11 +73,11 @@ static int update(UPDATE_FUNC_ARGS)
 					parts[i].life = 10;
 				}
 			}
-	for (int rx = -3; rx <= 4; rx++)
-		for (int ry = -3; ry <= 4; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -3; rx <= 4; rx++)
+		for (auto ry = -3; ry <= 4; ry++)
+			if (rx || ry)
 			{
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				//For collision detection.

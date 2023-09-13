@@ -56,12 +56,12 @@ static int update(UPDATE_FUNC_ARGS)
 		parts[i].vy = 0;
 	}
 
-	int r, rx, ry,rp;
-	for (rx = -2; rx < 3; rx++)
-		for (ry = -2; ry < 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	int rp;
+	for (auto rx = -2; rx < 3; rx++)
+		for (auto ry = -2; ry < 3; ry++)
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				if (sim->elements[TYP(r)].Properties&TYPE_SOLID||(parts[ID(r)].type == PT_COPR && parts[ID(r)].tmp2 == 0))

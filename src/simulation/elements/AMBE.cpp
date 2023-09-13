@@ -50,7 +50,7 @@ static int update(UPDATE_FUNC_ARGS)
 {
 	if (parts[i].tmp < 1 || parts[i].tmp > 25)
 		parts[i].tmp = 25;
-	int r, rx, ry, ar = parts[i].tmp;
+	int ar = parts[i].tmp;
 	if (parts[i].life != 10)
 	{
 		if (parts[i].life > 0)
@@ -58,8 +58,8 @@ static int update(UPDATE_FUNC_ARGS)
 	}
 	else
 	{
-		for (rx = -ar; rx <= ar; rx++)
-			for (ry = -ar; ry <= ar; ry++)
+		for (auto rx = -ar; rx <= ar; rx++)
+			for (auto ry = -ar; ry <= ar; ry++)
 			{
 				if (x + rx >= 0 && y + ry >= 0 && x + rx < XRES && y + ry < YRES && (rx || ry))
 				{
@@ -67,11 +67,11 @@ static int update(UPDATE_FUNC_ARGS)
 				}
 			}
 
-		for (rx = -2; rx <= 2; rx++)
-			for (ry = -2; ry <= 2; ry++)
-				if (BOUNDS_CHECK && (rx || ry))
+		for (auto rx = -2; rx <= 2; rx++)
+			for (auto ry = -2; ry <= 2; ry++)
+				if (rx || ry)
 				{
-					r = pmap[y + ry][x + rx];
+					auto r = pmap[y + ry][x + rx];
 					if (!r)
 						continue;
 					if (TYP(r) == PT_AMBE)

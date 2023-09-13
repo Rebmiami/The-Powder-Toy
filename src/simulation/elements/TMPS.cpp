@@ -55,11 +55,11 @@ static int update(UPDATE_FUNC_ARGS)
 	if (parts[i].life)
 	{
 		parts[i].life = 0;
-		for (int rx = -2; rx <= 2; rx++)
-			for (int ry = -2; ry <= 2; ry++)
-				if (BOUNDS_CHECK && (rx || ry))
+		for (auto rx = -2; rx <= 2; rx++)
+			for (auto ry = -2; ry <= 2; ry++)
+				if (rx || ry)
 				{
-					int r = pmap[y + ry][x + rx];
+					auto r = pmap[y + ry][x + rx];
 					if (!r)
 						continue;
 					int rt = TYP(r);
@@ -171,12 +171,12 @@ static int update(UPDATE_FUNC_ARGS)
 				}
 			}
 
-	for (int rx = -1; rx <= 1; rx++)
-		for (int ry = -1; ry <= 1; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -1; rx <= 1; rx++)
+		for (auto ry = -1; ry <= 1; ry++)
+			if (rx || ry)
 			{
 
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				int nx = x + rx;

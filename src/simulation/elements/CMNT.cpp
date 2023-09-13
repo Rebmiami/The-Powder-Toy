@@ -64,11 +64,11 @@ static int update(UPDATE_FUNC_ARGS)
 			parts[i].vx = 0;
 			parts[i].vy = 0;
 		}
-		for (int rx = -2; rx < 3; rx++)
-			for (int ry = -2; ry < 3; ry++)
-				if (BOUNDS_CHECK && (rx || ry))
+		for (auto rx = -2; rx < 3; rx++)
+			for (auto ry = -2; ry < 3; ry++)
+				if (rx || ry)
 				{
-					int r = pmap[y + ry][x + rx];
+					auto r = pmap[y + ry][x + rx];
 					if (!r)
 						continue;
 					if ((TYP(r) == PT_WATR|| TYP(r) == PT_DSTW|| TYP(r) == PT_SLTW|| TYP(r) == PT_CBNW) && (parts[i].tmp2 !=1))

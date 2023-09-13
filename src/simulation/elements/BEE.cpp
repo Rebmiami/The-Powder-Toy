@@ -139,12 +139,11 @@ static int update(UPDATE_FUNC_ARGS)
 
 	if (sim->rng.chance(1, 10))
 	{
-		int r, rx, ry;
-		for (rx = -20; rx < 21; rx++)
-			for (ry = -20; ry < 21; ry++)
+		for (auto rx = -20; rx < 21; rx++)
+			for (auto ry = -20; ry < 21; ry++)
 				if (x + rx >= 0 && y + ry >= 0 && x + rx < XRES && y + ry < YRES && (rx || ry))
 				{
-					r = pmap[y + ry][x + rx];
+					auto r = pmap[y + ry][x + rx];
 					if (!r)
 						continue;
 					if (TYP(r) == PT_PLNT)
@@ -156,12 +155,11 @@ static int update(UPDATE_FUNC_ARGS)
 				}
 	}
 
-	int r, rx, ry;
-	for (rx = -2; rx < 3; rx++)
-		for (ry = -2; ry < 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -2; rx < 3; rx++)
+		for (auto ry = -2; ry < 3; ry++)
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				if (parts[ID(r)].temp > 373.15f)

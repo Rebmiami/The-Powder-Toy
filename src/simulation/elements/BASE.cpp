@@ -50,12 +50,12 @@ static int update(UPDATE_FUNC_ARGS)
 {
 	if (parts[i].tmp < 10)
 		parts[i].tmp = 10;
-	int r, rx, ry, trade;
-	for (rx = -2; rx < 3; rx++)
-		for (ry = -2; ry < 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	int trade;
+	for (auto rx = -2; rx < 3; rx++)
+		for (auto ry = -2; ry < 3; ry++)
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				switch (TYP(r))
@@ -136,11 +136,11 @@ static int update(UPDATE_FUNC_ARGS)
 			}
 	for (trade = 0; trade < 2; trade++)
 	{
-		rx = sim->rng.between(-2, 2);
-		ry = sim->rng.between(-2, 2);
-		if (BOUNDS_CHECK && (rx || ry))
+		auto rx = sim->rng.between(-2, 2);
+		auto ry = sim->rng.between(-2, 2);
+		if (rx || ry)
 		{
-			r = pmap[y + ry][x + rx];
+			auto r = pmap[y + ry][x + rx];
 			if (!r)
 				continue;
 			if (TYP(r) == PT_BASE && (parts[i].tmp > parts[ID(r)].tmp) && parts[i].tmp > 0)//diffusion

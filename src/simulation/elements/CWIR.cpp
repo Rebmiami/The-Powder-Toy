@@ -51,7 +51,6 @@ void Element::Element_CWIR()
 
 static int update(UPDATE_FUNC_ARGS)
 {
-	int rx, ry, r;
 	//some checks for speed and melting point.
 	if (parts[i].tmp < 0 || parts[i].tmp > 8)
 	{
@@ -75,10 +74,9 @@ static int update(UPDATE_FUNC_ARGS)
 	if (!parts[i].life)
 	{
 		for (int j = 0; j < 4; j++) {
-			rx = checkCoordsX[j];
-			ry = checkCoordsY[j];
-			if (BOUNDS_CHECK) {
-				r = pmap[y + ry][x + rx];
+			auto rx = checkCoordsX[j];
+			auto ry = checkCoordsY[j];
+				auto r = pmap[y + ry][x + rx];
 				if (!r) continue;
 				if (TYP(r) == PT_SPRK && parts[ID(r)].life && parts[ID(r)].life < 4)
 				{
@@ -86,7 +84,7 @@ static int update(UPDATE_FUNC_ARGS)
 					parts[i].life = 4;
 					parts[i].ctype = PT_CWIR;
 				}
-			}
+
 		}
 	}
 	return 0;

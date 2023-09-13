@@ -48,20 +48,19 @@ void Element::Element_GSNS()
 
 static int update(UPDATE_FUNC_ARGS)
 {
-	int r, rx, ry, rt;
 	if ((parts[i].tmp == 0 && (sim->gravp[(y / CELL)*(XRES / CELL) + (x / CELL)] >= parts[i].temp - 273.15f) || (parts[i].tmp == 2 &&  (sim->gravp[(y / CELL)*(XRES / CELL) + (x / CELL)]) < parts[i].temp - 273.15f)))
 	{
 		parts[i].life = 0;
-		for (rx = -2; rx <= 2; rx++)
-			for (ry = -2; ry <= 2; ry++)
-				if (BOUNDS_CHECK && (rx || ry))
+		for (auto rx = -2; rx <= 2; rx++)
+			for (auto ry = -2; ry <= 2; ry++)
+				if (rx || ry)
 				{
-					r = pmap[y + ry][x + rx];
+					auto r = pmap[y + ry][x + rx];
 					if (!r)
 						continue;
 					if (sim->parts_avg(i, ID(r), PT_INSL) != PT_INSL)
 					{
-						rt = TYP(r);
+						auto rt = TYP(r);
 						if ((sim->elements[rt].Properties&PROP_CONDUCTS) && !(rt == PT_WATR || rt == PT_SLTW || rt == PT_NTCT || rt == PT_PTCT || rt == PT_INWR) && parts[ID(r)].life == 0)
 						{
 							parts[ID(r)].life = 4;
@@ -71,11 +70,11 @@ static int update(UPDATE_FUNC_ARGS)
 					}
 				}
 	}
-	for (int rx = -1; rx <= 1; rx++)
-		for (int ry = -1; ry <= 1; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto  rx = -1; rx <= 1; rx++)
+		for (auto  ry = -1; ry <= 1; ry++)
+			if (rx || ry)
 			{
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					r = sim->photons[y + ry][x + rx];
 				if (!r)

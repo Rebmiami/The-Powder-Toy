@@ -77,9 +77,9 @@ static int update(UPDATE_FUNC_ARGS)
 		{
 			static const int checkCoordsX[] = { -4, 4, 0, 0 };
 			static const int checkCoordsY[] = { 0, 0, -4, 4 };
-			int rx = checkCoordsX[j];
-			int ry = checkCoordsY[j];
-			int r = pmap[y + ry][x + rx];
+			auto  rx = checkCoordsX[j];
+			auto  ry = checkCoordsY[j];
+			auto  r = pmap[y + ry][x + rx];
 			if (r && TYP(r) == PT_SPRK && parts[ID(r)].life && parts[ID(r)].life < 4)
 			{
 				sim->part_change_type(i, x, y, PT_SPRK);
@@ -89,12 +89,11 @@ static int update(UPDATE_FUNC_ARGS)
 		}
 	}
 
-	int r, rx, ry;
-	for (rx = -2; rx < 3; rx++)
-		for (ry = -2; ry < 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -2; rx < 3; rx++)
+		for (auto ry = -2; ry < 3; ry++)
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					r = sim->photons[y + ry][x + rx];
 				if (!r)

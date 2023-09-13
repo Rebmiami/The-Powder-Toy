@@ -47,11 +47,11 @@ void Element::Element_BALL()
 }
 static int update(UPDATE_FUNC_ARGS)
 {
-	for (int rx = -3; rx <= 3; rx++)
-		for (int ry = -3; ry <= 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto  rx = -3; rx <= 3; rx++)
+		for (auto  ry = -3; ry <= 3; ry++)
+			if (rx || ry)
 			{
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				if (TYP(r) && TYP(r) != PT_BALL && parts[i].life < 2)

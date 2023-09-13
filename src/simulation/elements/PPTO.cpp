@@ -57,7 +57,6 @@ void Element::Element_PPTO()
 
 static int update(UPDATE_FUNC_ARGS)
 {
-	int r, rx, ry;
 	if (parts[i].tmp2 != 10)
 	{
 		if (parts[i].tmp2 > 0)
@@ -65,11 +64,11 @@ static int update(UPDATE_FUNC_ARGS)
 	}
 	else
 	{
-		for (rx = -2; rx < 3; rx++)
-			for (ry = -2; ry < 3; ry++)
-				if (BOUNDS_CHECK && (rx || ry))
+		for (auto rx = -2; rx < 3; rx++)
+			for (auto ry = -2; ry < 3; ry++)
+				if (rx || ry)
 				{
-					r = pmap[y + ry][x + rx];
+					auto r = pmap[y + ry][x + rx];
 					if (!r)
 						continue;
 					if (TYP(r) == PT_PPTO)
@@ -94,9 +93,9 @@ static int update(UPDATE_FUNC_ARGS)
 		{
 			rx = sim->portal_rx[count];
 			ry = sim->portal_ry[count];
-			if (BOUNDS_CHECK && (rx || ry))
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 				{
 					fe = 1;

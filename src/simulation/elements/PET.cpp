@@ -136,11 +136,11 @@ static int update(UPDATE_FUNC_ARGS)
 		parts[i].ctype = 3;
 	}
 
-	for (int rx = -70; rx < 70; rx++)
-		for (int ry = -30; ry < 5; ry++)
+	for (auto rx = -70; rx < 70; rx++)
+		for (auto ry = -30; ry < 5; ry++)
 			if (x + rx >= 0 && y + ry >= 0 && x + rx < XRES && y + ry < YRES && (rx || ry))
 			{
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				r = pmap[y + ry][x + rx];
@@ -221,11 +221,11 @@ static int update(UPDATE_FUNC_ARGS)
 					}
 				}
 
-	for (int rx = -15; rx < 15; rx++)
-		for (int ry = -10; ry < 5; ry++)
+	for (auto rx = -15; rx < 15; rx++)
+		for (auto ry = -10; ry < 5; ry++)
 				if (x + rx >= 0 && y + ry >= 0 && x + rx < XRES && y + ry < YRES && (rx || ry))
 				{
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				r = pmap[y + ry][x + rx];
@@ -282,12 +282,11 @@ static int update(UPDATE_FUNC_ARGS)
 				}
 			}
 
-	int r, rx, ry;
-	for (rx = -2; rx < 3; rx++)
-		for (ry = -2; ry < 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -2; rx < 3; rx++)
+		for (auto ry = -2; ry < 3; ry++)
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				if (parts[ID(r)].temp > 373.15f || parts[ID(r)].temp < 273.15f)

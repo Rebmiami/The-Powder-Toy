@@ -50,7 +50,6 @@ void Element::Element_PCON()
 
 static int update(UPDATE_FUNC_ARGS)
 {
-	int r, rx, ry;
 	if (parts[i].tmp2 != 10)
 	{
 		if (parts[i].tmp2 > 0)
@@ -58,11 +57,11 @@ static int update(UPDATE_FUNC_ARGS)
 	}
 	else
 	{
-		for (rx = -2; rx < 3; rx++)
-			for (ry = -2; ry < 3; ry++)
-				if (BOUNDS_CHECK && (rx || ry))
+		for (auto rx = -2; rx < 3; rx++)
+			for (auto ry = -2; ry < 3; ry++)
+				if (rx || ry)
 				{
-					r = pmap[y + ry][x + rx];
+					auto r = pmap[y + ry][x + rx];
 					if (!r)
 						continue;
 					if (TYP(r) == PT_PCON)
@@ -77,15 +76,12 @@ static int update(UPDATE_FUNC_ARGS)
 
 	if (parts[i].tmp2 == 0)
 	{
-		int r, rx, ry;
 		int ctype = TYP(parts[i].ctype);
 		if (ctype <= 0 || ctype >= PT_NUM || !sim->elements[ctype].Enabled || ctype == PT_PCON)
 		{
-			for (rx = -1; rx < 2; rx++)
-				for (ry = -1; ry < 2; ry++)
-					if (BOUNDS_CHECK)
-					{
-						r = sim->photons[y + ry][x + rx];
+			for (auto rx = -1; rx < 2; rx++)
+				for (auto ry = -1; ry < 2; ry++)
+						auto r = sim->photons[y + ry][x + rx];
 						if (!r)
 							r = pmap[y + ry][x + rx];
 						if (!r)
@@ -100,16 +96,15 @@ static int update(UPDATE_FUNC_ARGS)
 							if (rt == PT_LIFE)
 								parts[i].ctype |= PMAPID(parts[ID(r)].ctype);
 						}
-					}
 		}
 		else
 		{
 			int restrictElement = sim->IsElement(parts[i].tmp) ? parts[i].tmp : 0;
-			for (rx = -1; rx < 2; rx++)
-				for (ry = -1; ry < 2; ry++)
+			for (auto rx = -1; rx < 2; rx++)
+				for (auto ry = -1; ry < 2; ry++)
 					if (x + rx >= 0 && y + ry >= 0 && x + rx < XRES && y + ry < YRES)
 					{
-						r = sim->photons[y + ry][x + rx];
+						auto r = sim->photons[y + ry][x + rx];
 						if (!r || (restrictElement && TYP(r) != restrictElement))
 							r = pmap[y + ry][x + rx];
 						if (!r || (restrictElement && TYP(r) != restrictElement))

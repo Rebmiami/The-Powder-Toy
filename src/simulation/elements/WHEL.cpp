@@ -68,11 +68,11 @@ static int update(UPDATE_FUNC_ARGS)
 	if (parts[i].life < 0)
 		parts[i].life = 0;
 
-	for (int rx = -2; rx <=2; rx++)
-		for (int ry = -2; ry <= 2; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto  rx = -2; rx <=2; rx++)
+		for (auto  ry = -2; ry <= 2; ry++)
+			if (rx || ry)
 			{
-				int r = pmap[y + ry][x + rx];
+				auto  r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				if (parts[ID(r)].type == PT_SPRK && parts[ID(r)].ctype == PT_PSCN)
@@ -94,11 +94,11 @@ static int update(UPDATE_FUNC_ARGS)
 					parts[i].life += 1;
 				}
 			}
-	for (int rx = -1*(parts[i].tmp+8); rx <= (parts[i].tmp+8); rx++)
-		for (int ry = -1*(parts[i].tmp+8); ry <= (parts[i].tmp+8); ry++)
+	for (auto rx = -1*(parts[i].tmp+8); rx <= (parts[i].tmp+8); rx++)
+		for (auto ry = -1*(parts[i].tmp+8); ry <= (parts[i].tmp+8); ry++)
 			if (x + rx >= 0 && y + ry >= 0 && x + rx < XRES && y + ry < YRES && (rx || ry))
 			{
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				{

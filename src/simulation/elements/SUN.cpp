@@ -69,14 +69,13 @@ static int update(UPDATE_FUNC_ARGS)
 		parts[t].life = 200;
 	}
 
-	int r, rx, ry, rt;
-	for (rx = -1; rx < 2; rx++)
-		for (ry = -1; ry < 2; ry++)
+	for (auto rx = -1; rx < 2; rx++)
+		for (auto ry = -1; ry < 2; ry++)
 			if (rx || ry)
 			{
 				if (sim->rng.chance(1, 90))
 				{
-					int r = sim->create_part(-1, x + rx, y + ry, PT_UVRD);
+					auto r = sim->create_part(-1, x + rx, y + ry, PT_UVRD);
 					if (r != -1)
 					{
 						parts[r].vx = (float)(rx * 3);

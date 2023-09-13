@@ -62,11 +62,11 @@ static int update(UPDATE_FUNC_ARGS)
 	}
 	else
 	{
-		for (int rx = -2; rx < 3; rx++)
-			for (int ry = -2; ry < 3; ry++)
-				if (BOUNDS_CHECK && (rx || ry))
+		for (auto rx = -2; rx < 3; rx++)
+			for (auto ry = -2; ry < 3; ry++)
+				if (rx || ry)
 				{
-					int r = pmap[y + ry][x + rx];
+					auto r = pmap[y + ry][x + rx];
 					if (!r || sim->parts_avg(ID(r), i, PT_INSL) == PT_INSL)
 						continue;
 					if (TYP(r) == PT_LITH2)
@@ -78,11 +78,11 @@ static int update(UPDATE_FUNC_ARGS)
 					}
 				}
 	}
-	for (int rx = -2; rx < 3; rx++)
-		for (int ry = -2; ry < 3; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -2; rx < 3; rx++)
+		for (auto ry = -2; ry < 3; ry++)
+			if (rx || ry)
 			{
-				int r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				if (!r)
 					continue;
 				//Battery discharging.
@@ -132,11 +132,11 @@ static int update(UPDATE_FUNC_ARGS)
 	//Diffusion of tmp i.e stored charge.
 	for (int chargediffuse = 0; chargediffuse < 8; chargediffuse++)
 	{
-		int rx = sim->rng.between(-2, 2);
-		int ry = sim->rng.between(-2, 2);
-		if (BOUNDS_CHECK && (rx || ry))
+		auto rx = sim->rng.between(-2, 2);
+		auto ry = sim->rng.between(-2, 2);
+		if (rx || ry)
 		{
-			int r = pmap[y + ry][x + rx];
+			auto r = pmap[y + ry][x + rx];
 			if (!r || sim->parts_avg(ID(r), i, PT_INSL) == PT_INSL)
 				continue;
 			if (TYP(r) == PT_LITH2 && (parts[i].tmp > parts[ID(r)].tmp) && parts[i].tmp > 0)//diffusion

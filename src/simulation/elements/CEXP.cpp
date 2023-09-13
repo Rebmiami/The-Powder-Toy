@@ -49,12 +49,11 @@ static int update(UPDATE_FUNC_ARGS)
 	if (parts[i].tmp < 0 || parts[i].tmp > 10)
 		parts[i].tmp = 10;
 
-	int r, rx, ry;
-	for (rx = -1; rx < 2; rx++)
-		for (ry = -1; ry < 2; ry++)
-			if (BOUNDS_CHECK && (rx || ry))
+	for (auto rx = -1; rx < 2; rx++)
+		for (auto ry = -1; ry < 2; ry++)
+			if (rx || ry)
 			{
-				r = pmap[y + ry][x + rx];
+				auto r = pmap[y + ry][x + rx];
 				switch (TYP(r))
 				{
 					case PT_SPRK:
