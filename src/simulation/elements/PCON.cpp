@@ -81,7 +81,9 @@ static int update(UPDATE_FUNC_ARGS)
 		{
 			for (auto rx = -1; rx < 2; rx++)
 				for (auto ry = -1; ry < 2; ry++)
-						auto r = sim->photons[y + ry][x + rx];
+						if (rx || ry)
+						{
+							auto r = sim->photons[y + ry][x + rx];
 						if (!r)
 							r = pmap[y + ry][x + rx];
 						if (!r)
@@ -95,6 +97,7 @@ static int update(UPDATE_FUNC_ARGS)
 							parts[i].ctype = rt;
 							if (rt == PT_LIFE)
 								parts[i].ctype |= PMAPID(parts[ID(r)].ctype);
+						}
 						}
 		}
 		else

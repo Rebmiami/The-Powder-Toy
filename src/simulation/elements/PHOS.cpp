@@ -112,13 +112,12 @@ static int update(UPDATE_FUNC_ARGS)
 				}
 				break;
 				}
-			}
-
-	int rp = sim->photons[y + ry][x + rx]; // Fix later
+	int rp = sim->photons[y + ry][x + rx];
 	if (TYP(rp) == PT_UVRD)
 	{
 		parts[i].tmp3 = parts[i].tmp3+2;
 	}
+}
 	return 0;
 }
 static int graphics(GRAPHICS_FUNC_ARGS)
