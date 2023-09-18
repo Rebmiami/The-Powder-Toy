@@ -1,11 +1,11 @@
 v55.3
-Update tptmp script
-Fix fuse not burning properly
-Fix some rare crashes
+Update internal tptmp script.
+Fix fuse not burning properly.
+Fix some rare crashes.
 Fix EMBR showing weird graphics with high life values.
 Fix save browser and render options not working properly.
 Use ui.beginConfirm for changelogs.
-New element: Force field generator (powered element) (WIki updation pending)
+New element: MFOM (Memory foam, shape changing element)
 
 v55.2
 Update script manager to v3.13, fixing search and other options not working in script manager.

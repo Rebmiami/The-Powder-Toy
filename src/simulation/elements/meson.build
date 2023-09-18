@@ -242,7 +242,7 @@ simulation_elem_names = [
 	'SODM',  
 	'BALL',   
 	'RUBR',  
-	'FORF',  
+	'MFOM',  
 ]
 
 simulation_elem_src = []
