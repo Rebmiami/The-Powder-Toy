@@ -31,9 +31,9 @@ void Element::Element_MFOM()
 	Weight = 100;
 
 	HeatConduct = 251;
-	Description = "Memory foam material. Returns to and sets its shape when heated/ cooled. Read WIKI.";
+	Description = "Memory foam material.Deforms under pressure. Returns to and sets its shape when heated/ cooled. Read WIKI.";
 
-	Properties = TYPE_SOLID | PROP_LIFE_DEC;
+	Properties = TYPE_PART | PROP_HOT_GLOW;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
@@ -47,8 +47,18 @@ void Element::Element_MFOM()
 	Create = &create;
 	Graphics = &graphics;
 }
+	constexpr float ADVECTION = 0.1f;
 static int update(UPDATE_FUNC_ARGS)
 {
+	
+	if (!parts[i].tmp3 && sim->pv[y/CELL][x/CELL]>1.0f)
+		parts[i].tmp3 = sim->rng.between(300, 379);
+	if (parts[i].tmp3)
+	{
+		parts[i].vx += ADVECTION*sim->vx[y/CELL][x/CELL];
+		parts[i].vy += ADVECTION*sim->vy[y/CELL][x/CELL];
+	}
+	
 	if (parts[i].temp > 22+273.15f)
 	{
 		parts[i].temp -= 1.0f;
@@ -62,20 +72,20 @@ static int update(UPDATE_FUNC_ARGS)
 		//Movement code
 		if (parts[i].x > parts[i].tmp)
 		{
-			parts[i].vx = parts[i].vx - 1.0f;
+			parts[i].vx -= 1.0f;
 		}
 		else if (parts[i].x < parts[i].tmp)
 		{
-			parts[i].vx = parts[i].vx + 1.0f;
+			parts[i].vx += 1.0f;
 		}
 		
 		if (parts[i].y > parts[i].tmp2)
 		{
-			parts[i].vy = parts[i].vy - 1.0f;
+			parts[i].vy -= 1.0f;
 		}
 		else if (parts[i].y < parts[i].tmp2)
 		{
-			parts[i].vy = parts[i].vy + 1.0f;
+			parts[i].vy += 1.0f;
 		}
 	}
 		if (parts[i].temp < 273.15f)
@@ -86,24 +96,18 @@ static int update(UPDATE_FUNC_ARGS)
 	}
 	return 0;
 }
-
 static int graphics(GRAPHICS_FUNC_ARGS)
 {
 	if (cpart->temp > 100+273.15f)
 	{
-	*firea = cpart->temp;
-	*firer = 24;
-	*fireg = 244;
-	*fireb = 24;
-	*pixel_mode |= FIRE_ADD;
+	*pixel_mode |= PMODE_FLARE;
 	}
 	else if (cpart->temp < 273.15f)
 	{
-	*firea = cpart->temp;
-	*firer = 244;
-	*fireg = 84;
-	*fireb = 84;
-	*pixel_mode |= FIRE_ADD;
+	*colr = 244;
+	*colg = 84;
+	*colb = 84;
+	*pixel_mode |= PMODE_FLARE;
 	}
 	return 0;
 }

@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 55.3 --Next version: 55.4
+local crackversion = 55.4 --Next version: 55.5
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -927,7 +927,7 @@ local edelname4 = Textbox:new(10, 100, 100, 15, '', 'Menu Section.')
 local edelname5 = Textbox:new(10, 120, 100, 15, '', 'Show / Hide.')
 local edelname3 = Textbox:new(10, 140, 550, 15, '', '                                              New Element Description.')
 local edelname6 = Textbox:new(10, 160, 100, 15, '', 'Explosive.')
-local edelname7 = Textbox:new(10, 180, 100, 15, '', 'HeatConduct.')
+local edelname7 = Textbox:new(10, 180, 100, 15, '', 'Heat Conductivity.')
 local edelname8 = Textbox:new(10, 200, 100, 15, '', 'Flammable.')
 local edelname9 = Textbox:new(10, 220, 100, 15, '', 'Weight.')
 local edelname10 = Textbox:new(10, 240, 100, 15, '', 'Acid resistance.')
@@ -948,7 +948,7 @@ local ed7 = Label:new(151,183,120, 10,"Heat conductivity. 0 = No, 255 = Max.")
 local ed8 = Label:new(137,203,120, 10,"Flamability, 0 to a few thousand.")
 local ed9 = Label:new(169,223,120, 10,"Weight , Eg. 1 = Gas, 2 = Light, 98 = Heavy.")
 local ed10 = Label:new(173,243,120, 10,"Acid resistance , Eg. 0 = No effect, 50 = Max.")
-local ed11 = Label:new(137,263,120, 10,"Temp. of element when it is spawned.")
+local ed11 = Label:new(147,263,120, 10,"Temp. of element when it is spawned.")
 local ed12 = Label:new(211,283,120, 10,"How much the particle wiggles, mainly for gases, range 0 - 10.")
 local ed13 = Label:new(156,303,120, 10,"How fast the particle falls. -0.1 to 0.4.")
 local ed14 = Label:new(205,323,120, 10,"How much the particle is accelerated by moving air. -1 to 01")

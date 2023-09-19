@@ -355,8 +355,8 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	ren->BlendText(Vec2((int)(cpart->x - 2.0f), (int)(cpart->y + 3.0f)), "*", RGBA<uint8_t>(255, 255, 0, 255)); 
 	}
 	// draw body
-	ren->BlendEllipse(Vec2((int)(cpart->x), (int)(cpart->y - 10.0f)),Vec2(cpart->ctype, cpart->ctype), RGBA<uint8_t>(mr, mg, mb, 255));
-	ren->BlendEllipse(Vec2((int)(cpart->x), (int)(cpart->y - 2.0f)), Vec2(cpart->ctype + 1, cpart->ctype + 1),RGBA<uint8_t>( 138, 138, 255, 205));
+	ren->BlendFilledEllipse(Vec2((int)(cpart->x), (int)(cpart->y - 10.0f)),Vec2(cpart->ctype, cpart->ctype), RGBA<uint8_t>(mr, mg, mb, 255));
+	ren->BlendFilledEllipse(Vec2((int)(cpart->x), (int)(cpart->y - 2.0f)), Vec2(cpart->ctype + 1, cpart->ctype + 1),RGBA<uint8_t>( 138, 138, 255, 205));
 	ren->DrawRect(RectSized(Vec2((int)(cpart->x - 1.0f), (int)(cpart->y - 11.0f)),Vec2( 3, 1)),RGB<uint8_t>( 0, 0, 0));
 
 	// health bar
