@@ -183,7 +183,7 @@ void PropertyWindow::CheckProperty()
 				{
 					std::cout << "Got int value " << v << std::endl;
 				}
-				newConfiguration.propValue = v;
+				newConfiguration.propValue.Integer = v;
 				break;
 			}
 			case StructProperty::UInteger:
@@ -207,21 +207,22 @@ void PropertyWindow::CheckProperty()
 				{
 					std::cout << "Got uint value " << v << std::endl;
 				}
-				newConfiguration.propValue = v;
+				newConfiguration.propValue.UInteger = v;
 				break;
 			}
 			case StructProperty::Float:
 			{
 				if (properties[property->GetOption().second].Name == "temp")
-					newConfiguration.propValue = format::StringToTemperature(value, tool->gameModel.GetTemperatureScale());
+					newConfiguration.propValue.Float = format::StringToTemperature(value, tool->gameModel.GetTemperatureScale());
 				else
-					newConfiguration.propValue = value.ToNumber<float>();
+					newConfiguration.propValue.Float = value.ToNumber<float>();
 			}
 				break;
 			default:
 				return;
 		}
-		newConfiguration.prop = properties[property->GetOption().second];
+		newConfiguration.propOffset = properties[property->GetOption().second].Offset;
+		newConfiguration.propType = properties[property->GetOption().second].Type;
 		newConfiguration.changeType = properties[property->GetOption().second].Name == "type";
 	}
 	catch (const std::exception& ex)
@@ -281,21 +282,21 @@ void PropertyTool::SetProperty(Simulation *sim, ui::Point position)
 
 	if (configuration->changeType)
 	{
-		sim->part_change_type(ID(i), int(sim->parts[ID(i)].x+0.5f), int(sim->parts[ID(i)].y+0.5f), std::get<int>(configuration->propValue));
+		sim->part_change_type(ID(i), int(sim->parts[ID(i)].x+0.5f), int(sim->parts[ID(i)].y+0.5f), configuration->propValue.Integer);
 		return;
 	}
 
-	switch (configuration->prop.Type)
+	switch (configuration->propType)
 	{
 		case StructProperty::Float:
-			*((float*)(((char*)&sim->parts[ID(i)])+configuration->prop.Offset)) = std::get<float>(configuration->propValue);
+			*((float*)(((char*)&sim->parts[ID(i)])+configuration->propOffset)) = configuration->propValue.Float;
 			break;
 		case StructProperty::ParticleType:
 		case StructProperty::Integer:
-			*((int*)(((char*)&sim->parts[ID(i)])+configuration->prop.Offset)) = std::get<int>(configuration->propValue);
+			*((int*)(((char*)&sim->parts[ID(i)])+configuration->propOffset)) = configuration->propValue.Integer;
 			break;
 		case StructProperty::UInteger:
-			*((unsigned int*)(((char*)&sim->parts[ID(i)])+configuration->prop.Offset)) = std::get<unsigned int>(configuration->propValue);
+			*((unsigned int*)(((char*)&sim->parts[ID(i)])+configuration->propOffset)) = configuration->propValue.UInteger;
 			break;
 		default:
 			break;
@@ -390,5 +391,5 @@ void PropertyTool::DrawRect(Simulation *sim, Brush const &cBrush, ui::Point posi
 void PropertyTool::DrawFill(Simulation *sim, Brush const &cBrush, ui::Point position)
 {
 	if (configuration)
-		sim->flood_prop(position.X, position.Y, configuration->prop, configuration->propValue);
+		sim->flood_prop(position.X, position.Y, configuration->propOffset, configuration->propValue, configuration->propType);
 }

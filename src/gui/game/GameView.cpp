@@ -520,7 +520,11 @@ void GameView::NotifyActiveToolsChanged(GameModel * sender)
 
 	if (sender->GetRenderer()->findingElement)
 	{
-		ren->findingElement = FindingElementCandidate();
+		Tool *active = sender->GetActiveTool(0);
+		if (!active->Identifier.Contains("_PT_"))
+			ren->findingElement = 0;
+		else
+			ren->findingElement = sender->GetActiveTool(0)->ToolID;
 	}
 }
 
@@ -1432,15 +1436,11 @@ void GameView::OnKeyPress(int key, int scan, bool repeat, bool shift, bool ctrl,
 	case SDL_SCANCODE_F:
 		if (ctrl)
 		{
-			auto findingElementCandidate = FindingElementCandidate();
-			if (ren->findingElement == findingElementCandidate)
-			{
-				ren->findingElement = std::nullopt;
-			}
+			Tool *active = c->GetActiveTool(0);
+			if (!active->Identifier.Contains("_PT_") || (ren->findingElement == active->ToolID))
+				ren->findingElement = 0;
 			else
-			{
-				ren->findingElement = findingElementCandidate;
-			}
+				ren->findingElement = active->ToolID;
 		}
 		else
 			c->FrameStep();
@@ -2530,22 +2530,4 @@ ui::Point GameView::rectSnapCoords(ui::Point point1, ui::Point point2)
 		return point1 + ui::Point((diff.X + diff.Y)/2, (diff.X + diff.Y)/2);
 	// SW-NE
 	return point1 + ui::Point((diff.X - diff.Y)/2, (diff.Y - diff.X)/2);
-}
-
-std::optional<FindingElement> GameView::FindingElementCandidate() const
-{
-	Tool *active = c->GetActiveTool(0);
-	if (active->Identifier.Contains("_PT_"))
-	{
-		return FindingElement{ Particle::GetProperties()[FIELD_TYPE], active->ToolID };
-	}
-	else if (active->Identifier == "DEFAULT_UI_PROPERTY")
-	{
-		auto configuration = static_cast<PropertyTool *>(active)->GetConfiguration();
-		if (configuration)
-		{
-			return FindingElement{ configuration->prop, configuration->propValue };
-		}
-	}
-	return std::nullopt;
 }
