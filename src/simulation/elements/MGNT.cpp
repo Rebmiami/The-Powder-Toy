@@ -93,9 +93,7 @@ static int update(UPDATE_FUNC_ARGS)
 								parts[i].temp += 3.0f;
 							}
 							{
-								PropertyValue value;
-								value.Integer = 3;
-								sim->flood_prop(x, y, offsetof(Particle, tmp), value, StructProperty::Integer);
+								sim->flood_prop(x, y, Particle::GetProperties()[FIELD_TMP], 3);
 							}
 						}
 						if (parts[ID(r)].ctype == PT_NSCN)
@@ -105,9 +103,7 @@ static int update(UPDATE_FUNC_ARGS)
 								parts[i].temp += 3.0f;
 							}
 							{
-								PropertyValue value;
-								value.Integer = 3;
-								sim->flood_prop(x, y, offsetof(Particle, tmp2), value, StructProperty::Integer);
+								sim->flood_prop(x, y, Particle::GetProperties()[FIELD_TMP2], 3);
 							}
 						}
 					}

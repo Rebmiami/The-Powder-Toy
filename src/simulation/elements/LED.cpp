@@ -69,9 +69,7 @@ static int update(UPDATE_FUNC_ARGS)
 						if (parts[ID(r)].type == PT_SPRK && parts[ID(r)].life > 0 && parts[ID(r)].ctype == PT_PSCN)
 						{
 							{
-								PropertyValue value;
-								value.Integer = 8;
-								sim->flood_prop(x, y, offsetof(Particle, life), value, StructProperty::Integer);
+								sim->flood_prop(x, y, Particle::GetProperties()[FIELD_LIFE], 8);
 							}
 						}
 						}
