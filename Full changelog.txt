@@ -1,9 +1,10 @@
 v55.5
 Update manager and tptmp to latest versions
-MFOM is now DFOM, a different element with more uses.
+MFOM is now DFOM, a different element with more uses and somewhat same concept.
 Attempt to fix URS 600 errors for win11 users
 Merge fixes from master branch
 New element: NUKE
+Add Zhole back
 
 v55.4
 Fix MFOM
