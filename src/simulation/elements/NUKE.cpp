@@ -53,7 +53,7 @@ if (rx || ry)
 		{
 			parts[i].life = parts[i].tmp;
 		}
-		if (parts[i].life > 0 && parts[i].life <15)
+		if (parts[i].life > 0 && parts[i].life <20)
 		{
 		sim->pv[(ry / CELL)][(rx / CELL)] += 100;	
 		sim->gravmap[(ry/CELL)*XCELLS+(rx/CELL)] += 100;
@@ -94,8 +94,8 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 {
 	if (cpart->life > 0)
 	{
-	ren->BlendFilledEllipse(Vec2((int)(cpart->x), (int)(cpart->y+7)),Vec2(25-cpart->life/4,8), RGBA<uint8_t>(ren->rng.between(50,255),ren->rng.between(50,255), ren->rng.between(50,255), 255));
-	ren->BlendFilledEllipse(Vec2((int)(cpart->x), (int)(cpart->y+7)),Vec2(8,15), RGBA<uint8_t>(ren->rng.between(50,255),ren->rng.between(50,255), ren->rng.between(50,255), 255));
+	ren->BlendFilledEllipse(Vec2((int)(cpart->x), (int)(cpart->y+8)),Vec2(5,20), RGBA<uint8_t>(ren->rng.between(50,255),ren->rng.between(50,255), ren->rng.between(50,255), 255));
+	ren->BlendFilledEllipse(Vec2((int)(cpart->x), (int)(cpart->y+8)),Vec2(20,5), RGBA<uint8_t>(ren->rng.between(50,255),ren->rng.between(50,255), ren->rng.between(50,255), 255));
 	*pixel_mode = PMODE_LFLARE;
 	}
 	return 0;
