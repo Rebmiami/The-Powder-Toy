@@ -1,7 +1,6 @@
-iscrackmod = true
 --Cracker64's Autorun Script Manager
 --The autorun to end all autoruns
---Version 3.13
+--Version 3.14
 
 --TODO:
 --manual file addition (that can be anywhere and any extension)
@@ -10,7 +9,8 @@ iscrackmod = true
 --prettier, organize code
 
 --CHANGES:
---Version 3.13: Better support for upcoming versions of TPT, all script downloads now async, settings now stored separately per scripts directory, fix rare bug that wipes settings
+--Version 3.14: Fix extra newlines being inserted into scripts on Windows
+--Version 3.13: Better support for upcoming versions of TPT, all script downloads now async, settings now stored separately per scripts directory, fix another rare failure on startup
 --Version 3.12: Use https for all requests, online view loads async, add FILTER button to online, fix rare failure on startup if downloaded scripts list is corrupted
 --Version 3.11: Fix icons in 94.0, fix "view script in browser"
 --Version 3.10: Fix HTTP requests, without this update the online section may break
@@ -55,8 +55,8 @@ end
 if not socket then error("TPT version not supported") end
 if MANAGER then error("manager is already running") end
 
-local scriptversion = 15
-MANAGER = {["version"] = "3.13", ["scriptversion"] = scriptversion, ["hidden"] = true}
+local scriptversion = 16
+MANAGER = {["version"] = "3.14", ["scriptversion"] = scriptversion, ["hidden"] = true}
 
 local type = type -- people like to overwrite this function with a global a lot
 local TPT_LUA_PATH = 'scripts'
@@ -163,7 +163,7 @@ local function save_dir()
 	-- But now, only the "DIR" argument is kept here
 	fs.removeFile("autorunsettings.txt")
 	if TPT_LUA_PATH ~= "scripts" then
-		f = io.open("autorunsettings.txt", "w")
+		f = io.open("autorunsettings.txt", "wb")
 		if f then
 			f:write("DIR "..TPT_LUA_PATH)
 			f:close()
@@ -181,7 +181,7 @@ local function save_last()
 			savestring = savestring.."\nSET "..k.." "..n..":\""..v.."\""
 		end
 	end
-	local f = io.open(TPT_LUA_PATH..PATH_SEP.."autorunsettings.txt", "w")
+	local f = io.open(TPT_LUA_PATH..PATH_SEP.."autorunsettings.txt", "wb")
 	if f then
 		f:write(savestring)
 		f:close()
@@ -191,7 +191,7 @@ local function save_last()
 
 	save_dir()
 
-	f = io.open(TPT_LUA_PATH..PATH_SEP.."downloaded"..PATH_SEP.."scriptinfo", "w")
+	f = io.open(TPT_LUA_PATH..PATH_SEP.."downloaded"..PATH_SEP.."scriptinfo", "wb")
 	if f then
 		for k,v in pairs(localscripts) do
 			f:write(scriptInfoString(v).."\n")
@@ -318,7 +318,7 @@ ui_box = {
 new = function(x,y,w,h,r,g,b)
 	local box=ui_base.new()
 	box.x=x box.y=y box.w=w box.h=h box.x2=x+w box.y2=y+h
-	box.r=r or 50 box.g=g or 50 box.b=b or 50
+	box.r=r or 40 box.g=g or 40 box.b=b or 40
 	function box:setcolor(r,g,b) self.r=r self.g=g self.b=b end
 	function box:setbackground(r,g,b,a) self.br=r self.bg=g self.bb=b self.ba=a end
 	box.drawbox=true
@@ -918,7 +918,7 @@ end
 local function download_script(ID, location, cb)
 	download_file("https://starcatcher.us/scripts/main.lua?get=" .. ID, function(file, status_code)
 		if file and status_code == 200 then
-			f = io.open(location, "w")
+			f = io.open(location, "wb")
 			f:write(file)
 			f:close()
 			cb(true, status_code)
