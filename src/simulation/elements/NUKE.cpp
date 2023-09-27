@@ -27,7 +27,7 @@ void Element::Element_NUKE()
 	Hardness = 1;
 	Weight = 100;
 	HeatConduct = 0;
-	Description = "Super powerful atomic nuke. Activate with PSCN. Use one at a time. Needs gravity.";
+	Description = "Atomic nuke. Activate with PSCN. Use one at a time. Needs gravity.";
 	
 	Properties = TYPE_PART|PROP_LIFE_DEC;
 	Update = &update;
@@ -53,18 +53,12 @@ if (rx || ry)
 		{
 			parts[i].life = parts[i].tmp;
 		}
-		if (parts[i].life > 0 && parts[i].life <20)
-		{
-		sim->pv[(ry / CELL)][(rx / CELL)] += 100;	
-		sim->gravmap[(ry/CELL)*XCELLS+(rx/CELL)] += 100;
-		}
 		if (parts[i].life > 0)
 		{
 		sim->pv[(ry / CELL)][(rx / CELL)] = 250-parts[i].life;
 		sim->hv[ry/CELL][rx/CELL] = 255;
 		sim->gravmap[(ry/CELL)*XCELLS+(rx/CELL)] = 100;
 		parts[ID(r)].temp += 500;
-		parts[ID(r)].life = 200;
 		}
 		}
 	}
@@ -73,14 +67,20 @@ if (parts[i].life > 0)
 {
 		parts[ID(i)].temp += 500;
 		sim->create_part(-1,x,y+3,PT_GBMB);
-		sim->create_part(-1,x-3,y+1,PT_PLSM);
-		sim->create_part(-1,x+3,y+2,PT_FIRE);
-		if (parts[i].life < 30)
-		{
-		sim->create_part(-1,x-1,y+1,PT_THDR);
-		sim->create_part(-1,x-1,y+2,PT_LIGH);
-		}
+		sim->create_part(-1,x+sim->rng.between(1,6),y+sim->rng.between(1,6),PT_PLSM);
+		sim->create_part(-1,x-sim->rng.between(1,6),y+sim->rng.between(1,6),PT_PLSM);
 
+if (parts[i].life < 60)
+		{
+	    sim->pv[(y / CELL)][(x / CELL)] += 250;	
+		sim->gravmap[(y/CELL)*XCELLS+(x/CELL)] += 200;
+		sim->create_part(-1,x+sim->rng.between(1,6),y+sim->rng.between(1,6),PT_THDR);
+		sim->create_part(-1,x-sim->rng.between(1,6),y+sim->rng.between(1,6),PT_THDR);
+		sim->create_part(-1,x+sim->rng.between(1,6),y+sim->rng.between(1,6),PT_LIGH);
+		sim->create_part(-1,x-sim->rng.between(1,6),y+sim->rng.between(1,6),PT_LIGH);
+		sim->create_part(-1,x+sim->rng.between(1,6),y+sim->rng.between(1,6),PT_NAPM);
+		sim->create_part(-1,x-sim->rng.between(1,6),y+sim->rng.between(1,6),PT_NAPM);
+		}
 		if (parts[i].life == 1)
 		{
 		parts[i].tmp = 9700;

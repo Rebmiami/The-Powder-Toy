@@ -102,20 +102,20 @@ static int update(UPDATE_FUNC_ARGS)
 	{
 		if (parts[i].x > parts[i].tmp)
 		{
-			parts[i].vx -= 1.0f;
+			parts[i].vx -= 2.0f;
 		}
 	else
 		{
-			parts[i].vx += 1.0f;
+			parts[i].vx += 2.0f;
 		}
 		
 	if (parts[i].y > parts[i].tmp2)
 		{
-			parts[i].vy -= 1.0f;
+			parts[i].vy -= 2.0f;
 		}
 	else
 		{
-			parts[i].vy += 1.0f;
+			parts[i].vy += 2.0f;
 		}
 	}
 	}
