@@ -21,6 +21,16 @@ void Element::Element_NUKE()
 	HighTemperature = ITH;
 	HighTemperatureTransition = NT;
 
+	Advection = 0.0f;
+	AirDrag = 0.08f * CFDS;
+	AirLoss = 0.00f;
+	Loss = 0.00f;
+	Collision = 0.0f;
+	Gravity = 0.0f;
+	Diffusion = 0.00f;
+	HotAir = 0.040f	* CFDS;
+	Falldown = 0;
+	
 	Flammable = 0;
 	Explosive = 0;
 	Meltable = 0;
@@ -36,10 +46,15 @@ void Element::Element_NUKE()
 }
 static int update(UPDATE_FUNC_ARGS)
 {
-	if (parts[i].life > 0 && parts[i].y > 100)
+	if (parts[i].life > 0)
 	{
-		parts[i].vy = -0.5f;
-		parts[i].vx = 0.0f;
+		if (parts[i].y > 100)
+		{parts[i].vy = -0.5f;
+		}
+		else if (parts[i].y < 100)
+		{parts[i].vy = +0.5f;
+		}
+	parts[i].vx = 0.0f;
 	}
 for (auto rx = -2; rx < 2; rx++)
 for (auto ry = -2; ry < 2; ry++)
@@ -69,6 +84,8 @@ if (parts[i].life > 0)
 		sim->create_part(-1,x,y+3,PT_GBMB);
 		sim->create_part(-1,x+sim->rng.between(1,6),y+sim->rng.between(1,6),PT_PLSM);
 		sim->create_part(-1,x-sim->rng.between(1,6),y+sim->rng.between(1,6),PT_PLSM);
+		sim->create_part(-1,x+sim->rng.between(1,6),y+sim->rng.between(1,6),PT_FIRE);
+		sim->create_part(-1,x-sim->rng.between(1,6),y+sim->rng.between(1,6),PT_FIRE);
 
 if (parts[i].life < 60)
 		{
