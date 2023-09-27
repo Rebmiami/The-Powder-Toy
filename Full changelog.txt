@@ -1,3 +1,10 @@
+v56.0
+Add missing iscrackmod variable
+Additional stats show more data
+Fix custom can_move settings being reset after using tpt.el
+Improve NUKE.
+Update mod contritbutors list
+
 v55.5
 Update manager and tptmp to latest versions
 MFOM is now DFOM, a different element with more uses and somewhat same concept.
