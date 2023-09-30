@@ -2,10 +2,17 @@
 #include "Config.h"
 #include "common/String.h"
 
+inline ByteString VersionInfo()
+{
+	ByteStringBuilder sb;
+	sb << SAVE_VERSION << "." << MINOR_VERSION << "." << BUILD_NUM << " " << IDENT;
+	return sb.Build();
+}
+
 inline ByteString IntroText()
 {
 	ByteStringBuilder sb;
-	sb<<"\bo                                           |-----------------------------------|\n"
+	sb << "\bo                                           |-----------------------------------|\n"
 		"\bw                                            Welcome To The Cracker1000's Mod \n"
 		"\bo                                           |-----------------------------------|\n"
 		"                                                   \br<< \bwVersion: 56.1\br >>"

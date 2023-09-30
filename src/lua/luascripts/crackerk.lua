@@ -1972,6 +1972,7 @@ local bogb1 = Button:new(124,333,60,25,"Borders", "Draw Borders")
 local jkey = Button:new(124,300,60,25,"J-Shortcut", "Toggle Shortcut")
 local neonmode = Button:new(224,300,60,25,"Neon Mode", "Toggle fire strength")
 local relativeHeatDisplay = Button:new(324,300,80,25,"Relative Heat", "Makes heat display adjust to the temperature range in save")
+local relativeHeathelp = Button:new(434,302,20,20,"?", "Help text for relative heat display.")
 local bg7 = Button:new(224,333,60,25,"Developer", "Disable inbuilt scripts")
 
 local baropa =  Button:new(24,250,35,20,"Short", "Short and moving")
@@ -2112,6 +2113,7 @@ newmenuth:addComponent(bog1)
 newmenuth:addComponent(bogb1)
 newmenuth:addComponent(jkey)
 newmenuth:addComponent(relativeHeatDisplay)
+newmenuth:addComponent(relativeHeathelp)
 newmenuth:addComponent(neonmode)
 
 newmenuth:addComponent(rSlider)
@@ -2193,17 +2195,20 @@ relativeHeatDisplay:action(function (sender)
 if MANAGER.getsetting("CRK", "relhdv") == "0" then
 MANAGER.savesetting("CRK", "relhdv", "1")
 ren.heatDisplayRelativeMode(true)
-ren.colorMode(5)
-interface.beginMessageBox("Relative heat display help", "Uses the temp. of particles in simulation for min and max values instead of predefined ones. Thus changes the particle colour relative to the temp. of other particles.")
+tpt.display_mode(5)
 print("Relative heat display mode:  Makes heat display adjust to the temperature range in save.")
 elseif MANAGER.getsetting("CRK", "relhdv") == "1" then
 MANAGER.savesetting("CRK", "relhdv", "0")
 ren.heatDisplayRelativeMode(false)
-ren.colorMode(0)
+tpt.display_mode(3)
 print("Relative heat display mode turned off.")
 end
-ren.renderModes({ren.RENDER_BASC})
 end)
+
+relativeHeathelp:action(function (sender)
+interface.beginMessageBox("Relative heat display help", "This display mode changes the min and max temp values to that of the particles present in the simulation instead of pre defined ones. Thus making heat display adjust colours to the actual temp. range of particles on screen.")
+end)
+
 
 mpop:action(function(sender)
 ui.closeWindow(newmenuth)
