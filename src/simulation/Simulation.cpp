@@ -10,6 +10,7 @@
 #include "common/tpt-rand.h"
 #include "common/tpt-thread-local.h"
 #include "gui/game/Brush.h"
+#include "simulation/ElementDefs.h"
 #include <iostream>
 #include <set>
 
@@ -4059,6 +4060,12 @@ std::pair<float, float> Simulation::GetMinMaxTemp() {
 				minMax.second = std::max(minMax.second, air->hv[y][x]);
 			}
 		}
+	}
+
+	// In case there are no particles and ambient heat is disabled
+	if (minMax.first > minMax.second)
+	{
+		minMax = {MIN_TEMP, MAX_TEMP};
 	}
 
     return minMax;
