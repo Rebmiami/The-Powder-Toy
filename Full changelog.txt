@@ -2,6 +2,7 @@ Todo: V56.1 (Unreleased)
 Use ERASEA instead of Eraser in quick options (Done)
 Make wall resistant  to DEST and BOMB (Done)
 Fix bat files (Done)
+Maticzpl's relative heat display mode (found in control centre)
 
 Pending:
 Fix DFOM for once

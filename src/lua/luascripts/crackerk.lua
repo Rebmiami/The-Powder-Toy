@@ -340,7 +340,6 @@ local autoval = "1"
 local hidval = "1"
 local shrtv = "1"
 local nmodv = "0"
-local relhdv = "1"
 local focustime = 190
 
 function clearm()
@@ -1972,7 +1971,7 @@ local bogb1 = Button:new(124,333,60,25,"Borders", "Draw Borders")
 
 local jkey = Button:new(124,300,60,25,"J-Shortcut", "Toggle Shortcut")
 local neonmode = Button:new(224,300,60,25,"Neon Mode", "Toggle fire strength")
-local relativeHeatDisplay = Button:new(324,300,60,25,"Rel Heat", "Makes heat display adjust to the temperature range in save")
+local relativeHeatDisplay = Button:new(324,300,90,25,"Relative Heat", "Makes heat display adjust to the temperature range in save")
 local bg7 = Button:new(224,333,60,25,"Developer", "Disable inbuilt scripts")
 
 local baropa =  Button:new(24,250,35,20,"Short", "Short and moving")
@@ -2068,10 +2067,10 @@ gfx.drawText(290,309,"ON",105,255,105,255)
 else
 gfx.drawText(290,309,"OFF",255,105,105,255)
 end
-if relhdv == "1" then
-gfx.drawText(390,309,"ON",105,255,105,255)
+if MANAGER.getsetting("CRK", "relhdv") == "1" then
+gfx.drawText(420,309,"ON",105,255,105,255)
 else
-gfx.drawText(390,309,"OFF",255,105,105,255)
+gfx.drawText(420,309,"OFF",255,105,105,255)
 end
 
 if MANAGER.getsetting("CRK", "savergb") ~= "1" then
@@ -2191,14 +2190,15 @@ end
 end)
 
 relativeHeatDisplay:action(function (sender)
-if relhdv == "0" then
-relhdv = "1"
+if MANAGER.getsetting("CRK", "relhdv") == "0" then
+MANAGER.savesetting("CRK", "relhdv", "1")
 ren.heatDisplayRelativeMode(true)
-elseif relhdv == "1" then
-relhdv = "0"
+print("Relative heat display mode:  Makes heat display adjust to the temperature range in save.")
+elseif MANAGER.getsetting("CRK", "relhdv") == "1" then
+MANAGER.savesetting("CRK", "relhdv", "0")
 ren.heatDisplayRelativeMode(false)
+print("Relative heat display mode turned off.")
 end
-MANAGER.savesetting("CRK", "relhdv", relhdv)
 end)
 
 mpop:action(function(sender)
@@ -2533,7 +2533,7 @@ MANAGER.savesetting("CRK","notifval","1")
 MANAGER.savesetting("CRK", "fancurs","0")
 MANAGER.savesetting("CRK","savergb","0")
 MANAGER.savesetting("CRK","barval","2")
-MANAGER.savesetting("CRK","relhdv","1")
+MANAGER.savesetting("CRK","relhdv","0")
 MANAGER.savesetting("CRK","ar",dr)
 MANAGER.savesetting("CRK","ag",dg)
 MANAGER.savesetting("CRK","ab",db)
@@ -2546,9 +2546,9 @@ if MANAGER.getsetting("CRK", "split") == "1" then
 splitval = 1
 end
 
-if MANAGER.getsetting("CRK", "relhdv") == "0" then
-relhdv = "0"
-ren.heatDisplayRelativeMode(false)
+if MANAGER.getsetting("CRK", "relhdv") == "1" then
+ren.heatDisplayRelativeMode(true)
+print("Relative heat display mode is turned on.")
 end
 
 if MANAGER.getsetting("CRK", "hidestate") == "1" then
