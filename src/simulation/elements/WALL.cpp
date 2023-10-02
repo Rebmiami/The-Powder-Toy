@@ -26,7 +26,7 @@ void Element::Element_WALL()
 	Meltable = 0;
 	Hardness = 0;
 
-	Weight = 100;
+	Weight = 102;
 
 	DefaultProperties.temp = 293.15f;
 	HeatConduct = 0;
