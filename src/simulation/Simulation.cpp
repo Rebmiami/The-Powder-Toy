@@ -10,6 +10,7 @@
 #include "common/tpt-rand.h"
 #include "common/tpt-thread-local.h"
 #include "gui/game/Brush.h"
+#include "simulation/ElementDefs.h"
 #include <iostream>
 #include <set>
 
@@ -4036,6 +4037,38 @@ void Simulation::SetCustomGOL(std::vector<CustomGOLData> newCustomGol)
 {
 	std::sort(newCustomGol.begin(), newCustomGol.end());
 	customGol = newCustomGol;
+}
+
+std::pair<float, float> Simulation::GetMinMaxTemp() {
+    std::pair<float, float> minMax(MAX_TEMP, MIN_TEMP);
+
+    for (int i = 0; i < NPART; i++)
+    {
+        if(parts[i].type != 0)
+        {
+            minMax.first = std::min(minMax.first, parts[i].temp);
+            minMax.second = std::max(minMax.second, parts[i].temp);
+        }
+    }
+
+	if (aheat_enable) {
+		for (int y = 0; y < YCELLS; y++)
+		{
+			for (int x = 0; x < XCELLS; x++)
+			{
+				minMax.first = std::min(minMax.first, air->hv[y][x]);
+				minMax.second = std::max(minMax.second, air->hv[y][x]);
+			}
+		}
+	}
+
+	// In case there are no particles and ambient heat is disabled
+	if (minMax.first > minMax.second)
+	{
+		minMax = {MIN_TEMP, MAX_TEMP};
+	}
+
+    return minMax;
 }
 
 String Simulation::ElementResolve(int type, int ctype) const

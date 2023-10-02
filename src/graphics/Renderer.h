@@ -35,7 +35,7 @@ struct gcache_item
 };
 typedef struct gcache_item gcache_item;
 
-int HeatToColour(float temp);
+int HeatToColour(float temp, float min_temp, float max_temp);
 
 class Renderer: public RasterDrawMethods<Renderer>
 {
@@ -87,6 +87,7 @@ public:
 	pixel sampleColor;
 	std::optional<FindingElement> findingElement;
 	int foundElements;
+	bool relativeHeatDisplay;
 
 	//Mouse position for debug information
 	ui::Point mousePos;
@@ -169,4 +170,6 @@ public:
 
 private:
 	int gridSize;
+    float minTemp;
+    float maxTemp;
 };

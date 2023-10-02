@@ -177,6 +177,28 @@ void Renderer::render_parts()
 	Element *elements;
 	if(!sim)
 		return;
+
+	if (relativeHeatDisplay) 
+	{
+		auto heatRange = sim->GetMinMaxTemp();
+		float smooth = HEAT_DISPLAY_SMOOTHING;
+		minTemp = (heatRange.first + minTemp * smooth) / (smooth + 1); // Make smoother across frames
+		maxTemp = (heatRange.second + maxTemp * smooth) / (smooth + 1);
+		minTemp = std::max(minTemp, MIN_TEMP);
+		if (std::abs(minTemp - maxTemp) < HEAT_DISPLAY_MIN_DIFF)
+		{
+			maxTemp += HEAT_DISPLAY_MIN_DIFF - std::abs(minTemp - maxTemp);
+		}
+		float prevMax = maxTemp;
+		maxTemp = std::min(maxTemp, MAX_TEMP);
+		minTemp -= maxTemp - prevMax; // In case HEAT_DISPLAY_MIN_DIFF put it above MAX_TEMP
+	}
+	else 
+	{
+		minTemp = MIN_TEMP;
+		maxTemp = MAX_TEMP;
+	}
+
 	parts = sim->parts;
 	elements = sim->elements.data();
 	if (gridSize)//draws the grid
@@ -282,10 +304,8 @@ void Renderer::render_parts()
 				//Alter colour based on display mode
 				if(colour_mode & COLOUR_HEAT)
 				{
-					constexpr float min_temp = MIN_TEMP;
-					constexpr float max_temp = MAX_TEMP;
 					firea = 255;
-					RGB<uint8_t> color = heatTableAt(int((sim->parts[i].temp - min_temp) / (max_temp - min_temp) * 1024));
+					RGB<uint8_t> color = heatTableAt(int((sim->parts[i].temp - minTemp) / (maxTemp - minTemp) * 1024));
 					firer = colr = color.Red;
 					fireg = colg = color.Green;
 					fireb = colb = color.Blue;
@@ -877,7 +897,7 @@ void Renderer::draw_air()
 			}
 			else if (display_mode & DISPLAY_AIRH)
 			{
-				c = RGB<uint8_t>::Unpack(HeatToColour(hv[y][x]));
+				c = RGB<uint8_t>::Unpack(HeatToColour(hv[y][x], minTemp, maxTemp));
 				//c = RGB<uint8_t>(clamp_flt(fabsf(vx[y][x]), 0.0f, 8.0f),//vx adds red
 				//	clamp_flt(hv[y][x], 0.0f, 1600.0f),//heat adds green
 				//	clamp_flt(fabsf(vy[y][x]), 0.0f, 8.0f)).Pack();//vy adds blue
@@ -1219,10 +1239,8 @@ void Renderer::render_fire()
 		}
 }
 
-int HeatToColour(float temp)
+int HeatToColour(float temp, float min_temp, float max_temp)
 {
-	constexpr float min_temp = MIN_TEMP;
-	constexpr float max_temp = MAX_TEMP;
 	RGB<uint8_t> color = Renderer::heatTableAt(int((temp - min_temp) / (max_temp - min_temp) * 1024));
 	color.Red   = uint8_t(color.Red   * 0.7f);
 	color.Green = uint8_t(color.Green * 0.7f);
