@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 56.0 --Next version: 56.1
+local crackversion = 56.1 --Next version: 56.2
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -2461,7 +2461,7 @@ end
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
 if switchval == 0 then
 selectedelem = tpt.selectedl
-tpt.selectedl = "DEFAULT_PT_NONE"
+tpt.selectedl = "DEFAULT_PT_ERASEA"
 switchval = 1
 elseif switchval == 1 then
 tpt.selectedl = selectedelem

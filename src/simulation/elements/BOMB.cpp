@@ -60,7 +60,7 @@ static int update(UPDATE_FUNC_ARGS)
 				if (!r)
 					continue;
 				auto rt = TYP(r);
-				if (rt!=PT_BOMB && rt!=PT_EMBR && rt!=PT_DMND && rt!=PT_CLNE && rt!=PT_PCLN && rt!=PT_BCLN && rt!=PT_VIBR)
+				if (rt!=PT_BOMB && rt!=PT_EMBR && rt!=PT_DMND && rt!=PT_CLNE && rt!=PT_PCLN && rt!=PT_BCLN && rt!=PT_VIBR && rt!=PT_WALL)
 				{
 					int rad = 8, nt;
 					sim->kill_part(i);
