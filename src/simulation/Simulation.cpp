@@ -754,8 +754,8 @@ void Simulation::SetEdgeMode(int newEdgeMode)
 	edgeMode = newEdgeMode;
 	switch(edgeMode)
 	{
-	case 0:
-	case 2:
+	case EDGE_VOID:
+	case EDGE_LOOP:
 		for(int i = 0; i<XCELLS; i++)
 		{
 			bmap[0][i] = 0;
@@ -767,7 +767,7 @@ void Simulation::SetEdgeMode(int newEdgeMode)
 			bmap[i][XCELLS-1] = 0;
 		}
 		break;
-	case 1:
+	case EDGE_SOLID:
 		int i;
 		for(i=0; i<XCELLS; i++)
 		{
@@ -781,7 +781,7 @@ void Simulation::SetEdgeMode(int newEdgeMode)
 		}
 		break;
 	default:
-		SetEdgeMode(0);
+		SetEdgeMode(EDGE_VOID);
 	}
 }
 
@@ -1663,7 +1663,7 @@ int Simulation::try_move(int i, int x, int y, int nx, int ny)
 int Simulation::do_move(int i, int x, int y, float nxf, float nyf)
 {
 	int nx = (int)(nxf+0.5f), ny = (int)(nyf+0.5f), result;
-	if (edgeMode == 2)
+	if (edgeMode == EDGE_LOOP)
 	{
 		bool x_ok = (nx >= CELL && nx < XRES-CELL);
 		bool y_ok = (ny >= CELL && ny < YRES-CELL);
@@ -2092,15 +2092,15 @@ void Simulation::GetGravityField(int x, int y, float particleGrav, float newtonG
 	switch (gravityMode)
 	{
 	default:
-	case 0: //normal, vertical gravity
+	case GRAV_VERTICAL: //normal, vertical gravity
 		pGravX = 0;
 		pGravY = particleGrav;
 		break;
-	case 1: //no gravity
+	case GRAV_OFF: //no gravity
 		pGravX = 0;
 		pGravY = 0;
 		break;
-	case 2: //radial gravity
+	case GRAV_RADIAL: //radial gravity
 		{
 			pGravX = 0;
 			pGravY = 0;
@@ -2114,7 +2114,7 @@ void Simulation::GetGravityField(int x, int y, float particleGrav, float newtonG
 			}
 		}
 		break;
-	case 3: //custom gravity
+	case GRAV_CUSTOM: //custom gravity
 		pGravX = particleGrav * customGravityX;
 		pGravY = particleGrav * customGravityY;
 		break;
@@ -2902,7 +2902,7 @@ killed:
 					fin_yf += dy;
 					fin_x = (int)(fin_xf+0.5f);
 					fin_y = (int)(fin_yf+0.5f);
-					if (edgeMode == 2)
+					if (edgeMode == EDGE_LOOP)
 					{
 						bool x_ok = (fin_xf >= CELL-.5f && fin_xf < XRES-CELL-.5f);
 						bool y_ok = (fin_yf >= CELL-.5f && fin_yf < YRES-CELL-.5f);
@@ -2918,7 +2918,7 @@ killed:
 						// nothing found
 						fin_xf = parts[i].x + parts[i].vx;
 						fin_yf = parts[i].y + parts[i].vy;
-						if (edgeMode == 2)
+						if (edgeMode == EDGE_LOOP)
 						{
 							bool x_ok = (fin_xf >= CELL-.5f && fin_xf < XRES-CELL-.5f);
 							bool y_ok = (fin_yf >= CELL-.5f && fin_yf < YRES-CELL-.5f);
@@ -2962,7 +2962,7 @@ killed:
 				parts[i].y += parts[i].vy;
 				int nx = (int)((float)parts[i].x+0.5f);
 				int ny = (int)((float)parts[i].y+0.5f);
-				if (edgeMode == 2)
+				if (edgeMode == EDGE_LOOP)
 				{
 					bool x_ok = (nx >= CELL && nx < XRES-CELL);
 					bool y_ok = (ny >= CELL && ny < YRES-CELL);
@@ -3235,7 +3235,7 @@ killed:
 								goto movedone;
 							}
 						}
-						if (elements[t].Falldown>1 && !grav->IsEnabled() && gravityMode==0 && parts[i].vy>fabsf(parts[i].vx))
+						if (elements[t].Falldown>1 && !grav->IsEnabled() && gravityMode==GRAV_VERTICAL && parts[i].vy>fabsf(parts[i].vx))
 						{
 							s = 0;
 							// stagnant is true if FLAG_STAGNANT was set for this particle in previous frame
@@ -3959,8 +3959,8 @@ Simulation::Simulation():
 	gravWallChanged(false),
 	CGOL(0),
 	GSPEED(1),
-	edgeMode(0),
-	gravityMode(0),
+	edgeMode(EDGE_VOID),
+	gravityMode(GRAV_VERTICAL),
 	customGravityX(0),
 	customGravityY(0),
 	legacy_enable(0),
