@@ -63,11 +63,6 @@ if int(build_options['mod_id']) == 0:
 		build_options['app_comment'] += ' - Snapshot'
 		build_options['app_exe'    ] += 'snapshot'
 		build_options['app_id'     ] += 'snapshot'
-	else:
-		build_options['app_name'   ] += ''
-		build_options['app_comment'] += ''
-		build_options['app_exe'    ] += ''
-		build_options['app_id'     ] += ''
 
 set_output('mod_id'     , build_options['mod_id'     ])
 set_output('app_name'   , build_options['app_name'   ])
