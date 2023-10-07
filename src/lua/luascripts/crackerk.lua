@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 56.1 --Next version: 56.2
+local crackversion = 56.5 --Next version: 57.0
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -320,7 +320,7 @@ local passbut = Button:new(396,188,90,25, "Quick Options", "Quick options.")
 
 local reminder = Button:new(396,220,90,25, "Notifications", "Maticzpl's notification stuff")
 local reminderhelp = Button:new(516,224,15,15, "?", "Help")
-local upmp = Button:new(396,28,90,25, "Startup Elements", "Update multiplayer")
+local upmp = Button:new(396,28,90,25, "Startup Elements", "Changes the default elements that load on startup.")
 
 local hide= Button:new(578,5,25,25, "X", "Hide.")
 
@@ -1945,7 +1945,7 @@ local mp10 = Button:new(420,92,45,25,"Split", "Half of the theme is inverted")
 local mpop = Button:new(530,347,75,20,"Done", "Close")
 
 local bg1 = Button:new(24,300,60,25,"Filters", "Toggle filters")
-local bog1 = Button:new(24,333,60,25,"Update Mod", "Triggers the forced update mechanism.")
+local bog1 = Button:new(24,333,70,25,"Force Update", "Triggers the forced update mechanism.")
 local bogb1 = Button:new(124,333,60,25,"Borders", "Draw Borders")
 
 local jkey = Button:new(124,300,60,25,"J-Shortcut", "Toggle Shortcut")
