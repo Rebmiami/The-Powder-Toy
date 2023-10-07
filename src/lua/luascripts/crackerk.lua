@@ -1971,7 +1971,7 @@ local bogb1 = Button:new(124,333,60,25,"Borders", "Draw Borders")
 
 local jkey = Button:new(124,300,60,25,"J-Shortcut", "Toggle Shortcut")
 local neonmode = Button:new(224,300,60,25,"Neon Mode", "Toggle fire strength")
-local relativeHeatDisplay = Button:new(324,300,90,25,"Relative Heat", "Makes heat display adjust to the temperature range in save")
+local relativeHeatDisplay = Button:new(324,300,80,25,"Relative Heat", "Makes heat display adjust to the temperature range in save")
 local bg7 = Button:new(224,333,60,25,"Developer", "Disable inbuilt scripts")
 
 local baropa =  Button:new(24,250,35,20,"Short", "Short and moving")
@@ -2068,9 +2068,9 @@ else
 gfx.drawText(290,309,"OFF",255,105,105,255)
 end
 if MANAGER.getsetting("CRK", "relhdv") == "1" then
-gfx.drawText(420,309,"ON",105,255,105,255)
+gfx.drawText(410,309,"ON",105,255,105,255)
 else
-gfx.drawText(420,309,"OFF",255,105,105,255)
+gfx.drawText(410,309,"OFF",255,105,105,255)
 end
 
 if MANAGER.getsetting("CRK", "savergb") ~= "1" then
@@ -2193,12 +2193,16 @@ relativeHeatDisplay:action(function (sender)
 if MANAGER.getsetting("CRK", "relhdv") == "0" then
 MANAGER.savesetting("CRK", "relhdv", "1")
 ren.heatDisplayRelativeMode(true)
+ren.colorMode(5)
+interface.beginMessageBox("Relative heat display help", "Uses the temp. of particles in simulation for min and max values instead of predefined ones. Thus changes the particle colour relative to the temp. of other particles.")
 print("Relative heat display mode:  Makes heat display adjust to the temperature range in save.")
 elseif MANAGER.getsetting("CRK", "relhdv") == "1" then
 MANAGER.savesetting("CRK", "relhdv", "0")
 ren.heatDisplayRelativeMode(false)
+ren.colorMode(0)
 print("Relative heat display mode turned off.")
 end
+ren.renderModes({ren.RENDER_BASC})
 end)
 
 mpop:action(function(sender)
@@ -2480,7 +2484,7 @@ end
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
 if switchval == 0 then
 selectedelem = tpt.selectedl
-tpt.selectedl = "DEFAULT_PT_ERASEA"
+tpt.selectedl = "DEFAULT_WL_ERASEA"
 switchval = 1
 elseif switchval == 1 then
 tpt.selectedl = selectedelem

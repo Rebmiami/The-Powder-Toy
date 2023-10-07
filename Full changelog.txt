@@ -2,8 +2,9 @@ Todo: V56.1 (Unreleased)
 Use ERASEA instead of Eraser in quick options (Done)
 Make wall resistant  to DEST and BOMB (Done)
 Fix bat files (Done)
-Maticzpl's relative heat display mode (found in control centre)
-
+Maticzpl's relative heat display mode (found in control centre, Done)
+Make rel heat switch to heat display upon activation
+Merge commits from master branch
 Pending:
 Fix DFOM for once
 Make NUKE much stronger
