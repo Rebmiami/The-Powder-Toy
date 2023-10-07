@@ -49,8 +49,6 @@ public:
 	void SetChangeResolution(bool newChangeResolution);
 	bool GetForceIntegerScaling();
 	void SetForceIntegerScaling(bool forceIntegerScaling);
-	bool GetBlurryScaling();
-	void SetBlurryScaling(bool newBlurryScaling);
 	bool GetFastQuit();
 	void SetFastQuit(bool fastquit);
 	int GetDecoSpace();

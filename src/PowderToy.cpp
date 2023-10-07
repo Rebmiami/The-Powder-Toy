@@ -17,7 +17,6 @@
 #include "gui/Style.h"
 #include "gui/game/GameController.h"
 #include "gui/game/GameView.h"
-#include "gui/game/IntroText.h"
 #include "gui/dialogues/ConfirmPrompt.h"
 #include "gui/dialogues/ErrorMessage.h"
 #include "gui/interface/Engine.h"
@@ -81,13 +80,12 @@ void SaveWindowPosition()
 void LargeScreenDialog()
 {
 	StringBuilder message;
-	auto scale = ui::Engine::Ref().windowFrameOps.scale;
 	message << "Switching to " << scale << "x size mode since your screen was determined to be large enough: ";
-	message << desktopWidth << "x" << desktopHeight << " detected, " << WINDOWW * scale << "x" << WINDOWH * scale << " required";
+	message << desktopWidth << "x" << desktopHeight << " detected, " << WINDOWW*scale << "x" << WINDOWH*scale << " required";
 	message << "\nTo undo this, hit Cancel. You can change this in settings at any time.";
 	new ConfirmPrompt("Large screen detected", message.Build(), { nullptr, []() {
 		GlobalPrefs::Ref().Set("Scale", 1);
-		ui::Engine::Ref().windowFrameOps.scale = 1;
+		ui::Engine::Ref().SetScale(1);
 	} });
 }
 
@@ -104,7 +102,6 @@ void BlueScreen(String detailMessage)
 	String errorTitle = "ERROR";
 	String errorDetails = "Details: " + detailMessage;
 	String errorHelp = String("An unrecoverable fault has occurred, please report the error by visiting the website below\n") + SCHEME + SERVER;
-	auto versionInfo = ByteString::Build("Version: ", VersionInfo(), "\nTag: ", VCS_TAG).FromUtf8();
 
 	// We use the width of errorHelp to center, but heights of the individual texts for vertical spacing
 	auto pos = engine.g->Size() / 2 - Vec2(Graphics::TextSize(errorHelp).X / 2, 100);
@@ -113,8 +110,6 @@ void BlueScreen(String detailMessage)
 	engine.g->BlendText(pos, errorDetails, 0xFFFFFF_rgb .WithAlpha(0xFF));
 	pos.Y += 4 + Graphics::TextSize(errorDetails).Y;
 	engine.g->BlendText(pos, errorHelp, 0xFFFFFF_rgb .WithAlpha(0xFF));
-	pos.Y += 4 + Graphics::TextSize(errorHelp).Y;
-	engine.g->BlendText(pos, versionInfo, 0xFFFFFF_rgb .WithAlpha(0xFF));
 
 	//Death loop
 	SDL_Event event;
@@ -286,15 +281,7 @@ int Main(int argc, char *argv[])
 	explicitSingletons->globalPrefs = std::make_unique<GlobalPrefs>();
 
 	auto &prefs = GlobalPrefs::Ref();
-
-	WindowFrameOps windowFrameOps{
-		prefs.Get("Scale", 1),
-		prefs.Get("Resizable", false),
-		prefs.Get("Fullscreen", false),
-		prefs.Get("AltFullscreen", false),
-		prefs.Get("ForceIntegerScaling", true),
-		prefs.Get("BlurryScaling", false),
-	};
+	scale = prefs.Get("Scale", 1);
 	auto graveExitsConsole = prefs.Get("GraveExitsConsole", true);
 	momentumScroll = prefs.Get("MomentumScroll", true);
 	showAvatars = prefs.Get("ShowAvatars", true);
@@ -316,8 +303,8 @@ int Main(int argc, char *argv[])
 	auto kioskArg = arguments["kiosk"];
 	if (kioskArg.has_value())
 	{
-		windowFrameOps.fullscreen = true_string(kioskArg.value());
-		prefs.Set("Fullscreen", windowFrameOps.fullscreen);
+		currentFrameOps.fullscreen = true_string(kioskArg.value());
+		prefs.Set("Fullscreen", currentFrameOps.fullscreen);
 	}
 
 	if (true_arg(arguments["redirect"]))
@@ -335,8 +322,8 @@ int Main(int argc, char *argv[])
 	{
 		try
 		{
-			windowFrameOps.scale = scaleArg.value().ToNumber<int>();
-			prefs.Set("Scale", windowFrameOps.scale);
+			scale = scaleArg.value().ToNumber<int>();
+			prefs.Set("Scale", scale);
 		}
 		catch (const std::runtime_error &e)
 		{
@@ -375,29 +362,40 @@ int Main(int argc, char *argv[])
 	explicitSingletons->engine = std::make_unique<ui::Engine>();
 
 	// TODO: maybe bind the maximum allowed scale to screen size somehow
-	if(windowFrameOps.scale < 1 || windowFrameOps.scale > SCALE_MAXIMUM)
-		windowFrameOps.scale = 1;
+	if(scale < 1 || scale > SCALE_MAXIMUM)
+		scale = 1;
+
+	SDLOpen();
+
+	StopTextInput();
 
 	auto &engine = ui::Engine::Ref();
 	engine.g = new Graphics();
+	engine.Scale = scale;
 	engine.GraveExitsConsole = graveExitsConsole;
+	engine.SetWindowFrameOps(currentFrameOps);
 	engine.MomentumScroll = momentumScroll;
 	engine.ShowAvatars = showAvatars;
 	engine.Begin();
 	engine.SetFastQuit(prefs.Get("FastQuit", true));
 	engine.TouchUI = prefs.Get("TouchUI", DEFAULT_TOUCH_UI);
+
 	if (Client::Ref().IsFirstRun() && FORCE_WINDOW_FRAME_OPS == forceWindowFrameOpsNone)
 	{
-		windowFrameOps.scale = GuessBestScale();
-		if (windowFrameOps.scale)
+		scale = GuessBestScale();
+		if (scale > 1)
 		{
-			prefs.Set("Scale", windowFrameOps.scale);
+			prefs.Set("Scale", scale);
 			showLargeScreenDialog = true;
 		}
 	}
-	engine.windowFrameOps = windowFrameOps;
 
-	SDLOpen();
+	SDLSetScreen(scale, {
+		prefs.Get("Resizable", false),
+		prefs.Get("Fullscreen", false),
+		prefs.Get("AltFullscreen", false),
+		prefs.Get("ForceIntegerScaling", true),
+	}, vsyncHint);
 
 	bool enableBluescreen = USE_BLUESCREEN && !true_arg(arguments["disable-bluescreen"]);
 	if (enableBluescreen)

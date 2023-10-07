@@ -87,11 +87,6 @@ void OptionsController::SetForceIntegerScaling(bool forceIntegerScaling)
 	model->SetForceIntegerScaling(forceIntegerScaling);
 }
 
-void OptionsController::SetBlurryScaling(bool newBlurryScaling)
-{
-	model->SetBlurryScaling(newBlurryScaling);
-}
-
 void OptionsController::SetShowAvatars(bool showAvatars)
 {
 	model->SetShowAvatars(showAvatars);

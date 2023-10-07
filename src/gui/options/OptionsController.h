@@ -27,7 +27,6 @@ public:
 	void SetFullscreen(bool fullscreen);
 	void SetChangeResolution(bool newChangeResolution);
 	void SetForceIntegerScaling(bool forceIntegerScaling);
-	void SetBlurryScaling(bool newBlurryScaling);
 	void SetScale(int scale);
 	void SetGraveExitsConsole(bool graveExitsConsole);
 	void SetResizable(bool resizable);
