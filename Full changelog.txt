@@ -6,9 +6,13 @@ Maticzpl's relative heat display mode (found in control centre, Done)
 Make relative heat mode switch to heat display upon activation
 Merge commits from master branch
 Quick options > eraser now switches between wall erase tool and eraser based on selected category.
+Cr-menu buttons are larger now, displaying the entire text.
+Brightness settings got revamped, much simple to use.
+Reset button now asks for confirmation before resetting the mod.
+Fix 600 response errors for win 11 users.
 
 Pending:
-Cr-menu buttons are larger now, displaying the entire text.
+Merge conflicts
 Fix DFOM for once
 Make NUKE much stronger
 

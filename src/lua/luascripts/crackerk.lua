@@ -275,55 +275,52 @@ end
 local toggle = Button:new(419,408,50,15, "Cr-Menu", "Open Mod Settings.")
 local newmenu = Window:new(-15,-15, 609, 255)
 
-local deletesparkButton =  Button:new(10,28,80,25,"Focus Mode", "shows UI related stuff.")
+local deletesparkButton =  Button:new(10,28,90,25,"Focus Mode", "shows UI related stuff.")
 
-local FPS = Button:new(10,60,80,25, "Frame limiter", "Turns the frame limiter on/off.")
+local FPS = Button:new(10,60,90,25, "Frame limiter", "Turns the frame limiter on/off.")
 
-local reset = Button:new(10,92,80,25,"Reset", "Reset.")
-local resethelp = Button:new(100,96,15,15, "?", "Help")
+local reset = Button:new(10,92,90,25,"Reset", "Reset.")
 
-local info = Button:new(10,124,80,25,"Stack tools", "Usefull for subframe.")
+local info = Button:new(10,124,90,25,"Stack tools", "Usefull for subframe.")
 
-local Ruler = Button:new(10,156,80,25, "Ruler", "Toggles in game ruler.")
+local Ruler = Button:new(10,156,90,25, "Ruler", "Toggles in game ruler.")
 
-local bar = Button:new(10,188,80,25,"Auto Save", "Toggle Auto stamp.")
+local bar = Button:new(10,188,90,25,"Auto Save", "Toggle Auto stamp.")
 local stamplb = "0"
 
-local bug = Button:new(10,220,80,25,"Feedback", "Direct to Mod thread for bug report.")
-local bug1 = Button:new(100,220,45,25,"Website", "Direct to Mod thread for bug report.")
-local bug2 = Button:new(148,220,45,25,"In game", "Direct to Mod thread for bug report.")
+local bug = Button:new(10,220,90,25,"Feedback", "Direct to Mod thread for bug report.")
+local bug1 = Button:new(104,220,45,25,"Website", "Direct to Mod thread for bug report.")
+local bug2 = Button:new(153,220,45,25,"In game", "Direct to Mod thread for bug report.")
 
-local wiki  =  Button:new(203,28,80,25,"Wiki", "Element wiki!")
+local wiki  =  Button:new(203,28,90,25,"Wiki", "Element wiki!")
 
-local bare = Button:new(203,60,80,25,"Hidden Elem.", "Toggle hidden elements.")
+local bare = Button:new(203,60,90,25,"Hidden Elements", "Toggle hidden elements.")
 
-local bg = Button:new(203,92,80,25,"Mod Elem.", "")
+local bg = Button:new(203,92,90,25,"Mod Elements", "")
 
-local mp = Button:new(203,124,80,25,"Control Centre", "Changes game's theme")
+local mp = Button:new(203,124,90,25,"Control Centre", "Changes game's theme")
 
-local autohide = Button:new(203,156,80,25, "Auto Hide HUD", "Hide.")
+local autohide = Button:new(203,156,90,25, "Auto Hide HUD", "Hide.")
 
-local chud = Button:new(203,188,80,25, "Texter", "for text.")
+local chud = Button:new(203,188,90,25, "Texter", "for text.")
 
-local brightness = Button:new(203,220,80,25, "Brightness", "Adjust brightness.")
-local brightSlider = Slider:new(310,220,80,27, 255)
-local brop = Button:new(313,202,32,15,"On", "Save.")
-local bropc = Button:new(355,202,32,15,"Off", "Cancel.")
-local brlabel2 = Label:new(344, 225, 10, 15, "("..brightSlider:value()..")")
+local brightness = Button:new(203,220,90,25, "Brightness", "Adjust brightness.")
+local brightSlider = Slider:new(320,220,70,27, 255)
+local brlabel2 = Label:new(348, 225, 10, 15, "("..brightSlider:value()..")")
 
-local Help = Button:new(396,60,80,25, "Random save", "Opens random save.")
+local Help = Button:new(396,60,90,25, "Random save", "Opens random save.")
 
-local shrtpre = Button:new(396,92,80,25, "Invert-tool", "Selects opposite tool")
+local shrtpre = Button:new(396,92,90,25, "Invert-tool", "Selects opposite tool")
 
-local edito = Button:new(396,124,80,25, "Editor", "Basic element editor.")
+local edito = Button:new(396,124,90,25, "Editor", "Basic element editor.")
 
-local perfm = Button:new(396,156,80,25, "Performance", "For lower spec systems.")
+local perfm = Button:new(396,156,90,25, "Performance", "For lower spec systems.")
 
-local passbut = Button:new(396,188,80,25, "Quick Opt.", "Quick options.")
+local passbut = Button:new(396,188,90,25, "Quick Options", "Quick options.")
 
-local reminder = Button:new(396,220,80,25, "Notifications", "Maticzpl's notification stuff")
-local reminderhelp = Button:new(506,224,15,15, "?", "Help")
-local upmp = Button:new(396,28,80,25, "Startup Elem.", "Update multiplayer")
+local reminder = Button:new(396,220,90,25, "Notifications", "Maticzpl's notification stuff")
+local reminderhelp = Button:new(516,224,15,15, "?", "Help")
+local upmp = Button:new(396,28,90,25, "Startup Elements", "Update multiplayer")
 
 local hide= Button:new(578,5,25,25, "X", "Hide.")
 
@@ -366,14 +363,11 @@ newmenu:removeComponent(perfm)
 newmenu:removeComponent(passbut)
 newmenu:removeComponent(upmp)
 newmenu:removeComponent(reminderhelp)
-newmenu:removeComponent(resethelp)
 end
 
 function clearsb()
 newmenu:removeComponent(bug1)
 newmenu:removeComponent(bug2)
-newmenu:removeComponent(brop)
-newmenu:removeComponent(bropc)
 newmenu:removeComponent(brlabel2)
 newmenu:removeComponent(brightSlider)
 end
@@ -1105,9 +1099,6 @@ reminderhelp:action(function(sender)
 close()
 interface.beginMessageBox(" Notification feature help", "Turning it on will notify you when:\n*There's a new vote or comment on your save\n*When your save reaches/ leaves FP.\n\nRefreshes every 5 minutes and works for first 60 saves (by votes + by dates).\n\nShows a red cross if something goes wrong.\n\nCredit: @Maticzpl")
 end)
-resethelp:action(function(sender)
-interface.beginMessageBox(" Mod resetter","Resetting the mod changes the mod settings back to their default values and disables all the lua scripts. Saves and other important data will remain intact.")
-end)
 
 function cbrightness()
 tpt.fillrect(-1,-1,630,425,0,0,0,255-MANAGER.getsetting("CRK", "brightness"))
@@ -1127,29 +1118,17 @@ brlabel2:text(tonumber(string.format("%.1f",brightSlider:value()/255*100)).."%")
 end)
 newmenu:addComponent(brlabel2)
 newmenu:addComponent(brightSlider)
-newmenu:addComponent(brop)
-newmenu:addComponent(bropc)
-end)
-
-brop:action(function(sender)
+if MANAGER.getsetting("CRK", "brightstate") == "1" then --Off
+MANAGER.savesetting("CRK", "brightstate", "0")
+event.unregister(event.tick,cbrightness)
+MANAGER.savesetting("CRK", "brightness", brightSlider:value())
+newmenu:removeComponent(brightSlider)
+newmenu:removeComponent(brlabel2)
+elseif MANAGER.getsetting("CRK", "brightstate") == "0" then --On
 MANAGER.savesetting("CRK", "brightstate", "1")
 event.unregister(event.tick,cbrightness)
 event.register(event.tick,cbrightness)
-newmenu:removeComponent(brightSlider)
-newmenu:removeComponent(brlabel2)
-newmenu:removeComponent(brop)
-newmenu:removeComponent(bropc)
-end)
-
-bropc:action(function(sender)
-MANAGER.savesetting("CRK", "brightstate", "0")
-event.unregister(event.tick,cbrightness)
-brightSlider:value("255")
-MANAGER.savesetting("CRK", "brightness", brightSlider:value())
-newmenu:removeComponent(brightSlider)
-newmenu:removeComponent(brop)
-newmenu:removeComponent(brlabel2)
-newmenu:removeComponent(bropc)
+end
 end)
 
 --Texter hybrid start
@@ -2206,7 +2185,7 @@ end
 end)
 
 relativeHeathelp:action(function (sender)
-interface.beginMessageBox("Relative heat display help", "This display mode changes the min and max temp values to that of the particles present in the simulation instead of pre defined ones. Thus making heat display adjust colours to the actual temp. range of particles on screen.")
+interface.beginMessageBox(" Relative heat display help", "This display mode changes the min and max temp values to that of the particles present in the simulation instead of pre defined ones. Thus making heat display adjust colours to the actual temp. range of particles on screen.")
 end)
 
 
@@ -2545,6 +2524,8 @@ MANAGER.savesetting("CRK", "modelemval","1")
 MANAGER.savesetting("CRK","notifval","1")
 MANAGER.savesetting("CRK", "fancurs","0")
 MANAGER.savesetting("CRK","savergb","0")
+MANAGER.savesetting("CRK", "brightstate","0")
+MANAGER.savesetting("CRK", "brightness",255)
 MANAGER.savesetting("CRK","barval","2")
 MANAGER.savesetting("CRK","relhdv","0")
 MANAGER.savesetting("CRK","ar",dr)
@@ -2629,6 +2610,9 @@ end
 end)
 
 reset:action(function(sender)
+interface.beginConfirm(" Mod Reset help","Clicking on Reset will reset the mod back to the default state. All the lua scripts will be unloaded. Saves, stamps and other data still remain intact.","Reset", 
+function (result)
+if result then 
 os.remove("scripts/downloaded/2 LBPHacker-TPTMulti.lua")
 os.remove("scripts/downloaded/219 Maticzpl-Notifications.lua")
 os.remove("scripts/downloaded/scriptinfo.txt")
@@ -2636,6 +2620,9 @@ os.remove("scripts/autorunsettings.txt")
 os.remove("autorun.lua")
 os.remove("oldmod")
 platform.restart()
+end
+end
+)
 end)
 
 function close()
@@ -2685,71 +2672,69 @@ else
 gfx.drawText(498,7,"Offline",255,95,95,255)
 end
 if uival == "0" then --Focus Mode
-gfx.drawText(98,37,"ON",105,255,105,255)
+gfx.drawText(108,37,"ON",105,255,105,255)
 else
-gfx.drawText(98,37,"OFF",255,105,105,255)
+gfx.drawText(108,37,"OFF",255,105,105,255)
 end
 if fpsval == "1" then --Frame limiter
-gfx.drawText(98,69,"ON",105,255,105,255)
+gfx.drawText(108,69,"ON",105,255,105,255)
 else
-gfx.drawText(98,69,"OFF",255,105,105,255)
+gfx.drawText(108,69,"OFF",255,105,105,255)
 end
 if MANAGER.getsetting("CRK","rulval") == "1" then --Ruler
-gfx.drawText(98,165,"ON",105,255,105,255)
+gfx.drawText(108,165,"ON",105,255,105,255)
 else
-gfx.drawText(98,165,"OFF",255,105,105,255)
+gfx.drawText(108,165,"OFF",255,105,105,255)
 end
 if stamplb == "1" then --Autostamp
-gfx.drawText(98,198,"ON",105,255,105,255)
+gfx.drawText(108,198,"ON",105,255,105,255)
 else
-gfx.drawText(98,198,"OFF",255,105,105,255)
+gfx.drawText(108,198,"OFF",255,105,105,255)
 end
 if hidval == "0" then --Hidden elements
-gfx.drawText(291,69,"ON",105,255,105,255)
+gfx.drawText(301,69,"ON",105,255,105,255)
 else
-gfx.drawText(291,69,"OFF",255,105,105,255)
+gfx.drawText(301,69,"OFF",255,105,105,255)
 end
 if MANAGER.getsetting("CRK", "modelemval") == "1" then --Mod elements
-gfx.drawText(291,101,"ON",105,255,105,255)
+gfx.drawText(301,101,"ON",105,255,105,255)
 else
-gfx.drawText(291,101,"OFF",255,105,105,255)
+gfx.drawText(301,101,"OFF",255,105,105,255)
 end
 if autoval == "0" then --Auto hide hud
-gfx.drawText(291,165,"ON",105,255,105,255)
+gfx.drawText(301,165,"ON",105,255,105,255)
 else
-gfx.drawText(291,165,"OFF",255,105,105,255)
+gfx.drawText(301,165,"OFF",255,105,105,255)
 end
 if MANAGER.getsetting("CRK", "brightstate") == "1" then --Brigntness
-gfx.drawText(291,229,"ON",105,255,105,255)
+gfx.drawText(301,229,"ON",105,255,105,255)
 else
-gfx.drawText(291,229,"OFF",255,105,105,255)
+gfx.drawText(301,229,"OFF",255,105,105,255)
 end
 if perfmv == "0" then --Performance
-gfx.drawText(484,165,"ON",105,255,105,255)
+gfx.drawText(494,165,"ON",105,255,105,255)
 else
-gfx.drawText(484,165,"OFF",255,105,105,255)
+gfx.drawText(494,165,"OFF",255,105,105,255)
 end
-if MANAGER.getsetting("CRK", "pass") == "1" then --Password/ Now quick settings
-gfx.drawText(484,197,"ON",105,255,105,255)
+if MANAGER.getsetting("CRK", "pass") == "1" then -- Quick Options
+gfx.drawText(494,197,"ON",105,255,105,255)
 else
-gfx.drawText(484,197,"OFF",255,105,105,255)
+gfx.drawText(494,197,"OFF",255,105,105,255)
 end
 if MANAGER.getsetting("CRK","notifval") == "1" then --Notifications
-gfx.drawText(484,229,"ON",105,255,105,255)
+gfx.drawText(494,229,"ON",105,255,105,255)
 else
-gfx.drawText(484,229,"OFF",255,105,105,255)
+gfx.drawText(494,229,"OFF",255,105,105,255)
 end
-
 if MANAGER.getsetting("CRK","loadelem") == "1" then --Startup elements.
-gfx.drawText(484,37,"Configured",105,255,105,255)
+gfx.drawText(494,37,"Configured",105,255,105,255)
 else
-gfx.drawText(484,37,"OFF",255,105,105,255)
+gfx.drawText(494,37,"OFF",255,105,105,255)
 end
---Reserved
 if MANAGER.getsetting("CRK","invtoolv") == "1" then --Invert-tool
-gfx.drawText(484,101,"ON",105,255,105,255)
+gfx.drawText(494,101,"ON",105,255,105,255)
 else
-gfx.drawText(484,101,"OFF",255,105,105,255)
+gfx.drawText(494,101,"OFF",255,105,105,255)
 end
 end
 
@@ -2802,7 +2787,6 @@ newmenu:addComponent(perfm)
 newmenu:addComponent(passbut)
 newmenu:addComponent(upmp)
 newmenu:addComponent(reminderhelp)
-newmenu:addComponent(resethelp)
 end
 
 hide:action(function(sender)
