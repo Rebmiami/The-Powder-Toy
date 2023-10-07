@@ -2438,7 +2438,7 @@ if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 
 if switchval == 0 then
 gfx.drawText(16,247,"Eraser",105,105,255,255)
 else
-gfx.drawText(16,247,"Element",105,105,255,255)
+gfx.drawText(16,247,"Element/ Wall",105,105,255,255)
 end
 end
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
@@ -2489,7 +2489,11 @@ end
 if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
 if switchval == 0 then
 selectedelem = tpt.selectedl
-tpt.selectedl = "DEFAULT_WL_ERASEA"
+if selectedelem == "DEFAULT_WL_ERASE" or selectedelem == "DEFAULT_WL_DTECT" or selectedelem == "DEFAULT_WL_CNDT" or selectedelem == "DEFAULT_WL_EWALL" or selectedelem == "DEFAULT_WL_STRM"  or selectedelem == "DEFAULT_WL_FAN" or selectedelem == "DEFAULT_WL_LIQD" or selc == "DEFAULT_WL_ABSRB" or selectedelem == "DEFAULT_WL_WALL" or selectedelem ==" DEFAULT_WL_AIR" or selectedelem =="DEFAULT_WL_POWDR" or selectedelem =="DEFAULT_WL_CNDTR" or selectedelem =="DEFAULT_WL_EHOLE" or selectedelem =="DEFAULT_WL_GAS" or selectedelem =="DEFAULT_WL_GRVTY" or selectedelem =="DEFAULT_WL_ENRGY" or selectedelem =="DEFAULT_WL_NOAIR" or selectedelem =="DEFAULT_WL_STASIS"  or selectedelem =="DEFAULT_WL_CNDTW" then
+tpt.selectedl = "DEFAULT_WL_ERASE"
+else
+tpt.selectedl = "DEFAULT_PT_NONE"
+end
 switchval = 1
 elseif switchval == 1 then
 tpt.selectedl = selectedelem
