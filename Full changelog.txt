@@ -1,4 +1,10 @@
-V56.1
+v56.6
+Change reset button behaviour. Doesn't delete any script/ settings except the mod ones.
+Fix relative heat display not turning off actually when disabled from settings.
+In progess:
+New element by Redmiami
+
+V56.5
 Use ERASEA instead of Eraser in quick options
 Make wall resistant  to DEST and BOMB
 Fix bat files

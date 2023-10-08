@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 56.5 --Next version: 57.0
+local crackversion = 56.6 --Next version: 56.7
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -2543,6 +2543,8 @@ end
 if MANAGER.getsetting("CRK", "relhdv") == "1" then
 ren.heatDisplayRelativeMode(true)
 print("Relative heat display mode is turned on.")
+elseif MANAGER.getsetting("CRK", "relhdv") == "0" then
+ren.heatDisplayRelativeMode(false)
 end
 
 if MANAGER.getsetting("CRK", "hidestate") == "1" then
@@ -2610,14 +2612,10 @@ end
 end)
 
 reset:action(function(sender)
-interface.beginConfirm(" Mod Reset help","Clicking on Reset will reset the mod back to the default state. All the lua scripts will be unloaded. Saves, stamps and other data still remain intact.","Reset", 
+interface.beginConfirm(" Mod Reset help","Clicking on Reset will reset the mod back to the default state. All the lua scripts, their saved settings, saves, stamps and other data still remain intact.","Reset", 
 function (result)
 if result then 
-os.remove("scripts/downloaded/2 LBPHacker-TPTMulti.lua")
-os.remove("scripts/downloaded/219 Maticzpl-Notifications.lua")
-os.remove("scripts/downloaded/scriptinfo.txt")
-os.remove("scripts/autorunsettings.txt")
-os.remove("autorun.lua")
+MANAGER.delsetting("CRK")
 os.remove("oldmod")
 platform.restart()
 end
