@@ -16,6 +16,7 @@ os.remove("dlf3.txt")
 os.remove("scripts/downloaded/2 LBPHacker-TPTMulti.lua")
 os.remove("scripts/downloaded/219 Maticzpl-Notifications.lua")
 os.remove("scripts/autorunsettings.txt")
+os.remove("autorun.lua")
 platform.restart()
 end
 return false

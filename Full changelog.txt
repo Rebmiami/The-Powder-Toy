@@ -1,6 +1,8 @@
 v56.6
 Change reset button behaviour. Doesn't delete any script/ settings except the mod ones.
 Fix relative heat display not turning off actually when disabled from settings.
+Center sensors, search and pause icons.
+Fix a bug in the font editor where the last row of a symbol is cleared when shifting the whole symbol up.
 In progess:
 New element by Redmiami
 
