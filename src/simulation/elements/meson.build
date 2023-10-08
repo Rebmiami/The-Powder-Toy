@@ -244,6 +244,7 @@ simulation_elem_names = [
 	'RUBR',  
 	'DFOM',  
 	'NUKE', 
+	'ALUM', 
 ]
 
 simulation_elem_src = []
