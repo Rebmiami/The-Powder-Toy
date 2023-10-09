@@ -42,7 +42,7 @@ void Element::Element_ACTY()
 	HighPressureTransition = NT;
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
-	HighTemperature = 3800 + 273.15;
+	HighTemperature = 3800 + 273.15f;
 	HighTemperatureTransition = PT_PLSM;
 
 	Update = &update;

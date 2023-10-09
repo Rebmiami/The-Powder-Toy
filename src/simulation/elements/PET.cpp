@@ -57,20 +57,20 @@ static int update(UPDATE_FUNC_ARGS)
 	// Edge detection
 	if (parts[i].x < 20)
 	{
-		parts[i].vx = 0.6;
+		parts[i].vx = 0.6f;
 	}
 	else if (parts[i].x > 600)
 	{
-		parts[i].vx = -0.6;
+		parts[i].vx = -0.6f;
 	}
 
 	if (parts[i].y <= 10)
 	{
-		parts[i].vy = 0.6;
+		parts[i].vy = 0.6f;
 	}
 	else if (parts[i].y > 360)
 	{
-		parts[i].vy = -0.6;
+		parts[i].vy = -0.6f;
 	}
 	//Slowly loses life if there's nothing to eat.
 	if (sim->rng.chance(1, 80))

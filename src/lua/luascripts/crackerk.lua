@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 56.6 --Next version: 56.7
+local crackversion = 57.0 --Next version: 57.1
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -280,6 +280,8 @@ local deletesparkButton =  Button:new(10,28,90,25,"Focus Mode", "shows UI relate
 local FPS = Button:new(10,60,90,25, "Frame limiter", "Turns the frame limiter on/off.")
 
 local reset = Button:new(10,92,90,25,"Reset", "Reset.")
+local rset1 = Button:new(104,92,45,25,"Soft", "Reset just the mod settings.")
+local rset2 = Button:new(153,92,45,25,"Hard", "Reset entire game, might delete some stuff.")
 
 local info = Button:new(10,124,90,25,"Stack tools", "Usefull for subframe.")
 
@@ -368,6 +370,8 @@ end
 function clearsb()
 newmenu:removeComponent(bug1)
 newmenu:removeComponent(bug2)
+newmenu:removeComponent(rset1)
+newmenu:removeComponent(rset2)
 newmenu:removeComponent(brlabel2)
 newmenu:removeComponent(brightSlider)
 end
@@ -2612,15 +2616,36 @@ end
 end)
 
 reset:action(function(sender)
-interface.beginConfirm(" Mod Reset help","Clicking on Reset will reset the mod back to the default state. All the lua scripts, their saved settings, saves, stamps and other data still remain intact.","Reset", 
+clearsb()
+newmenu:addComponent(rset1)
+newmenu:addComponent(rset2)
+end)
+
+rset1:action(function(sender) --Soft reset, doesn't delete anything.
+interface.beginConfirm(" Mod Reset help","You have initiated soft reset. Clicking on Reset will reset the mod back to the default state. Only the mod settings will reset. Useful when some new features are added in an update.","Reset", 
 function (result)
 if result then 
 MANAGER.delsetting("CRK")
 os.remove("oldmod")
 platform.restart()
 end
+end)
+end)
+
+rset2:action(function(sender) --Soft reset, doesn't delete anything.
+interface.beginConfirm(" Mod Reset help","You have initiated hard reset. Clicking on Reset will reset the mod back to the default state. All the lua scripts will be unloaded, their saved settings might get deleted. Use autorunsettingsbackup.txt for recovery. Saves, stamps and other data will still remain intact.","Reset", 
+function (result)
+if result then 
+os.remove("scripts/downloaded/2 LBPHacker-TPTMulti.lua")
+os.remove("scripts/downloaded/219 Maticzpl-Notifications.lua")
+os.remove("scripts/autorunsettingsbackup.txt")--Delete the file if it already exists
+os.rename("scripts/autorunsettings.txt","scripts/autorunsettingsbackup.txt")--Rename the file for use as a backup.
+os.remove("scripts/autorunsettings.txt")
+os.remove("autorun.lua")
+os.remove("oldmod")
+platform.restart()
 end
-)
+end)
 end)
 
 function close()
@@ -8219,4 +8244,4 @@ if name == "" then
 end
 end
 notificationscript()
-failsafe = 1 -- Meant to be a global variable, used for detecting script crash
+failsafe = 1 -- Meant to be a global variable, used for detecting script crashes.
