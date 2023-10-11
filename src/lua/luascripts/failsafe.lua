@@ -15,7 +15,7 @@ os.remove("dlf3.txt")
 os.remove("scripts/downloaded/2 LBPHacker-TPTMulti.lua")
 os.remove("scripts/downloaded/219 Maticzpl-Notifications.lua")
 os.remove("scripts/autorunsettingsbackup.txt")--Delete the file if it already exists
-os.rename("scripts/autorunsettings.txt","autorunsettingsbackup.txt")--Rename the file for use as a backup.
+os.rename("scripts/autorunsettings.txt","scripts/autorunsettingsbackup.txt")--Rename the file for use as a backup.
 os.remove("scripts/autorunsettings.txt")
 os.remove("autorun.lua")
 os.remove("oldmod")

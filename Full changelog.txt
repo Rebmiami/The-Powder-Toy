@@ -1,3 +1,9 @@
+v56.7
+Change the old mod and script backup settings directory.
+Update the tptmp script.
+New element: Aluminium.
+changes from master branch
+
 v56.6
 Test update for win 11 users.
 Change reset button behaviour. Doesn't delete any script/ settings except the mod ones.
