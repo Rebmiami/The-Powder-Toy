@@ -2518,6 +2518,10 @@ event.register(event.tick,quickset)
 event.register(event.mousedown,quicksetmouse)
 end
 
+if MANAGER.getsetting("CRK","relhdv") == nil then --Special handling just for new features
+MANAGER.savesetting("CRK","relhdv","0")
+end
+
 if MANAGER.getsetting("CRK","al") == nil then --Defaults to prevent errors in script
 MANAGER.savesetting("CRK","loadelem","0")
 MANAGER.savesetting("CRK", "pass","0")

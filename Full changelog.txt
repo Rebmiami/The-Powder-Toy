@@ -1,7 +1,7 @@
-v56.7
-Change the old mod and script backup settings directory.
+v57.0
+Fix relative heat setting requiring a reset after update.
 Update the tptmp script to v2.0.35.
-New element: Aluminium.
+New element: Aluminium by @Redmiami
 changes from master branch:
 Make save history icon not so hard to find, and show up on all saves (not just your own) the icon is now shown whenever you hover over the save, not just when you hover over where the icon is supposed to be.
 Add bound checking to Simulation::clear_area
