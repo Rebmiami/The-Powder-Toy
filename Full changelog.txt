@@ -1,7 +1,11 @@
 v57.0
 Fix relative heat setting requiring a reset after update.
-Update the tptmp script to v2.0.35.
-New element: Aluminium by @Redmiami
+Update the tptmp script to v2.0.36.
+Additional stats, now called additional hud, now shows more information.
+Fix AMTR destroying wall element.
+Redesigned quick options
+Add version info in intro text
+Add relative heat mode to quick settings
 changes from master branch:
 Make save history icon not so hard to find, and show up on all saves (not just your own) the icon is now shown whenever you hover over the save, not just when you hover over where the icon is supposed to be.
 Add bound checking to Simulation::clear_area

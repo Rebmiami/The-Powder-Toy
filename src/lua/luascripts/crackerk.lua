@@ -923,7 +923,7 @@ local edelname = Textbox:new(10, 60, 100, 15, '', 'New Name.')
 local edelname2 = Textbox:new(10, 80, 100, 15, '', 'New Colour.')
 local edelname4 = Textbox:new(10, 100, 100, 15, '', 'Menu Section.')
 local edelname5 = Textbox:new(10, 120, 100, 15, '', 'Show / Hide.')
-local edelname3 = Textbox:new(10, 140, 550, 15, '', '                                              New Element Description.')
+local edelname3 = Textbox:new(10, 140, 550, 15, '', 'New Element Description.')
 local edelname6 = Textbox:new(10, 160, 100, 15, '', 'Explosive.')
 local edelname7 = Textbox:new(10, 180, 100, 15, '', 'Heat Conductivity.')
 local edelname8 = Textbox:new(10, 200, 100, 15, '', 'Flammable.')
@@ -2167,6 +2167,7 @@ neonmode:action(function(sender)
 if nmodv == "0" then
 nmodv = "1"
 tpt.setfire(30)
+tpt.display_mode(3)
 print("Neon Mode: Particles like FIRE, GAS and PHOT etc appear extra fancy and glowy.")
 elseif nmodv == "1" then
 nmodv = "0"
@@ -2351,7 +2352,7 @@ sim.framerender(1)
 end
 end
 local timehr, timemin, timesec, starttime = 0, 0, 0, os.clock()
-local staty = 35
+local staty = 36
 local statstring 
 local function extstat()
 if MANAGER.getsetting("CRK","extraval") == "1" and MANAGER.getsetting("CRK", "pass") == "1" and tpt.hud() == 1 then
@@ -2363,75 +2364,90 @@ end
 if timemin > 59 then
 timehr= timehr + 1
 end
-statstring = "Time elapsed: "..timehr.." Hr. "..timemin.." Min. "..timesec.." Sec, Elem. P:"..sim.elementCount(elem[tpt.selectedl])..", S:"..sim.elementCount(elem[tpt.selectedr])
-graphics.fillRect(6,staty-2,gfx.textSize(statstring)+1,11,10,10,10,120)
+local relativeheatvalue = "OFF"
+if MANAGER.getsetting("CRK", "relhdv") == "1" then
+relativeheatvalue = "ON"
+else
+relativeheatvalue = "OFF"
+end
+statstring = "Time elapsed: "..timehr.." Hr. "..timemin.." Min. "..timesec.." Sec, Elem. P:"..sim.elementCount(elem[tpt.selectedl])..", S:"..sim.elementCount(elem[tpt.selectedr])..", Relative heat: "..relativeheatvalue
+graphics.fillRect(6,staty-3,gfx.textSize(statstring)+1,13,10,10,10,120)
 graphics.drawText(7,staty,statstring,32,216,255,255)
 if ren.debugHUD() == 0 then
-staty = 35
+staty = 36
 else
-staty = 49
+staty = 50
 end
 end
 end
 
 local function quickset()
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
-gfx.fillCircle(5,175,8,8,105,255,105,200)
-gfx.drawText(16,173,"Quick options",105,255,105,255)
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 168 and tpt.mousey < 182 then
+gfx.fillCircle(14,175,8,8,105,255,105,200)
+gfx.drawText(27,173,"Quick options",105,255,105,255)
 else
-gfx.fillCircle(5,175,8,8,105,255,105,70)
+gfx.fillCircle(14,175,8,8,105,255,105,70)
 end
-gfx.drawCircle(5,175,8,8,105,255,105,200)
 if quickmenval == 0 then
-gfx.drawText(3,170,">",105,255,105,255)
+gfx.drawText(12,171,">",105,255,105,255)
 elseif quickmenval == 1 then
-gfx.drawText(3,170,"<",105,255,105,255)
+gfx.drawText(12,171,"<",105,255,105,255)
 if MANAGER.getsetting("CRK", "fancurs") == "1" then 
-gfx.fillCircle(5,200,8,8,255,85,85,190)
+gfx.fillCircle(14,200,8,8,255,85,85,190)
 else
-gfx.fillCircle(5,200,8,8,255,105,105,70)
+gfx.fillCircle(14,200,8,8,255,105,105,70)
 end
-gfx.drawText(3,196,"C",255,105,105,255)
+gfx.drawText(12,196,"C",255,105,105,255)
 if slowval == 0 then
-gfx.fillCircle(5,225,8,8,105,255,105,80)
+gfx.fillCircle(14,225,8,8,105,255,105,80)
 else
-gfx.fillCircle(5,225,8,8,90,255,90,190)
+gfx.fillCircle(14,225,8,8,90,255,90,190)
 end
-gfx.drawText(3,221,"S",105,255,105,255)
+gfx.drawText(12,221,"S",105,255,105,255)
 if switchval == 0 then
-gfx.fillCircle(5,250,8,8,105,105,255,80)
+gfx.fillCircle(14,250,8,8,105,105,255,80)
 else
-gfx.fillCircle(5,250,8,8,85,85,255,190)
+gfx.fillCircle(14,250,8,8,85,85,255,190)
 end
-gfx.drawText(3,246,"E",105,105,255,255)
+gfx.drawText(12,246,"E",105,105,255,255)
 if MANAGER.getsetting("CRK","extraval") == "0" then
-gfx.fillCircle(5,275,8,8,155,155,155,80)
+gfx.fillCircle(14,275,8,8,155,155,155,80)
 else
-gfx.fillCircle(5,275,8,8,255,255,255,190)
+gfx.fillCircle(14,275,8,8,255,255,255,190)
 end
-gfx.drawText(3,271,"A",255,255,255,255)
+gfx.drawText(12,271,"A",255,255,255,255)
 
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
-gfx.drawText(16,197,"Cross-Hair",255,105,105,255)
-end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
-gfx.drawText(16,222,"Slow motion",105,255,105,255)
-end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
-if switchval == 0 then
-gfx.drawText(16,247,"Eraser",105,105,255,255)
+if MANAGER.getsetting("CRK","relhdv") == "0" then
+gfx.fillCircle(14,300,8,8,131,0,255,80)
 else
-gfx.drawText(16,247,"Element/ Wall",105,105,255,255)
+gfx.fillCircle(14,300,8,8,131,0,255,190)
+end
+gfx.drawText(12,296,"R",131,0,255,255)
+
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
+gfx.drawText(27,197,"Cross-Hair",255,105,105,255)
+end
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
+gfx.drawText(27,222,"Slow motion",105,255,105,255)
+end
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
+if switchval == 0 then
+gfx.drawText(27,247,"Eraser",105,105,255,255)
+else
+gfx.drawText(27,247,"Element/ Wall",105,105,255,255)
 end
 end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
-gfx.drawText(16,272,"Additional stats.",255,255,255,255)
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra information in hud
+gfx.drawText(27,272,"Additional HUD",255,255,255,255)
+end
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 292 and tpt.mousey < 312 then -- Relative heat
+gfx.drawText(27,297,"Relative heat",131,0,255,255)
 end
 end
 end
 
 local function quicksetmouse()
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 168 and tpt.mousey < 182 then
 if quickmenval == 0 then
 quickmenval = 1
 elseif quickmenval == 1 then
@@ -2440,7 +2456,7 @@ end
 return false
 end
 if quickmenval == 1 then
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
 if MANAGER.getsetting("CRK", "fancurs") == "0" then 
 MANAGER.savesetting("CRK", "fancurs","1") 
 elseif MANAGER.getsetting("CRK", "fancurs") == "1" then 
@@ -2448,7 +2464,7 @@ MANAGER.savesetting("CRK", "fancurs","0")
 end
 return false
 end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
 if slowval == 0 then
 slowval = 1
 tpt.set_pause(1)
@@ -2459,7 +2475,7 @@ event.unregister(event.tick,slowmo)
 end
 return false
 end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
 if MANAGER.getsetting("CRK","extraval") == "0" then
 MANAGER.savesetting("CRK","extraval","1")
 event.register(event.tick,extstat)
@@ -2469,7 +2485,7 @@ event.unregister(event.tick,extstat)
 end
 return false
 end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
 if switchval == 0 then
 selectedelem = tpt.selectedl
 if selectedelem == "DEFAULT_WL_ERASE" or selectedelem == "DEFAULT_WL_DTECT" or selectedelem == "DEFAULT_WL_CNDT" or selectedelem == "DEFAULT_WL_EWALL" or selectedelem == "DEFAULT_WL_STRM"  or selectedelem == "DEFAULT_WL_FAN" or selectedelem == "DEFAULT_WL_LIQD" or selc == "DEFAULT_WL_ABSRB" or selectedelem == "DEFAULT_WL_WALL" or selectedelem ==" DEFAULT_WL_AIR" or selectedelem =="DEFAULT_WL_POWDR" or selectedelem =="DEFAULT_WL_CNDTR" or selectedelem =="DEFAULT_WL_EHOLE" or selectedelem =="DEFAULT_WL_GAS" or selectedelem =="DEFAULT_WL_GRVTY" or selectedelem =="DEFAULT_WL_ENRGY" or selectedelem =="DEFAULT_WL_NOAIR" or selectedelem =="DEFAULT_WL_STASIS"  or selectedelem =="DEFAULT_WL_CNDTW" then
@@ -2481,6 +2497,19 @@ switchval = 1
 elseif switchval == 1 then
 tpt.selectedl = selectedelem
 switchval = 0
+end
+return false
+end
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 292 and tpt.mousey < 312 then -- Relative heat
+if MANAGER.getsetting("CRK","relhdv") == "0" then
+MANAGER.savesetting("CRK", "relhdv", "1")
+ren.heatDisplayRelativeMode(true)
+tpt.display_mode(5)
+print("Relative heat display mode: ON")
+elseif MANAGER.getsetting("CRK","relhdv") == "1" then
+MANAGER.savesetting("CRK", "relhdv", "0")
+ren.heatDisplayRelativeMode(false)
+print("Relative heat display mode: OFF")
 end
 return false
 end
