@@ -1,3 +1,11 @@
+v57.1
+Add an option to customise the element that CEXP explodes into, also add gravity variable to it.
+Add help text to autosave
+Element cleanup:
+Removed NUKE element
+New digital sign element (DIGS), use with different tmp modes.
+Fix some features not treating Zhole as a wall
+
 v57.0
 Fix relative heat setting requiring a reset after update.
 Update the tptmp script to v2.0.36.

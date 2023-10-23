@@ -243,7 +243,7 @@ simulation_elem_names = [
 	'BALL',   
 	'RUBR',  
 	'DFOM',  
-	'NUKE', 
+	'DIGS', 
 ]
 
 simulation_elem_src = []

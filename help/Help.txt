@@ -77,6 +77,8 @@ src>gui>search>Searchview.cpp
 (MIST, 242); Lua element 
 (SPSH, 243); Lua element 
 (RUBR, 244);
+(DFOM 245);
+(DIGS 246)
 
 For BTRY, replace this
  "if ((sim->elements[rt].Properties&PROP_CONDUCTS) && !(rt==PT_WATR||rt==PT_SLTW||rt==PT_NTCT||rt==PT_PTCT||rt==PT_INWR||rt == PT_FNTC||rt == PT_FPTC) && parts[ID(r)].life==0)"
