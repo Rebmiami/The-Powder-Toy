@@ -45,6 +45,7 @@ class PreviewView: public ui::Window
 	ui::Label *saveDescriptionLabel{};
 	ui::Label *viewsLabel{};
 	ui::Label *saveIDLabel{};
+	ui::Label* voteLabel;
 	ui::Label *saveIDLabel2{};
 	ui::CopyTextButton *saveIDButton{};
 	ui::ScrollPanel *commentsPanel{};
