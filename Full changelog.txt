@@ -6,6 +6,8 @@ Removed NUKE element
 New digital sign element (DIGS), use with different tmp modes.
 Fix some features not treating Zhole as a wall
 
+Changes from master branch:
+
 v57.0
 Fix relative heat setting requiring a reset after update.
 Update the tptmp script to v2.0.36.
