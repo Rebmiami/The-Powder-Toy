@@ -5,8 +5,11 @@ Element cleanup:
 Removed NUKE element
 New digital sign element (DIGS), use with different tmp modes.
 Fix some features not treating Zhole as a wall
-
 Changes from master branch:
+Fix spurious timeout errors from some callbacks
+Complain about missing custom elements when opening online saves 
+Auto-focus the input field in the tag list
+Fix prop tool not remembering settings in some cases 
 
 v57.0
 Fix relative heat setting requiring a reset after update.
