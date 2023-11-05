@@ -46,30 +46,29 @@ void Element::Element_CEXP()
 }
 static int update(UPDATE_FUNC_ARGS)
 {
-	for (auto rx = -2; rx < 2; rx++)
-		for (auto ry = -2; ry < 2; ry++)
-			if (rx || ry)
+	for (auto rx = -2; rx <= 2; rx++)
+		{
+			for (auto ry = -2; ry <= 2; ry++)
 			{
-				auto r = pmap[y + ry][x + rx];
-				switch (TYP(r))
+				if (rx || ry)
 				{
-					case PT_SPRK:
-					case PT_FIRE:
-					case PT_PLSM:
-					case PT_THDR:
-					case PT_LIGH:
-					{
-					 sim->flood_prop(x, y, Particle::GetProperties()[FIELD_TMP2], 10);
-					}
-					break;
-
-					case PT_CEXP:
-					{
-						if (parts[ID(r)].tmp2 > 0)
-							parts[i].tmp2 = 10;
-					}
-					break;
+					auto r = pmap[y + ry][x + rx];
+					if (!r)
+						r = sim->photons[y + ry][x + rx];
+					if (!r)
+						continue;
+				{
+				if (parts[ID(r)].type == PT_SPRK||parts[ID(r)].type == PT_FIRE||parts[ID(r)].type == PT_PLSM||parts[ID(r)].type == PT_THDR||parts[ID(r)].type == PT_LIGH)
+				{
+                 parts[i].tmp2 = 10;
 				}
+				
+				if(parts[ID(r)].type== PT_CEXP && parts[ID(r)].tmp2 > 0)
+				{
+				parts[i].tmp2 = 10;
+				sim->flood_prop(x, y, Particle::GetProperties()[FIELD_TMP2], 10);
+				}
+				
 				if (parts[i].tmp2 > 0)
 				{
 					sim->pv[(y / CELL) + ry][(x / CELL) + rx] = (float)(parts[i].life);
@@ -79,7 +78,10 @@ static int update(UPDATE_FUNC_ARGS)
 					sim->part_change_type(i, x, y, parts[i].ctype);
 				}
 				}
-	return 0;
+				}
+				}
+				}
+				return 0;
 }
 
 static void create(ELEMENT_CREATE_FUNC_ARGS)
