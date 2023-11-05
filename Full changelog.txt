@@ -1,6 +1,6 @@
 v57.2
-Fix lag when using CEXP
-
+Fix lag when using CEXP.
+Fix reset buttons not clearing crack menu options.
 v57.1
 Add an option to customise the element that CEXP explodes into, also add gravity variable to it.
 Add help text to autosave

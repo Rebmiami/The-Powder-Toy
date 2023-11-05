@@ -2656,6 +2656,7 @@ newmenu:addComponent(rset2)
 end)
 
 rset1:action(function(sender) --Soft reset, doesn't delete anything.
+clearsb()
 interface.beginConfirm(" Mod Reset help","You have initiated soft reset. Clicking on Reset will reset the mod back to the default state. Only the mod settings will reset. Useful when some new features are added in an update.","Reset", 
 function (result)
 if result then 
@@ -2667,6 +2668,7 @@ end)
 end)
 
 rset2:action(function(sender) --Soft reset, doesn't delete anything.
+clearsb()
 interface.beginConfirm(" Mod Reset help","You have initiated hard reset. Clicking on Reset will reset the mod back to the default state. Externally downloaded TPTMP and Notifications script will be deleted while other lua scripts will be unloaded, their saved settings might get deleted. Use scripts/autorunsettingsbackup.txt for recovery. Saves, stamps and other data will still remain intact.","Reset", 
 function (result)
 if result then 
