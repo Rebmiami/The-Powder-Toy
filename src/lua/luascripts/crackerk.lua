@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 57.1 --Next version: 57.2
+local crackversion = 57.2 --Next version: 57.3
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
