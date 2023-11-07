@@ -1,6 +1,8 @@
-v57.2
+v57.2 (unreleased)
 Fix lag when using CEXP.
 Fix reset buttons not clearing crack menu options.
+Fix weird artifacts (Somewhat) on wheel graphics because of new changes made to graphic drawing in game.
+
 v57.1
 Add an option to customise the element that CEXP explodes into, also add gravity variable to it.
 Add help text to autosave
