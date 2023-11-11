@@ -8,7 +8,7 @@ void Element::Element_DIGS()
 {
 	Identifier = "DEFAULT_PT_DIGS";
 	Name = "DIGS";
-	Colour = 0x8A8AFF_rgb;
+	Colour = 0xFFFFFFFF_rgb;
 	MenuVisible = 1;
 	MenuSection = SC_SPECIAL;
 	Enabled = 1;
@@ -30,8 +30,8 @@ void Element::Element_DIGS()
 
 	Weight = 91;
 
-	HeatConduct = 0;
-	Description = "Digital signs for crack mod saves. Activates with PSCN. Tmp modes = different signs. (Read wiki for more info.)";
+	HeatConduct = 255;
+	Description = "Digital sign. Powered element, use with PSCN, NSCN and INST. tmp changes modes. (Read wiki for more info.)";
 	DefaultProperties.temp = 274.15f;
 	Properties = TYPE_SOLID;
 	LowPressure = IPL;
@@ -50,39 +50,14 @@ void Element::Element_DIGS()
 
 static int update(UPDATE_FUNC_ARGS)
 {
-	if (parts[i].tmp4 > 59)
+	if (parts[i].tmp > 5 || parts[i].tmp < 1)
+		parts[i].tmp = 1;
+	
+	if (parts[i].tmp == 5 && parts[i].life == 10)
 	{
-		parts[i].tmp4 -= 58;
-	}
-	if (parts[i].tmp3 < 0 || parts[i].tmp3 > 30)
-	{
-		parts[i].tmp3 = 0;
-	}
-	if (parts[i].life > 0) //Active
-	{
-		if (parts[i].tmp2 < 125)
-		{
-			parts[i].tmp2 += 1;
-		}
-		if (parts[i].tmp3 < 30)
-		{
-			parts[i].tmp3 += 1;
-		}
-		if (parts[i].tmp4 < 60)
-		{
-			parts[i].tmp4 += 1;
-		}
-	}
-		if (parts[i].life == 0) //Inactive
-	{
-		if (parts[i].tmp2 > 0)
-		{
-			parts[i].tmp2 -= 1;
-		}
-		if (parts[i].tmp3 > 0)
-		{
-			parts[i].tmp3 -= 1;
-		}
+		parts[i].tmp4 += 1;
+        if (parts[i].tmp4 > 9999)
+        parts[i].tmp4 = 0;		
 	}
 	for (auto rx = -2; rx < 3; rx++)
 		for (auto ry = -2; ry < 3; ry++)
@@ -93,13 +68,24 @@ static int update(UPDATE_FUNC_ARGS)
 					continue;
 			if (sim->parts_avg(i, ID(r), PT_INSL) != PT_INSL)
 			{
-					if (parts[ID(r)].type == PT_SPRK && parts[ID(r)].ctype == PT_PSCN && parts[ID(r)].life < 3)
+				//Activation and deactivation part
+				if (parts[ID(r)].type == PT_SPRK && parts[ID(r)].ctype == PT_PSCN && parts[ID(r)].life < 3)
 				{
 					parts[i].life = 10;
 				}
 				else if (parts[ID(r)].type == PT_SPRK && parts[ID(r)].ctype == PT_NSCN && parts[ID(r)].life < 3)
 				{
 					parts[i].life = 0;
+				}
+				else if (parts[ID(r)].type == PT_SPRK && parts[ID(r)].ctype == PT_INST && parts[ID(r)].life > 2)
+				{
+					parts[i].tmp += 1;
+				}
+				// Properties copy
+				if (parts[i].life == 10)
+				{
+					parts[i].tmp2 = sim->pv[y/CELL][x/CELL]; //Pressure
+					parts[i].tmp3 = sim->gravp[(y/CELL)*XCELLS+(x/CELL)]; //Gravity
 				}
 			}
 			}
@@ -108,7 +94,7 @@ static int update(UPDATE_FUNC_ARGS)
 
 static void create(ELEMENT_CREATE_FUNC_ARGS)
 {
-	sim->parts[i].dcolour = 0xFF478ED6;
+	sim->parts[i].dcolour = 0xFFFF0000;
 	sim->parts[i].tmp = 1;
 }
 
@@ -117,80 +103,35 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	*colr = ((cpart->dcolour >> 16) & 0xFF);
 	*colg = ((cpart->dcolour >> 8) & 0xFF);
 	*colb = ((cpart->dcolour) & 0xFF);
-	if (cpart->tmp2 > 0) //Active state
+	if (cpart->life == 10) //Active state
 	{
-	if (cpart->tmp == 1) // Here Mode [1]
-	{
-	ren->BlendText(Vec2((int)(cpart->x+1-cpart->tmp3/2), (int)(cpart->y - 10.0f)),"[", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	if (cpart->life > 0)
-	{
-	ren->BlendText(Vec2((int)(cpart->x-8), (int)((cpart->y+5) - (cpart->tmp3/2))),"Here", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	ren->BlendText(Vec2((int)(cpart->x-1+cpart->tmp3/2), (int)(cpart->y - 10.0f)),"]", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	else if (cpart->tmp == 2 && cpart->life > 0) // Scrolling mode Left [2]
-	{
-	ren->BlendText(Vec2((int)(cpart->x + 15 - cpart->tmp4/2), (int)((cpart->y-10.0f))),"<<", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	else if (cpart->tmp == 3 && cpart->life > 0) // Scrolling mode Right [3]
-	{
-	ren->BlendText(Vec2((int)(cpart->x - 15 + cpart->tmp4/2), (int)((cpart->y-10.0f))),">>", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	else if (cpart->tmp == 4 && cpart->life > 0) // SPRK Sign [4]
-	{
-	if (cpart->dcolour == 0xFF478ED6)
-	{
-	cpart->dcolour = 0xFFFFFF00;
-	}
-	ren->BlendText(Vec2((int)(cpart->x-10), (int)((cpart->y-10.0f))),"SPRK", RGBA<uint8_t>(*colr, *colg, *colb, 255-cpart->tmp4*4));
-	}
-	else if (cpart->tmp == 5) // Hello [5]
-	{
-	ren->BlendText(Vec2((int)(cpart->x+1-cpart->tmp3/2), (int)(cpart->y - 10.0f)),"[", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	if (cpart->life > 0)
-	{
-	ren->BlendText(Vec2((int)(cpart->x-10), (int)((cpart->y+5) - (cpart->tmp3/2))),"Hello", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	ren->BlendText(Vec2((int)(cpart->x-1+cpart->tmp3/2), (int)(cpart->y - 10.0f)),"]", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	else if (cpart->tmp == 6) // Start [6]
-	{
-	if (cpart->dcolour == 0xFF478ED6)
-	{
-	cpart->dcolour = 0xFF00FF00;
-	}	
-	ren->BlendText(Vec2((int)(cpart->x+1-cpart->tmp3/2), (int)(cpart->y - 10.0f)),"[", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	if (cpart->life > 0)
-	{
-	ren->BlendText(Vec2((int)(cpart->x-10), (int)((cpart->y+5) - (cpart->tmp3/2))),"Start", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	ren->BlendText(Vec2((int)(cpart->x-1+cpart->tmp3/2), (int)(cpart->y - 10.0f)),"]", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	else if (cpart->tmp == 7) // STOP [7]
-	{
-	if (cpart->dcolour == 0xFF478ED6)
+	if (cpart->tmp == 1) // Temp. [1]
 	{
 	cpart->dcolour = 0xFFFF0000;
-	}	
-	ren->BlendText(Vec2((int)(cpart->x+1-cpart->tmp3/2), (int)(cpart->y - 10.0f)),"[", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	if (cpart->life > 0)
-	{
-	ren->BlendText(Vec2((int)(cpart->x-10), (int)((cpart->y+5) - (cpart->tmp3/2))),"STOP", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
+
+	ren->BlendText(Vec2((int)(cpart->x-8), (int)(cpart->y - 10)),String::Build(roundf(cpart->temp-273.15f)), RGBA<uint8_t>(*colr, *colg, *colb, 255));
 	}
-	ren->BlendText(Vec2((int)(cpart->x-1+cpart->tmp3/2), (int)(cpart->y - 10.0f)),"]", RGBA<uint8_t>(*colr, *colg, *colb, cpart->tmp2*2));
-	}
-	else if (cpart->tmp == 8) // Crackermod [8]
+	else if (cpart->tmp == 2) //Pressure [2]
 	{
-	if (cpart->dcolour == 0xFF478ED6)
+	cpart->dcolour = 0xFF478ED6;
+	ren->BlendText(Vec2((int)(cpart->x-2), (int)(cpart->y - 10)),String::Build(cpart->tmp2), RGBA<uint8_t>(*colr, *colg, *colb, 255));
+	}
+	else if (cpart->tmp == 3) //Gravity [3]
+	{
+	cpart->dcolour = 0xFF00FF00;
+	ren->BlendText(Vec2((int)(cpart->x-2), (int)(cpart->y - 10)),String::Build(cpart->tmp3), RGBA<uint8_t>(*colr, *colg, *colb, 255));
+	}
+	else if (cpart->tmp == 4) //Crack Mod [4]
 	{
 	cpart->dcolour = 0xFF8300FF;
-	}	
-	if (cpart->life > 0)
-	{
-	ren->DrawRect(RectSized(Vec2((int)(cpart->x - 18), (int)(cpart->y-13)),Vec2( 51, 13)),RGB<uint8_t>(*colr, *colg, *colb));
-	ren->BlendFilledRect(RectSized(Vec2((int)(cpart->x - 18), (int)(cpart->y-13)),Vec2( 51, 13)),RGBA<uint8_t>(*colr, *colg, *colb,50));
-	ren->BlendText(Vec2((int)(cpart->x-15), (int)((cpart->y+5) - (cpart->tmp3/2))),"Crack mod", RGBA<uint8_t>(*colr, *colg, *colb, 255-cpart->tmp4*4));
+	ren->BlendFilledRect(RectSized(Vec2((int)(cpart->x - 22), (int)(cpart->y-13)),Vec2( 51, 13)),RGBA<uint8_t>(*colr, *colg, *colb,50));
+	ren->DrawRect(RectSized(Vec2((int)(cpart->x - 22), (int)(cpart->y-13)),Vec2( 51, 13)),RGB<uint8_t>(*colr, *colg, *colb));
+	ren->BlendText(Vec2((int)(cpart->x-20), (int)(cpart->y - 10)),"Crack Mod", RGBA<uint8_t>(*colr, *colg, *colb, 255));
 	}
+	else if (cpart->tmp == 5) //Timer [5]
+	{
+	cpart->dcolour = 0xFFFFFFFF;
+	ren->BlendText(Vec2((int)(cpart->x-4), (int)(cpart->y - 10)),String::Build(cpart->tmp4), RGBA<uint8_t>(*colr, *colg, *colb, 255));
 	}
 	}
 	return 0;
