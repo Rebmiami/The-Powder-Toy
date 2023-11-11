@@ -2702,7 +2702,7 @@ barlength = 1
 end
 local posix2 = posix + 10
 function motwdisplay()
-if motw ~= "." then
+if motw ~= "." and onlinestatus == 1 then --Prevent black bars when offline.
 if posix > 600 then
 if posix2 > -1*(posix)then
 posix2 = posix2 - 1

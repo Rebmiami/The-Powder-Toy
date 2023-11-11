@@ -3,6 +3,7 @@ Fix lag when using CEXP.
 Fix reset buttons not clearing crack menu options.
 Fix weird artifacts (Somewhat) on wheel graphics because of new changes made to graphic drawing in game.
 Quick options are now Advanced options.
+Fix black bars under cr menu window when offline.
 Make advanced options visible with light backgrounds
 DIGS is now complete. Now shows the element properties like temp., Pressure, etc.
 New element: ALUM (WIP)
