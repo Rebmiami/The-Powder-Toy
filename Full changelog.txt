@@ -6,6 +6,10 @@ Quick options are now Advanced options.
 Make advanced options visible with light backgrounds
 DIGS is now complete. Now shows the element properties like temp., Pressure, etc.
 New element: ALUM (WIP)
+Changes from master branch:
+Remove unnecessary lua_pushlightuserdata usage, use commandInterface
+Add surface normal debug tool
+Expose debug constants to lua 
 
 v57.1
 Add an option to customise the element that CEXP explodes into, also add gravity variable to it.
