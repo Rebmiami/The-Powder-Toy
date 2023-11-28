@@ -49,17 +49,13 @@ void Element::Element_ALUM()
 static int update(UPDATE_FUNC_ARGS)
 {
 	int alum = 0; // Number of orthogonally adjacent aluminium particles, including self.
-	for (int rx = -1; rx <= 1; rx++)
-	{
-		for (int ry = -1; ry <= 1; ry++)
-		{
+	for (int rx = -1; rx <= 1; rx++) {
+		for (int ry = -1; ry <= 1; ry++) {
 			// Excludes the diagonal neighbors from being detected.
-			if (!rx != !ry)
-			{
+			if (!rx != !ry) {
 				if (TYP(pmap[y+ry][x+rx]) == PT_ALUM)
 					alum++;
-				if (alum == 4)
-				{
+				if (alum == 4) {
 					// Increases relative strength of surface aluminium, which improves the effect of mechanical failure.
 					alum = 3;
 					break;
@@ -74,10 +70,8 @@ static int update(UPDATE_FUNC_ARGS)
     float velocityAvg = 0; // The average air speed around this particle.
     float velocitySum = 0; // The amount of direct force this particle is receiving from velocity.
 
-    for (int rx = -1; rx <= 1; rx++)
-	{
-		for (int ry = -1; ry <= 1; ry++)
-		{
+    for (int rx = -1; rx <= 1; rx++) {
+		for (int ry = -1; ry <= 1; ry++) {
             pressureValues[pi] = sim->pv[y/CELL + ry][x/CELL + rx];
             pressureAvg += pressureValues[pi];
             
@@ -86,8 +80,7 @@ static int update(UPDATE_FUNC_ARGS)
 			float velocityStrength = sqrt(avx * avx + avy * avy);
 			velocityAvg += velocityStrength;
 
-            if (velocityStrength > 0.1f)
-            {
+            if (velocityStrength > 0.1f) {
 				// Calculate the dot product of air velocity based on its relative position to this particle.
 				// Positive = flowing towards the particle, negative = flowing away from the particle
             	float velDot = (rx * avx + ry * avy) / velocityStrength;
@@ -99,8 +92,7 @@ static int update(UPDATE_FUNC_ARGS)
 
     pressureAvg /= 9;
     float pressureStdev = 0; // The intensity of the pressure gradient surrounding this particle.
-    for (int j = 0; j < 9; j++)
-    {
+    for (int j = 0; j < 9; j++) {
         pressureStdev += (pressureValues[j] - pressureAvg) * (pressureValues[j] - pressureAvg);
         //velocitySum += velocityDot[j];
     }
@@ -122,9 +114,9 @@ static int update(UPDATE_FUNC_ARGS)
 		sim->air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
 	}
 	// When particles are broken off of a mass of aluminium and exposed to high air velocity, break into powder.
-	if (nt == 8 && (pressureStdev + velocityAvg) / (alum + 1) > 40)
-	{
+	if (nt == 8 && (pressureStdev + velocityAvg) / (alum + 1) > 40) {
 		sim->part_change_type(i, x, y, PT_ALMP);
+		sim->parts[i].tmp = 40;
 	}
 
 

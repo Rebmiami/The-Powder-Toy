@@ -94,6 +94,11 @@ static int update(UPDATE_FUNC_ARGS)
 											sim->part_change_type(ID(rr), x+nxi, y+nxj, PT_BCOL);
 										else if (t == PT_QRTZ)
 											sim->part_change_type(ID(rr), x+nxi, y+nxj, PT_PQRT);
+										else if (t == PT_ALUM) 
+										{
+											sim->part_change_type(ID(rr), x+nxi, y+nxj, PT_ALMP);
+											sim->parts[ID(rr)].tmp = 40;
+										}
 										else if (t == PT_TUNG)
 										{
 											sim->part_change_type(ID(rr), x+nxi, y+nxj, PT_BRMT);
