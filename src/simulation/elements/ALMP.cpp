@@ -10,7 +10,7 @@ void Element::Element_ALMP()
 	Name = "ALMP";
 	Colour = 0x87A4AF_rgb;
 	MenuVisible = 1;
-	MenuSection = SC_POWDERS;
+	MenuSection = SC_EXPLOSIVE;
 	Enabled = 1;
 
 	Advection = 0.4f;
@@ -32,7 +32,7 @@ void Element::Element_ALMP()
 	Weight = 90;
 
 	HeatConduct = 70;
-	Description = "Aluminium powder.";
+	Description = "Aluminium powder. Flammable, burns with brilliant sparks.";
 
 	Properties = TYPE_PART|PROP_SPARKSETTLE;
 
@@ -63,7 +63,7 @@ static int update(UPDATE_FUNC_ARGS)
 					int r = pmap[y+ry][x+rx];
 					if (!r)
 						continue;
-					if (TYP(r) == PT_FIRE || TYP(r) == PT_PLSM || TYP(r) == PT_SPRK || TYP(r) == PT_LIGH || TYP(r) == PT_FIRE)
+					if (TYP(r) == PT_FIRE || TYP(r) == PT_PLSM || TYP(r) == PT_SPRK || TYP(r) == PT_LIGH)
 					{
 						parts[i].tmp = AlmpBurnHealth - sim->rng.between(1, 10);
 					}
@@ -74,11 +74,11 @@ static int update(UPDATE_FUNC_ARGS)
 		sim->create_part(i, x, y, PT_FIRE);
 		sim->pv[y / CELL][x / CELL] += 2;
 		return 1;
-	} else if (parts[i].tmp < AlmpBurnHealth) {
+	} else if (parts[i].tmp < AlmpBurnHealth && sim->rng.chance(1, 2)) { // Erratic burning pattern
 		parts[i].tmp--;
 		if (sim->rng.chance(2, 3))
 		{
-			sim->pv[y / CELL][x / CELL] += 0.1f;
+			sim->pv[y / CELL][x / CELL] += 0.2f;
 			int p = sim->create_part(-1, x + sim->rng.between(-1, 1), y + sim->rng.between(-1, 1), PT_EMBR);
 			parts[p].tmp = 0;
 			parts[p].life = 50;

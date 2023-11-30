@@ -3,6 +3,23 @@
 
 static int update(UPDATE_FUNC_ARGS);
 
+// Element overview:
+// ALUM is designed to be a versatile building material with fun-to-use properties.
+// Physically, it is a weaker version of TTAN that shares the pressure blocking ability
+// but with the caveat that it breaks if the force from the pressure difference becomes too large.
+
+// Its properties are used as follows:
+// ctype: Normally 0/NONE. Becomes MERC if inundated with enough MERC, causing it to grow strange formations.
+// life: Used for SPRK conduction.
+// tmp: Oxidation level. When oxidized, becomes brighter and resists ACID/MERC corrosion.
+// tmp2: MERC inundation level. When it reaches a high enough point, ctype becomes MERC.
+// tmp3: Alloy level. When mixed with molten METL, they combine to create a tougher alloy that resists more pressure.
+// tmp4: Not used.
+
+static constexpr int BaseStrength = 10;
+static constexpr int MaxOxidation = 10;
+static constexpr int MaxAlloyLevel = 10;
+
 void Element::Element_ALUM()
 {
 	Identifier = "DEFAULT_PT_ALUM";
@@ -30,7 +47,7 @@ void Element::Element_ALUM()
 	Weight = 100;
 
 	HeatConduct = 251;
-	Description = "Aluminium.";
+	Description = "Aluminium. Breakable metal that contains pressure.";
 
 	Properties = TYPE_SOLID|PROP_CONDUCTS|PROP_LIFE_DEC;
 
@@ -40,7 +57,7 @@ void Element::Element_ALUM()
 	HighPressureTransition = NT;
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
-	HighTemperature = 660.32f;
+	HighTemperature = ITH; // 660.32f - Melting point is custom and handled through code
 	HighTemperatureTransition = PT_LAVA;
 
 	Update = &update;
@@ -103,7 +120,9 @@ static int update(UPDATE_FUNC_ARGS)
 	// This has the effect of failures in one area of a pressurized container causing the entire thing to violently burst open.
 	float strain = (pressureStdev + velocitySum + pressureStdev * velocityAvg * 0.05f) / (alum + 1);
     
-	if (strain > 20) // Deform under immense stress from pressure
+	float strength = BaseStrength + parts[i].tmp3;
+
+	if (strain > strength) // Deform under immense stress from pressure
     {
 		parts[i].vx += 0.4f*sim->vx[y/CELL][x/CELL];
 		parts[i].vy += 0.4f*sim->vy[y/CELL][x/CELL];
@@ -114,12 +133,38 @@ static int update(UPDATE_FUNC_ARGS)
 		sim->air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
 	}
 	// When particles are broken off of a mass of aluminium and exposed to high air velocity, break into powder.
-	if (nt == 8 && (pressureStdev + velocityAvg) / (alum + 1) > 40) {
+	if (nt == 8 && (pressureStdev + velocityAvg) / (alum + 1) > strength * 2) {
 		sim->part_change_type(i, x, y, PT_ALMP);
 		sim->parts[i].tmp = 40;
 	}
 
+	// Reactions with neighbors
+	for (int rx = -2; rx <= 2; rx++) {
+		for (int ry = -2; ry <= 2; ry++) {
+			int r = pmap[y+ry][x+rx];
+			if (r >= 0) {
+				if (parts[i].ctype != PT_MERC && TYP(r) == PT_MERC && sim->rng.chance(10 - sim->parts[i].tmp, 10))
+				{
+					parts[i].tmp2 += parts[ID(r)].tmp;
+					sim->kill_part(ID(r));
+				}
+				if (TYP(r) == PT_O2 && sim->parts[i].tmp2 < 10)
+				{
+					parts[i].tmp += 1;
+				}
+			}
+		}
+	}
 
+	if (parts[i].ctype == PT_MERC)
+	{
+		if (parts[i].tmp2 > 0)
+		{
+
+		}
+		int px = x + sim->rng.between(-1, 1);
+		int py = y + sim->rng.between(-1, 1);
+	}
 
 	return 0;
 }
