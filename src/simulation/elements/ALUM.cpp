@@ -58,8 +58,8 @@ void Element::Element_ALUM()
 	HighPressureTransition = NT;
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
-	HighTemperature = ITH; // 660.32f - Melting point is custom and handled through code
-	HighTemperatureTransition = PT_LAVA;
+	HighTemperature = ITH; // Melting point is custom and handled through code
+	HighTemperatureTransition = PT_MALM;
 
 	Update = &update;
 	Graphics = &graphics;
@@ -139,6 +139,7 @@ static int update(UPDATE_FUNC_ARGS)
 		sim->part_change_type(i, x, y, PT_ALMP);
 		sim->parts[i].tmp = 40;
 		sim->parts[i].tmp2 = sim->rng.between(0, 6);
+		return 1;
 	}
 
 	// Reactions with neighbors
@@ -167,6 +168,11 @@ static int update(UPDATE_FUNC_ARGS)
 		}
 		int px = x + sim->rng.between(-1, 1);
 		int py = y + sim->rng.between(-1, 1);
+	}
+
+	if (parts[i].temp > 660.32f)
+	{
+		sim->part_change_type(i,x,y,PT_MALM);
 	}
 
 	return 0;
