@@ -2,7 +2,18 @@
 #include "simulation/Air.h"
 
 static int update(UPDATE_FUNC_ARGS);
+static int graphics(GRAPHICS_FUNC_ARGS);
+static void create(ELEMENT_CREATE_FUNC_ARGS);
+
 constexpr int AlmpBurnHealth = 40;
+
+// Element overview:
+// ALMP is the broken version of ALUM. Primarily meant to be used as a pyrotechnic powder.
+// When ignited, it burns brilliantly, sending sparks and bits of burning powder in all directions.
+
+// Its properties are used as follows:
+// tmp: The number of sparks/fire that it can create before it dies.
+// tmp2: Grain/sparkle effect.
 
 void Element::Element_ALMP()
 {
@@ -48,6 +59,8 @@ void Element::Element_ALMP()
 	DefaultProperties.tmp = 40;
 
 	Update = &update;
+	Graphics = &graphics;
+	Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -91,4 +104,29 @@ static int update(UPDATE_FUNC_ARGS)
 		}
 	}
 	return 0;
+}
+
+static int graphics(GRAPHICS_FUNC_ARGS)
+{
+	// Spörkle
+	int z = (cpart->tmp2) * 10 - 18;
+	*colr += z;
+	*colg += z;
+	*colb += z;
+
+	if (ren->rng.chance(1, 6))
+	{
+		*pixel_mode |= PMODE_SPARK;
+	}
+	float s = sqrt(pow(cpart->vx, 2) + pow(cpart->vy, 2));
+	if (cpart->tmp2 + 1 < s)
+	{
+		*pixel_mode |= PMODE_FLARE;
+	}
+	return 0;
+}
+
+static void create(ELEMENT_CREATE_FUNC_ARGS)
+{
+	sim->parts[i].tmp2 = sim->rng.between(0, 6);
 }

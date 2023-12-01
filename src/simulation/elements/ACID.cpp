@@ -84,6 +84,7 @@ static int update(UPDATE_FUNC_ARGS)
 					{
 						if (sim->parts_avg(i, ID(r),PT_GLAS)!= PT_GLAS)//GLAS protects stuff from acid
 						{
+							// Oxidized ALUM is immune to corrosion
 							if (rt == PT_ALUM && sim->rng.chance(sim->parts[ID(r)].tmp, 10))
 							{
 								continue;

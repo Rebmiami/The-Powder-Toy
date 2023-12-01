@@ -2,6 +2,7 @@
 #include "simulation/Air.h"
 
 static int update(UPDATE_FUNC_ARGS);
+static int graphics(GRAPHICS_FUNC_ARGS);
 
 // Element overview:
 // ALUM is designed to be a versatile building material with fun-to-use properties.
@@ -61,6 +62,7 @@ void Element::Element_ALUM()
 	HighTemperatureTransition = PT_LAVA;
 
 	Update = &update;
+	Graphics = &graphics;
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -136,6 +138,7 @@ static int update(UPDATE_FUNC_ARGS)
 	if (nt == 8 && (pressureStdev + velocityAvg) / (alum + 1) > strength * 2) {
 		sim->part_change_type(i, x, y, PT_ALMP);
 		sim->parts[i].tmp = 40;
+		sim->parts[i].tmp2 = sim->rng.between(0, 6);
 	}
 
 	// Reactions with neighbors
@@ -148,7 +151,7 @@ static int update(UPDATE_FUNC_ARGS)
 					parts[i].tmp2 += parts[ID(r)].tmp;
 					sim->kill_part(ID(r));
 				}
-				if (TYP(r) == PT_O2 && sim->parts[i].tmp2 < 10)
+				if (TYP(r) == PT_O2 && sim->parts[i].tmp < 10)
 				{
 					parts[i].tmp += 1;
 				}
@@ -166,5 +169,15 @@ static int update(UPDATE_FUNC_ARGS)
 		int py = y + sim->rng.between(-1, 1);
 	}
 
+	return 0;
+}
+
+static int graphics(GRAPHICS_FUNC_ARGS)
+{
+	// Appear brighter when oxidized
+	int z = (cpart->tmp) * 4;
+	*colr += z;
+	*colg += z;
+	*colb += z;
 	return 0;
 }
