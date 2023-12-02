@@ -3,6 +3,7 @@
 
 static int update(UPDATE_FUNC_ARGS);
 static int graphics(GRAPHICS_FUNC_ARGS);
+static void changetype(ELEMENT_CHANGETYPE_FUNC_ARGS);
 
 // Element overview:
 // ALUM is designed to be a versatile building material with fun-to-use properties.
@@ -19,7 +20,6 @@ static int graphics(GRAPHICS_FUNC_ARGS);
 
 static constexpr int BaseStrength = 10;
 static constexpr int MaxOxidation = 10;
-static constexpr int MaxAlloyLevel = 10;
 
 void Element::Element_ALUM()
 {
@@ -59,10 +59,11 @@ void Element::Element_ALUM()
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
 	HighTemperature = ITH; // Melting point is custom and handled through code
-	HighTemperatureTransition = PT_MALM;
+	HighTemperatureTransition = PT_LAVA;
 
 	Update = &update;
 	Graphics = &graphics;
+	ChangeType = &changetype;
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -122,7 +123,7 @@ static int update(UPDATE_FUNC_ARGS)
 	// This has the effect of failures in one area of a pressurized container causing the entire thing to violently burst open.
 	float strain = (pressureStdev + velocitySum + pressureStdev * velocityAvg * 0.05f) / (alum + 1);
     
-	float strength = BaseStrength + parts[i].tmp3;
+	float strength = BaseStrength + parts[i].tmp3 * 10;
 
 	if (strain > strength) // Deform under immense stress from pressure
     {
@@ -170,9 +171,12 @@ static int update(UPDATE_FUNC_ARGS)
 		int py = y + sim->rng.between(-1, 1);
 	}
 
-	if (parts[i].temp > 660.32f)
+	// When alloyed, becomes harder to melt.
+	if (parts[i].temp > 660.32f + 273.15f + parts[i].tmp3 * 200.0f)
 	{
-		sim->part_change_type(i,x,y,PT_MALM);
+		sim->part_change_type(i,x,y,PT_LAVA);
+		parts[i].ctype = PT_ALUM;
+		parts[i].tmp = 0;
 	}
 
 	return 0;
@@ -185,5 +189,22 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	*colr += z;
 	*colg += z;
 	*colb += z;
+	// Darker, bluer color (closer to METL) when alloyed
+	if (cpart->tmp3 > 0)
+	{
+		*colr += -50;
+		*colg += -40;
+		*colb += -20;
+	}
 	return 0;
+}
+
+static void changetype(ELEMENT_CHANGETYPE_FUNC_ARGS)
+{
+	if (from == PT_LAVA)
+	{
+		// Prevents strange deformations when cooled
+		sim->parts[i].vx =
+		sim->parts[i].vy = 0;
+	}
 }
