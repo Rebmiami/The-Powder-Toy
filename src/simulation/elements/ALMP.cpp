@@ -65,43 +65,56 @@ void Element::Element_ALMP()
 
 static int update(UPDATE_FUNC_ARGS)
 {
-	if (parts[i].tmp >= AlmpBurnHealth)
+	// Oxidized aluminium powder is less reactive.
+	// Should this be turned into a different element in the future? (aluminium oxide)
+	if (parts[i].ctype != PT_O2)
 	{
-		for (int rx = -1; rx <= 1; rx++)
+		if (parts[i].tmp >= AlmpBurnHealth)
 		{
-			for (int ry = -1; ry <= 1; ry++)
+			for (int rx = -1; rx <= 1; rx++)
 			{
-				if (rx || ry)
+				for (int ry = -1; ry <= 1; ry++)
 				{
-					int r = pmap[y+ry][x+rx];
-					if (!r)
-						continue;
-					if (TYP(r) == PT_FIRE || TYP(r) == PT_PLSM || TYP(r) == PT_SPRK || TYP(r) == PT_LIGH)
+					if (rx || ry)
 					{
-						parts[i].tmp = AlmpBurnHealth - sim->rng.between(1, 10);
+						int r = pmap[y+ry][x+rx];
+						if (!r)
+							continue;
+						if (TYP(r) == PT_FIRE || TYP(r) == PT_PLSM || TYP(r) == PT_SPRK || TYP(r) == PT_LIGH)
+						{
+							parts[i].tmp = AlmpBurnHealth - sim->rng.between(1, 10);
+						}
 					}
 				}
 			}
+		} else if (parts[i].tmp <= 0) {
+			sim->create_part(i, x, y, PT_FIRE);
+			sim->pv[y / CELL][x / CELL] += 2;
+			return 1;
+		} else if (parts[i].tmp < AlmpBurnHealth && sim->rng.chance(1, 2)) { // Erratic burning pattern
+			parts[i].tmp--;
+			if (sim->rng.chance(2, 3))
+			{
+				sim->pv[y / CELL][x / CELL] += 0.2f;
+				int p = sim->create_part(-1, x + sim->rng.between(-1, 1), y + sim->rng.between(-1, 1), PT_EMBR);
+				parts[p].tmp = 0;
+				parts[p].life = 50;
+				parts[p].vx = float(sim->rng.between(-4, 4));
+				parts[p].vy = float(sim->rng.between(-4, 4));
+			}
+			else
+			{
+				sim->create_part(-1, x + sim->rng.between(-1, 1), y + sim->rng.between(-1, 1), PT_FIRE);
+			}
 		}
-	} else if (parts[i].tmp <= 0) {
-		sim->create_part(i, x, y, PT_FIRE);
-		sim->pv[y / CELL][x / CELL] += 2;
+	}
+	else
+	{
+		// Aluminium oxide can be melted back into aluminium
+		sim->part_change_type(i,x,y,PT_LAVA);
+		parts[i].ctype = PT_ALUM;
+		parts[i].tmp = 0;
 		return 1;
-	} else if (parts[i].tmp < AlmpBurnHealth && sim->rng.chance(1, 2)) { // Erratic burning pattern
-		parts[i].tmp--;
-		if (sim->rng.chance(2, 3))
-		{
-			sim->pv[y / CELL][x / CELL] += 0.2f;
-			int p = sim->create_part(-1, x + sim->rng.between(-1, 1), y + sim->rng.between(-1, 1), PT_EMBR);
-			parts[p].tmp = 0;
-			parts[p].life = 50;
-			parts[p].vx = float(sim->rng.between(-4, 4));
-			parts[p].vy = float(sim->rng.between(-4, 4));
-		}
-		else
-		{
-			sim->create_part(-1, x + sim->rng.between(-1, 1), y + sim->rng.between(-1, 1), PT_FIRE);
-		}
 	}
 	return 0;
 }
@@ -110,9 +123,20 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 {
 	// Spörkle
 	int z = (cpart->tmp2) * 10 - 18;
+
+	if (cpart->ctype == PT_O2)
+	{
+		z /= 2;
+		z += 20;
+	}
 	*colr += z;
 	*colg += z;
 	*colb += z;
+
+	if (cpart->ctype == PT_O2)
+	{
+		return 0;
+	}
 
 	if (ren->rng.chance(1, 6))
 	{

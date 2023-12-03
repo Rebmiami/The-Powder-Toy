@@ -12,6 +12,8 @@ static void changetype(ELEMENT_CHANGETYPE_FUNC_ARGS);
 
 // Its properties are used as follows:
 // ctype: Normally 0/NONE. Becomes MERC if inundated with enough MERC, causing it to grow strange formations.
+// Becomes OXYG if it's the oxide created by the MERC reaction, which is very weak structurally.
+// ALUM(OXYG) is NOT aluminium with an oxide layer, it is aluminium oxide in a weak solid form.
 // life: Used for SPRK conduction.
 // tmp: Oxidation level. When oxidized, becomes brighter and resists ACID/MERC corrosion.
 // tmp2: MERC inundation level. When it reaches a high enough point, ctype becomes MERC.
@@ -124,6 +126,10 @@ static int update(UPDATE_FUNC_ARGS)
 	float strain = (pressureStdev + velocitySum + pressureStdev * velocityAvg * 0.05f) / (alum + 1);
     
 	float strength = BaseStrength + parts[i].tmp3 * 10;
+	if (parts[i].ctype == PT_O2)
+	{
+		strength = 1;
+	}
 
 	if (strain > strength) // Deform under immense stress from pressure
     {
@@ -144,31 +150,62 @@ static int update(UPDATE_FUNC_ARGS)
 	}
 
 	// Reactions with neighbors
-	for (int rx = -2; rx <= 2; rx++) {
-		for (int ry = -2; ry <= 2; ry++) {
-			int r = pmap[y+ry][x+rx];
-			if (r >= 0) {
-				if (parts[i].ctype != PT_MERC && TYP(r) == PT_MERC && sim->rng.chance(10 - sim->parts[i].tmp, 10))
+	int rx = x + sim->rng.between(-2, 2);
+	int ry = y + sim->rng.between(-2, 2);
+	int r = pmap[ry][rx];
+	if (r >= 0) {
+		// Absorb MERC
+		if (parts[i].ctype != PT_O2 && TYP(r) == PT_MERC && sim->parts[i].tmp < 1)
+		{
+			parts[i].ctype = PT_MERC;
+			parts[i].tmp2 += 1;
+			parts[ID(r)].tmp -= 1;
+			if (parts[ID(r)].tmp < 1)
+			{
+				sim->kill_part(ID(r));
+			}
+		}
+		// Oxidize on contact with OXYG
+		if (TYP(r) == PT_O2 && sim->parts[i].tmp < 1)
+		{
+			parts[i].tmp = 1;
+		}
+
+		if (parts[i].ctype == PT_O2 && TYP(r) == PT_ALUM && sim->parts[ID(r)].ctype == PT_MERC && sim->rng.chance(std::clamp(parts[ID(r)].tmp2 - 10, 0, 3000), 3000))
+		{
+			// "Traveler" position - it moves through the tower to find a suitable spot to grow from.
+			int tx = x;
+			int ty = y;
+			// Traveler velocity - how much it moves on each iteration if it has not found a suitable place to grow.
+			int tdx = x - rx;
+			int tdy = y - ry;
+			for (int j = 0; j < 10; j++)
+			{
+				tx += tdx;
+				ty += tdy;
+				int np = sim->create_part(-1, tx, ty, PT_ALUM);
+				if (np >= 0)
 				{
-					parts[i].tmp2 += parts[ID(r)].tmp;
-					sim->kill_part(ID(r));
-				}
-				if (TYP(r) == PT_O2 && sim->parts[i].tmp < 10)
-				{
-					parts[i].tmp += 1;
+					parts[np].ctype = PT_O2;
+					parts[np].tmp2 = 10;
+					parts[ID(r)].tmp2 -= 10;
+					break;
 				}
 			}
 		}
 	}
 
-	if (parts[i].ctype == PT_MERC)
+	if (parts[i].ctype == PT_MERC && sim->rng.chance(std::clamp(parts[i].tmp2 - 10, 0, 3000), 3000))
 	{
-		if (parts[i].tmp2 > 0)
-		{
-
-		}
 		int px = x + sim->rng.between(-1, 1);
 		int py = y + sim->rng.between(-1, 1);
+		int np = sim->create_part(-1, px, py, PT_ALUM);
+		if (np >= 0)
+		{
+			parts[np].ctype = PT_O2;
+			parts[np].tmp2 = 10;
+			parts[i].tmp2 -= 10;
+		}
 	}
 
 	// When alloyed, becomes harder to melt.
@@ -177,6 +214,7 @@ static int update(UPDATE_FUNC_ARGS)
 		sim->part_change_type(i,x,y,PT_LAVA);
 		parts[i].ctype = PT_ALUM;
 		parts[i].tmp = 0;
+		return 1;
 	}
 
 	return 0;
@@ -185,10 +223,12 @@ static int update(UPDATE_FUNC_ARGS)
 static int graphics(GRAPHICS_FUNC_ARGS)
 {
 	// Appear brighter when oxidized
-	int z = (cpart->tmp) * 4;
-	*colr += z;
-	*colg += z;
-	*colb += z;
+	if (cpart->tmp > 0)
+	{
+		*colr += 40;
+		*colg += 40;
+		*colb += 40;
+	}
 	// Darker, bluer color (closer to METL) when alloyed
 	if (cpart->tmp3 > 0)
 	{
