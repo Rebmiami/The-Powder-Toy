@@ -55,7 +55,7 @@ static int update(UPDATE_FUNC_ARGS)
 
 	if (parts[i].temp < 273.15f)
 	{
-		parts[i].vy = 0.1;
+		parts[i].vy = 0.1f;
 	}
 
 	for (auto rx = -2; rx < 3; rx++)

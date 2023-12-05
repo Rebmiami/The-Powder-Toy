@@ -3,8 +3,8 @@
 #include "Format.h"
 #include "simulation/Simulation.h"
 #include "simulation/ElementClasses.h"
-#include "common/tpt-minmax.h"
 #include "common/tpt-compat.h"
+#include "common/Version.h"
 #include "bson/BSON.h"
 #include "graphics/Renderer.h"
 #include "Config.h"
@@ -14,6 +14,7 @@
 #include <memory>
 #include <set>
 #include <cmath>
+#include <algorithm>
 
 static void ConvertJsonToBson(bson *b, Json::Value j, int depth = 0);
 static void ConvertBsonToJson(bson_iterator *b, Json::Value *j, int depth = 0);
@@ -640,6 +641,25 @@ void GameSave::readOPS(const std::vector<char> &data)
 			}
 		}
 	}
+
+	auto paletteRemap = [this, saveVersion = Version(majorVersion, minorVersion)](auto maxVersion, ByteString from, ByteString to) {
+		if (saveVersion <= maxVersion)
+		{
+			auto it = std::find_if(palette.begin(), palette.end(), [&from](auto &item) {
+				return item.first == from;
+			});
+			if (it != palette.end())
+			{
+				it->first = to;
+			}
+		}
+	};
+	paletteRemap(Version(87, 1), "DEFAULT_PT_TUGN", "DEFAULT_PT_TUNG");
+	paletteRemap(Version(90, 1), "DEFAULT_PT_REPL", "DEFAULT_PT_RPEL");
+	paletteRemap(Version(92, 0), "DEFAULT_PT_E180", "DEFAULT_PT_HEAC");
+	paletteRemap(Version(92, 0), "DEFAULT_PT_E181", "DEFAULT_PT_SAWD");
+	paletteRemap(Version(92, 0), "DEFAULT_PT_E182", "DEFAULT_PT_POLO");
+	paletteRemap(Version(93, 3), "DEFAULT_PT_RAYT", "DEFAULT_PT_LDTC");
 
 	//Read wall and fan data
 	if(wallData)

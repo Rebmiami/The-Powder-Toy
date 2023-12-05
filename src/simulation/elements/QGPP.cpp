@@ -76,7 +76,7 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	}
 	if (cpart->tmp <= 150 && cpart->temp >= 374.15f)
 	{
-		float frequency = 0.04045;
+		float frequency = 0.04045f;
 		*colr = (int)(sin(frequency * cpart->tmp + 4) * 127 + 150);
 		*colg = (int)(sin(frequency * cpart->tmp + 8) * 127 + 150);
 		*colb = (int)(sin(frequency * cpart->tmp + 5) * 127 + 150);

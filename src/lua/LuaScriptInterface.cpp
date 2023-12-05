@@ -301,10 +301,6 @@ LuaScriptInterface::LuaScriptInterface(GameController * c, GameModel * m):
 	luaopen_bit(l);
 	lua_pop(l, 1);
 
-	lua_pushliteral(l, "Luacon_ci");
-	lua_pushlightuserdata(l, this);
-	lua_settable(l, LUA_REGISTRYINDEX);
-
 	initSimulationAPI();
 	initInterfaceAPI();
 	SetWindow(c->GetView());
@@ -433,22 +429,6 @@ LuaScriptInterface::LuaScriptInterface(GameController * c, GameModel * m):
 	lua_setfield(l, tptProperties, "version");
 
 	lua_sethook(l, &luacon_hook, LUA_MASKCOUNT, 200);
-#ifdef FFI
-	//LuaJIT's ffi gives us direct access to parts data, no need for nested metatables. HOWEVER, this is in no way safe, it's entirely possible for someone to try to read parts[-10]
-	lua_pushlightuserdata(l, parts);
-	lua_setfield(l, tptProperties, "partsdata");
-
-	tpt_lua_dostring (l, "ffi = require(\"ffi\")\n\
-ffi.cdef[[\n\
-typedef struct { int type; int life, ctype; float x, y, vx, vy; float temp; int tmp3; int tmp4; int flags; int tmp; int tmp2; unsigned int dcolour; } particle;\n\
-]]\n\
-tpt.parts = ffi.cast(\"particle *\", tpt.partsdata)\n\
-ffi = nil\n\
-tpt.partsdata = nil");
-	//Since ffi is REALLY REALLY dangrous, we'll remove it from the environment completely (TODO)
-	//lua_pushliteral(l, "parts");
-	//tptPartsCData = lua_gettable(l, tptProperties);
-#else
 	lua_newtable(l);
 	tptParts = lua_gettop(l);
 	lua_newtable(l);
@@ -475,7 +455,6 @@ tpt.partsdata = nil");
 	tptPart = new LuaSmartRef();
 	tptPart->Assign(l, -1);
 	lua_pop(l, 1);
-#endif
 
 	lua_newtable(l);
 	tptElements = lua_gettop(l);
@@ -516,6 +495,12 @@ tpt.partsdata = nil");
 		lua_settable(l, tptElementTransitions);
 	}
 	lua_setfield(l, tptProperties, "eltransition");
+
+	SETCONST(l, DEBUG_PARTS);
+	SETCONST(l, DEBUG_ELEMENTPOP);
+	SETCONST(l, DEBUG_LINES);
+	SETCONST(l, DEBUG_PARTICLE);
+	SETCONST(l, DEBUG_SURFNORM);
 
 	lua_gr_func_v = std::vector<LuaSmartRef>(PT_NUM);
 	lua_gr_func = &lua_gr_func_v[0];
@@ -737,7 +722,7 @@ static int beginMessageBox(lua_State* l)
 		cb->Push(l);
 		if (lua_isfunction(l, -1))
 		{
-			if (lua_pcall(l, 0, 0, 0))
+			if (tpt_lua_pcall(l, 0, 0, 0, false))
 			{
 				luacon_ci->Log(CommandInterface::LogError, luacon_geterror());
 			}
@@ -761,7 +746,7 @@ static int beginThrowError(lua_State* l)
 		cb->Push(l);
 		if (lua_isfunction(l, -1))
 		{
-			if (lua_pcall(l, 0, 0, 0))
+			if (tpt_lua_pcall(l, 0, 0, 0, false))
 			{
 				luacon_ci->Log(CommandInterface::LogError, luacon_geterror());
 			}
@@ -796,7 +781,7 @@ static int beginInput(lua_State* l)
 			{
 				lua_pushnil(l);
 			}
-			if (lua_pcall(l, 1, 0, 0))
+			if (tpt_lua_pcall(l, 1, 0, 0, false))
 			{
 				luacon_ci->Log(CommandInterface::LogError, luacon_geterror());
 			}
@@ -828,7 +813,7 @@ static int beginConfirm(lua_State *l)
 		if (lua_isfunction(l, -1))
 		{
 			lua_pushboolean(l, result);
-			if (lua_pcall(l, 1, 0, 0))
+			if (tpt_lua_pcall(l, 1, 0, 0, false))
 			{
 				luacon_ci->Log(CommandInterface::LogError, luacon_geterror());
 			}
@@ -5225,7 +5210,7 @@ int LuaScriptInterface::luatpt_getscript(lua_State* l)
 				tpt_lua_pushString(l, runFailed->error);
 				nargs = 2;
 			}
-			if (lua_pcall(l, nargs, 0, 0))
+			if (tpt_lua_pcall(l, nargs, 0, 0, false))
 			{
 				luacon_ci->Log(CommandInterface::LogError, luacon_geterror());
 			}

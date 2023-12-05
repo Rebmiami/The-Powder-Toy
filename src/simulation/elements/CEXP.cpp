@@ -29,7 +29,7 @@ void Element::Element_CEXP()
 	PhotonReflectWavelengths = 0xFF6347;
 
 	HeatConduct = 0;
-	Description = "Custom explosive, read wiki. Temp = Temp upon explosion, Life = Pressure it creates, tmp = power (0-10).";
+	Description = "Custom explosive. Temp. = Temp upon explosion, Life = Pressure it creates, tmp = gravity. ctype = exploding element.";
 
 	Properties = TYPE_SOLID;
 
@@ -46,49 +46,48 @@ void Element::Element_CEXP()
 }
 static int update(UPDATE_FUNC_ARGS)
 {
-	if (parts[i].tmp < 0 || parts[i].tmp > 10)
-		parts[i].tmp = 10;
-
-	for (auto rx = -1; rx < 2; rx++)
-		for (auto ry = -1; ry < 2; ry++)
-			if (rx || ry)
+	for (auto rx = -2; rx <= 2; rx++)
+		{
+			for (auto ry = -2; ry <= 2; ry++)
 			{
-				auto r = pmap[y + ry][x + rx];
-				switch (TYP(r))
+				if (rx || ry)
 				{
-					case PT_SPRK:
-					case PT_FIRE:
-					case PT_PLSM:
-					case PT_THDR:
-					case PT_LIGH:
-					{
-						parts[i].tmp2 = 10;
-					}
-					break;
-
-					case PT_CEXP:
-					{
-						if (parts[ID(r)].tmp2 > 0)
-							parts[i].tmp2 = 10;
-					}
-					break;
+					auto r = pmap[y + ry][x + rx];
+					if (!r)
+						r = sim->photons[y + ry][x + rx];
+					if (!r)
+						continue;
+				{
+				if (parts[ID(r)].type == PT_SPRK||parts[ID(r)].type == PT_FIRE||parts[ID(r)].type == PT_PLSM||parts[ID(r)].type == PT_THDR||parts[ID(r)].type == PT_LIGH)
+				{
+                 parts[i].tmp2 = 10;
 				}
+				
+				if(parts[ID(r)].type== PT_CEXP && parts[ID(r)].tmp2 > 0)
+				{
+				parts[i].tmp2 = 10;
+				sim->flood_prop(x, y, Particle::GetProperties()[FIELD_TMP2], 10);
+				}
+				
 				if (parts[i].tmp2 > 0)
 				{
 					sim->pv[(y / CELL) + ry][(x / CELL) + rx] = (float)(parts[i].life);
-					sim->create_part(-1, x + parts[i].tmp, y + parts[i].tmp, PT_PLSM);
-					sim->create_part(-1, x - parts[i].tmp, y - parts[i].tmp, PT_PLSM);
-					sim->create_part(-1, x - parts[i].tmp, y + parts[i].tmp, PT_PLSM);
-					sim->create_part(-1, x + parts[i].tmp, y - parts[i].tmp, PT_PLSM);
-					sim->part_change_type(i, x, y, PT_FIRE);
+					sim->hv[(y / CELL) + ry][(x / CELL) + rx] = parts[i].temp;
+					sim->gravmap[(y/CELL)*XCELLS+(x/CELL)] = parts[i].tmp;
+					parts[ID(r)].temp = parts[i].temp;
+					sim->part_change_type(i, x, y, parts[i].ctype);
 				}
 				}
-	return 0;
+				}
+				}
+				}
+				return 0;
 }
 
 static void create(ELEMENT_CREATE_FUNC_ARGS)
 {
 	sim->parts[i].temp = 9720;
-	sim->parts[i].tmp = 10;
+	sim->parts[i].ctype = PT_PLSM;
+	sim->parts[i].tmp = 100;
 	sim->parts[i].life = 256;
 }

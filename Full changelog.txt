@@ -1,10 +1,49 @@
+v57.2 (unreleased)
+Fix lag when using CEXP.
+Fix reset buttons not clearing crack menu options.
+Fix weird artifacts (Somewhat) on wheel graphics because of new changes made to graphic drawing in game.
+Quick options are now Advanced options.
+Fix black bars under cr menu window when offline.
+Make advanced options visible with light backgrounds
+DIGS is now complete. Now shows the element properties like temp., Pressure, etc.
+New element: ALUM (WIP)
+Changes from master branch:
+Remove unnecessary lua_pushlightuserdata usage, use commandInterface
+Add surface normal debug tool
+Expose debug constants to lua 
+
+v57.1
+Add an option to customise the element that CEXP explodes into, also add gravity variable to it.
+Add help text to autosave
+Element cleanup:
+Removed NUKE element
+New digital sign element (DIGS), use with different tmp modes.
+Fix some features not treating Zhole as a wall
+Changes from master branch:
+Fix spurious timeout errors from some callbacks
+Complain about missing custom elements when opening online saves 
+Auto-focus the input field in the tag list
+Fix prop tool not remembering settings in some cases 
+
+v57.0
+Fix relative heat setting requiring a reset after update.
+Update the tptmp script to v2.0.36.
+Additional stats, now called additional hud, now shows more information.
+Fix AMTR destroying wall element.
+Redesigned quick options, do not block solid edge mode.
+Add version info in intro text
+Add relative heat mode to quick settings
+changes from master branch:
+Make save history icon not so hard to find, and show up on all saves (not just your own) the icon is now shown whenever you hover over the save, not just when you hover over where the icon is supposed to be.
+Add bound checking to Simulation::clear_area
+Fix guess best scale prompt showing up even when it guesses the default
+
 v56.6
+Test update for win 11 users.
 Change reset button behaviour. Doesn't delete any script/ settings except the mod ones.
 Fix relative heat display not turning off actually when disabled from settings.
 Center sensors, search and pause icons.
 Fix a bug in the font editor where the last row of a symbol is cleared when shifting the whole symbol up.
-In progess:
-New element by Redmiami
 
 V56.5
 Use ERASEA instead of Eraser in quick options

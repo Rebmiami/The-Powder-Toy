@@ -40,7 +40,7 @@ void Element::Element_COPR()
 	HighPressureTransition = NT;
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
-	HighTemperature = 1085.85 + 273.15f;
+	HighTemperature = 1085.85f + 273.15f;
 	HighTemperatureTransition = PT_LAVA;
 
 	Update = &update;

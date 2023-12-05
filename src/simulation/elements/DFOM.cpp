@@ -57,21 +57,21 @@ static int update(UPDATE_FUNC_ARGS)
 		parts[i].vy += ADVECTION*sim->vy[y/CELL][x/CELL];
 	}
 	//Temp. checks
-	if (parts[i].temp > 22+273.15f)
+	if (parts[i].temp > 22.0f + 273.15f)
 	{
 		parts[i].temp -= 4.0f;
 	}
-	if (parts[i].temp < 22+273.15f)
+	if (parts[i].temp < 22 + 273.15f)
 	{
 		parts[i].temp += 1.0f;
 	}
 	if (parts[i].tmp3 > 0)
 	{
-		parts[i].tmp3 -= 1.0; 
+		parts[i].tmp3 -= 1; 
 	}
 	if (parts[i].tmp4 > 0)
 	{
-		parts[i].tmp4 -= 1.0; 
+		parts[i].tmp4 -= 1; 
 	}
 	//uneven texture 
 	if (parts[i].tmp3 < 15 and parts[i].tmp3 > 1)

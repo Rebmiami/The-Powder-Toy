@@ -89,7 +89,7 @@ static int update(UPDATE_FUNC_ARGS)
 	//Actual life begins here.
 	if (parts[i].tmp == 2 && parts[i].temp >= 275.15f)
 	{
-		parts[i].vy = -0.4;
+		parts[i].vy = -0.4f;
 		parts[i].vx = 0;
 		parts[i].life--;
 		if (parts[i].life >= 200)

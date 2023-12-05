@@ -1,5 +1,5 @@
 --Cracker1000 mod interface script--
-local crackversion = 56.6 --Next version: 56.7
+local crackversion = 57.2 --Next version: 57.3
 local motw = "."
 local specialmsgval = 0
 local dr, dg, db, da, defaulttheme = 131,0,255,255, "Default"
@@ -280,6 +280,8 @@ local deletesparkButton =  Button:new(10,28,90,25,"Focus Mode", "shows UI relate
 local FPS = Button:new(10,60,90,25, "Frame limiter", "Turns the frame limiter on/off.")
 
 local reset = Button:new(10,92,90,25,"Reset", "Reset.")
+local rset1 = Button:new(104,92,45,25,"Soft", "Reset just the mod settings.")
+local rset2 = Button:new(153,92,45,25,"Hard", "Reset entire game, might delete some stuff.")
 
 local info = Button:new(10,124,90,25,"Stack tools", "Usefull for subframe.")
 
@@ -316,7 +318,7 @@ local edito = Button:new(396,124,90,25, "Editor", "Basic element editor.")
 
 local perfm = Button:new(396,156,90,25, "Performance", "For lower spec systems.")
 
-local passbut = Button:new(396,188,90,25, "Quick Options", "Quick options.")
+local passbut = Button:new(396,188,90,25, "Advanced Options", "Advanced options.")
 
 local reminder = Button:new(396,220,90,25, "Notifications", "Maticzpl's notification stuff")
 local reminderhelp = Button:new(516,224,15,15, "?", "Help")
@@ -368,6 +370,8 @@ end
 function clearsb()
 newmenu:removeComponent(bug1)
 newmenu:removeComponent(bug2)
+newmenu:removeComponent(rset1)
+newmenu:removeComponent(rset2)
 newmenu:removeComponent(brlabel2)
 newmenu:removeComponent(brightSlider)
 end
@@ -416,7 +420,7 @@ if reqwincode == 200 then
 os.remove("oldmod")--Delete the oldmod file
 local oldName = platform.exeName()
 os.rename(oldName,"oldmod")
-updatertext = "Renaming files.."
+updatertext = "Moving and Renaming files.."
 errorcode = "Error while renaming files.."
 local fupdate = io.open(oldName, 'wb')
 fupdate:write(reqwindata)
@@ -704,7 +708,7 @@ elseif selc == "DEFAULT_UI_WIND" then
 tpt.selectedr = "DEFAULT_TOOL_CYCL"
 elseif selc == "DEFAULT_TOOL_CYCL" then
 tpt.selectedr = "DEFAULT_UI_WIND"
-elseif selc == "DEFAULT_WL_ERASE" or selc == "DEFAULT_WL_DTECT" or selc == "DEFAULT_WL_CNDT" or selc == "DEFAULT_WL_EWALL" or selc == "DEFAULT_WL_STRM"  or selc == "DEFAULT_WL_FAN" or selc == "DEFAULT_WL_LIQD" or selc == "DEFAULT_WL_ABSRB" or selc == "DEFAULT_WL_WALL" or selc ==" DEFAULT_WL_AIR" or selc =="DEFAULT_WL_POWDR" or selc =="DEFAULT_WL_CNDTR" or selc =="DEFAULT_WL_EHOLE" or selc =="DEFAULT_WL_GAS" or selc =="DEFAULT_WL_GRVTY" or selc =="DEFAULT_WL_ENRGY" or selc =="DEFAULT_WL_NOAIR" or selc =="DEFAULT_WL_STASIS"  or selc =="DEFAULT_WL_CNDTW" then
+elseif selc == "DEFAULT_WL_ERASE" or selc == "DEFAULT_WL_DTECT" or selc == "DEFAULT_WL_CNDT" or selc == "DEFAULT_WL_EWALL" or selc == "DEFAULT_WL_STRM"  or selc == "DEFAULT_WL_FAN" or selc == "DEFAULT_WL_LIQD" or selc == "DEFAULT_WL_ABSRB" or selc == "DEFAULT_WL_WALL" or selc ==" DEFAULT_WL_AIR" or selc =="DEFAULT_WL_POWDR" or selc =="DEFAULT_WL_CNDTR" or selc =="DEFAULT_WL_EHOLE" or selc =="DEFAULT_WL_ZHOLE" or selc =="DEFAULT_WL_GAS" or selc =="DEFAULT_WL_GRVTY" or selc =="DEFAULT_WL_ENRGY" or selc =="DEFAULT_WL_NOAIR" or selc =="DEFAULT_WL_STASIS"  or selc =="DEFAULT_WL_CNDTW" then
 tpt.selectedr = "DEFAULT_WL_ERASE"
 else
 tpt.selectedr = "DEFAULT_PT_NONE"
@@ -774,6 +778,7 @@ if stamplb == "0" then
 stamplb = "1"
 event.unregister(event.tick,autosave)
 event.register(event.tick,autosave)
+print("Autosave: The mod will automatically stamp the current simulation after every few frames.")
 elseif stamplb == "1" then
 stamplb = "0"
 event.unregister(event.tick,autosave)
@@ -919,7 +924,7 @@ local edelname = Textbox:new(10, 60, 100, 15, '', 'New Name.')
 local edelname2 = Textbox:new(10, 80, 100, 15, '', 'New Colour.')
 local edelname4 = Textbox:new(10, 100, 100, 15, '', 'Menu Section.')
 local edelname5 = Textbox:new(10, 120, 100, 15, '', 'Show / Hide.')
-local edelname3 = Textbox:new(10, 140, 550, 15, '', '                                              New Element Description.')
+local edelname3 = Textbox:new(10, 140, 550, 15, '', 'New Element Description.')
 local edelname6 = Textbox:new(10, 160, 100, 15, '', 'Explosive.')
 local edelname7 = Textbox:new(10, 180, 100, 15, '', 'Heat Conductivity.')
 local edelname8 = Textbox:new(10, 200, 100, 15, '', 'Flammable.')
@@ -1073,7 +1078,7 @@ end)
 
 Help:action(function(sender)
 close()
-randsav = math.random(1,2963348)
+randsav = math.random(1,3046486)
 sim.loadSave(randsav, 0) 
 end)
 
@@ -1596,9 +1601,9 @@ local close2 = Button:new(570, 400, 50, 15, "Close")
 
 local wpage1 = "01) CWIR: Customisable wire. Conduction speed set using .tmp property (Range is 0 to 8) \n    .tmp2 property is used for setting melting point (default is 2000C).\n\n02) VSNS: Velocity sensor. Creates sprk when there's a particle with velocity higher than its temp.\n\n03) TIMC: Time Crystal, powder that converts into its ctype when sparked with PSCN.\n\n04) FUEL: Powerful fuel, explodes when temp is above 50C or Pressure above 14.\n\n05) THRM: Thermostat. Maintains the surrounding temp based on its own .temp property.\n\n06) CLNT: Coolant. Cools down the temp of the system. Use .tmp to configure the cooling/heating power.\n    Evaporates at extreme temperatures into WTRV.\n\n07) DMRN: Demron. Radioactive shielding material and a better indestructible heat insulator.\n    It can also block energy particles like PROT.\n\n08) FNTC & FPTC: Faster versions of NTCT and PTCT. Useful for making faster logic gates.\n\n09) PINV: Powered Invisible, allows particles to move through it only when activated. Use with PSCN and NSCN.\n\n10) UV: UV rays, harms stkms (-5 life every frame), visible with FILT, grows plnt, can sprk pscn and evaporates watr.\n    Can split WATR into O2 and H2 when passed through FILT. Makes PHOS glow, ionises RADN. PHOT + GRPH -> UV. \n\n11) SUN.: Emits rays which makes PLNT grow in direction of sun, emits UV radiation, makes PSCN spark and heals STKMs.\n\n12) CLUD: Realistic cloud, rains and creates LIGH after sometime (every 1000 frames). Cool below 0C to make it snow.\n\n13) LBTR: Lithium Ion Battery, Use with PSCN and NSCN. Charges with INST when deactivated. Life sets capacity.\n    Reacts with different elements like O2, WATR, ACID etc as IRL."
 local wpage2 = "14) LED: Light Emmiting Diode. Use PSCN to power it on. Temp. sets the brightness. Glows in its dcolour (Default set to white).\n\n15) QGP: Quark Gluon Plasma, bursts out radiation afer sometime. Turns into Purple QGP when under 100C which is stable.\n    Glows in different colours just before exploding. \n\n16) TMPS: .tmp sensor, .tmp3 modes => value = 0 or 1 detects tmp, .tmp3 = 2 (.tmp2), 3 = .tmp3 and 4 = .tmp4. \n    Rest all is same as any other sensor. Supports serialisation and deserilisation of all tmp values too.\n\n17) PHOS: Phosphorus. Shiny white particle, slowly oxidises into red phosphorus with time. \n    Burns instantly with CFLM. Reacts violently with Oxygen. Burns slowly when ignited with FIRE.\n    Oil reverses the oxidation turning it back into white PHOS, acts as a fertiliser for PLNT. Melts at 45C. Glows under UV.\n\n18) CMNT: Cement, creates an exothermic reaction when mixed with water and gets solidified, darkens when solid.\n\n19) NTRG: Nitrogen gas, liquifies to LN2 when cooled or when under pressure, reacts with H2 to make NITR and puts out fire.\n\n20) PRMT: Promethium, radioactive element. Catches fire at high velocity (>12), creats NEUT when mixed with PLUT. \n    Explodes at low temp and emits neut at high temp.\n\n21) BEE: Eats PLNT. Makes wax hive at center when health > 90. Attacks STKMs and FIGH can regulate temp.\n    Gets aggresive if life gets below 30. Tries to return to center when life >90. Falls down when life is low.\n\n22) ECLR: Electronic eraser, clears the defined radius (.tmp) when activated (Use with PSCN and NSCN). \n\n23) PROJ: Projectile, converts into its's ctype upon collision. launch with PSCN. Temperature = power while .tmp = range.\n    Limits: Both .tmp and temp. if set to negative or >100 will be reset.\n\n24) PPTI and PPTO: Powered Versions of PRTI and PRTO, use with PSCN and NSCN.\n\n25) SEED: Grows into PLNT of random height when placed on DUST/SAND/CLST and Watered. Needs warm temp. to grow."
-local wpage3 = "26) CSNS: Ctype sensor, detects nearby element's ctype. Useful when working with LAVA.\n\n27) CPPR: Copper, excellent conductor. Loses conductivity when oxidised with O2 or when it is heated around temp. of 300C.\n    Oxide form breaks apart when under pressures above 4.0. Becomes a super conductor when cooled below -200C.\n\n28) CLRC: Clear coat. A white fluid that coats solids. Becomes invisible with UV. Non conductive and acid resistant.\n\n29) CEXP: Customisable explosive. Temperature = temp. that it reaches while exploding.\n    .Life and .tmp determines the pressure and power (0-10) respectively that it generates (preset to be stronger).\n\n30) PCON: Powered CONV. Use with PSCN and NSCN. Set its Ctype carefully!\n\n31) STRC: Structure, Falls apart without support. CNCT and Solids can support it. \n    .tmp2 = Max overhang strength. (Default = 10). \n\n32) BFLM: Black Flames. Burns everything it touches even VIRS, can't be stopped. DMRN & WALL are immune to it.\n\n33) TURB: Turbine, generates sprk under pressure. Discharges to PSCN. Changes colour as per pressure. \n    Performance = Poor when pressure is >4 and <16, Moderate above >16, Best above 30, breaks around 50.\n\n34) PET: STKM/STKM2's new AI friend. Follows them while also healing them. Tries to regulate temp. when healthy.\n    Colour of head shows health. Uses PLNT/WATR to stay alive. Avoids harmful particles like ACID/ LAVA. Can avoid falling. \n    Avoids areas of extreme temps. Kills nearby pets. Expands and blasts if life drops below 10. \n\n35) MISL: Missile, flies to target (X=tmp, Y=tmp2) shown as crosshair (use PSCN to hide it). Blasts when at coords or >500C.\n    Use the MIST tool under tools section for much better experience.\n\n36) AMBE: Sets ambient air temp as per its own Temp. Powered Element. tmp = area it affects (1-25).\n\n37) ACTY: Acetylene, light gas that burns quickly ~1100C, burns hotter ~3500C & longer with O2. Makes LBRD with Chlorine."
+local wpage3 = "26) CSNS: Ctype sensor, detects nearby element's ctype. Useful when working with LAVA.\n\n27) CPPR: Copper, excellent conductor. Loses conductivity when oxidised with O2 or when it is heated around temp. of 300C.\n    Oxide form breaks apart when under pressures above 4.0. Becomes a super conductor when cooled below -200C.\n\n28) CLRC: Clear coat. A white fluid that coats solids. Becomes invisible with UV. Non conductive and acid resistant.\n\n29) CEXP: Customisable explosive. Temperature = temp. that it reaches while exploding. Ctype = element it explodes into.\n    .Life and .tmp determines the pressure and gravity respectively that it generates (preset to be stronger).\n\n30) PCON: Powered CONV. Use with PSCN and NSCN. Set its Ctype carefully!\n\n31) STRC: Structure, Falls apart without support. CNCT and Solids can support it. \n    .tmp2 = Max overhang strength. (Default = 10). \n\n32) BFLM: Black Flames. Burns everything it touches even VIRS, can't be stopped. DMRN & WALL are immune to it.\n\n33) TURB: Turbine, generates sprk under pressure. Discharges to PSCN. Changes colour as per pressure. \n    Performance = Poor when pressure is >4 and <16, Moderate above >16, Best above 30, breaks around 50.\n\n34) PET: STKM/STKM2's new AI friend. Follows them while also healing them. Tries to regulate temp. when healthy.\n    Colour of head shows health. Uses PLNT/WATR to stay alive. Avoids harmful particles like ACID/ LAVA. Can avoid falling. \n    Avoids areas of extreme temps. Kills nearby pets. Expands and blasts if life drops below 10. \n\n35) MISL: Missile, flies to target (X=tmp, Y=tmp2) shown as crosshair (use PSCN to hide it). Blasts when at coords or >500C.\n    Use the MIST tool under tools section for much better experience.\n\n36) AMBE: Sets ambient air temp as per its own Temp. Powered Element. tmp = area it affects (1-25).\n\n37) ACTY: Acetylene, light gas that burns quickly ~1100C, burns hotter ~3500C & longer with O2. Makes LBRD with Chlorine."
 local wpage4 = "38) Cl: Chlorine gas, settles down fast. Photochemical reaction with H2. 1/400 chance of Cl + H2 = ACID.\n    Cl + WATR = DSTW (distillation below 50C) or ACID (>50C). Kills STKM.\n    Decays organic matter like PLNT, YEST, WOOD, SEED, etc. Slows when cooled. Rusts IRON & BMTL.\n\n39) WALL: Walls now in element form (1x1), can block pressure, PROT and is an indestructible INSL.\n\n40) ELEX: A strange element that can turn into any random element (only when above 0C).\n\n41) RADN: A heavy radioactive gas with short half-life (Emits neut while decaying). Can conduct SPRK.\n    Ionises in presence of UV (glows red) and then emits different radioactive elements.\n\n42) GRPH: Graphite. Excellent heat and electricity conductor. Melts at 3900C. GRPH + O2 -> CO2 and PHOT + GRPH -> UV.\n    Once ignited (when > 450C) the flames are very difficult to stop. Absorbs NEUT and thus acting as a moderator.\n\n43) BASE: Base, forms salt when reacted with acid. Dissolves certain metals like METL, BMTL, GOLD, BRMT, IRON, BREL etc.\n    Strength reduces upon dilution with water (turns brown). Turns GRPH, COAL, BCOL etc to CO2. Evaporates when > 150C.\n\n44) WHEL: Wheel. Spins when powered with PSCN. RPM increases with time. Use .tmp to set the wheel size.\n    Wheel Size Range: 05-50 (8 = default). Use decoroations for spoke colour. Note: SPRK the center particle and not the rim.\n    Sparking with NSCN decreases the RPM eventually stopping it. Temperature (100C-1000C) sets the max RPM (400C default).\n\n45) NAPM: Napalm. Viscous liquid that's impossible to extinguish once ignited. Sticks to solids. Use in small amounts.\n    Reaches temp. around 1200C while burning. Ignites when around 100C.\n\n46) GSNS: Gravity sensor, creates sprk when nearby gravity is higher than its temp. (supports serialisation).\n\n47) EMGT: Electromagnet. Creates positive & negative EM fiels around it when sparked with PSCN or NSCN respectively.\n    Spark with both PSCN and NSCN and it becomes unstable heating and sparking nearby metals.\n    Can attract or repel metalic powders (BRMT, SLCN, BREL,PQRT, etc) or PHOT and ELEC depending upon the field created.\n    Heats while being powered (upto 400C), strength decreases with temperature. Melts around 1300C."
-local wpage5 = "48) SODM: Sodium shiny conductive metal. Reacts violently with WATR generating hydrogen. Turns powder when under pressure.\n    Absorbs O2 and Co2 to form oxide layers. Forms SALT with chlorine when above 50C. Melts at 97C. Glows under vaccum.\n\n49) BALL: Bouncy glas balls, can spill away liquids and powders while bouncing. Breaks at 20 pressure and melts around 1900C\n\n50) SPSH: Space ship. Controlled via on screen buttons. Needs charge to move. Pause the game to draw stuff while using SPSH.\n\n51) RUBR: Rubber fluid, sets into given shape when above 230C. Burns around 430C. Bounces off powders and liquids.\n    Blocks pressure like TTAN when solid and is a good heat insulator. Gets dissolved by GAS & OIL.\n\n52) DFOM: Defensive foam like element. Returns to it's set shape after deforming. Sets shape when created/ below 0C. \n    Acts as a shock absorber. Melts at 6000C. \n\n53) NUKE: Extremely powerful atomic bomb. Destructs everything around it. Activates with PSCN. Needs gravity to work.\n\n54) ALUM: Destructible pressure-blocking metal. Becomes stronger when alloyed with molten METL.\n    Can be oxidized by OXYG which prevents corrosion. Has a bizarre reaction with MERC.\n\n55) ALMP: Aluminium powder. Created by breaking ALUM. Very flammable."
+local wpage5 = "48) SODM: Sodium shiny conductive metal. Reacts violently with WATR generating hydrogen. Turns powder when under pressure.\n    Absorbs O2 and Co2 to form oxide layers. Forms SALT with chlorine when above 50C. Melts at 97C. Glows under vaccum.\n\n49) BALL: Bouncy glas balls, can spill away liquids and powders while bouncing. Breaks at 20 pressure and melts around 1900C\n\n50) SPSH: Space ship. Controlled via on screen buttons. Needs charge to move. Pause the game to draw stuff while using SPSH.\n\n51) RUBR: Rubber fluid, sets into given shape when above 230C. Burns around 430C. Bounces off powders and liquids.\n    Blocks pressure like TTAN when solid and is a good heat insulator. Gets dissolved by GAS & OIL.\n\n52) DFOM: Defensive foam like element. Returns to it's set shape after deforming. Sets shape when created/ below 0C. \n    Acts as a shock absorber. Melts at 6000C. \n\n53) DIGS: Digital Sign element. Use with PSCN and NSCN. INST makes it cycle through different tmp modes.\n    Tmp modes: 1 = Temperature, 2 = Pressure, 3 = Gravity, 4 = Crack Mod, 5 = Timer.\n\n54) NUKE: Extremely powerful atomic bomb. Destructs everything around it. Activates with PSCN. Needs gravity to work.\n\n55) ALUM: Destructible pressure-blocking metal. Becomes stronger when alloyed with molten METL.\n    Can be oxidized by OXYG which prevents corrosion. Has a bizarre reaction with MERC.\n\n56) ALMP: Aluminium powder. Created by breaking ALUM. Very flammable."
 
 creditw:addComponent(close2)
 creditw:addComponent(nextpg)
@@ -1701,7 +1706,8 @@ tpt.el.sodm.menu=0
 tpt.el.ball.menu=0
 tpt.el.rubr.menu=0
 tpt.el.dfom.menu=0
-tpt.el.nuke.menu=0
+tpt.el.digs.menu=0
+tpt.el.alum.menu=0
 elem.property(PLNE, "MenuVisible", 0)
 elem.property(MISLT, "MenuVisible", 0)
 end
@@ -1760,7 +1766,8 @@ tpt.el.sodm.menu=1
 tpt.el.ball.menu=1
 tpt.el.rubr.menu=1
 tpt.el.dfom.menu=1
-tpt.el.nuke.menu=1
+tpt.el.digs.menu=1
+tpt.el.alum.menu=1
 elem.property(PLNE, "MenuVisible", 1)
 elem.property(MISLT, "MenuVisible", 1)
 end
@@ -2163,6 +2170,7 @@ neonmode:action(function(sender)
 if nmodv == "0" then
 nmodv = "1"
 tpt.setfire(30)
+tpt.display_mode(3)
 print("Neon Mode: Particles like FIRE, GAS and PHOT etc appear extra fancy and glowy.")
 elseif nmodv == "1" then
 nmodv = "0"
@@ -2335,7 +2343,7 @@ MANAGER.savesetting("CRK","barval","4")
 end)
 end)
 
---Quick settings
+--Advanced settings
 local quickmenval, selectedelem, switchval, slowval,slo2 = 0, tpt.selectedl,0,0,0
 local function slowmo()
 if slo2 < 5 then
@@ -2347,7 +2355,7 @@ sim.framerender(1)
 end
 end
 local timehr, timemin, timesec, starttime = 0, 0, 0, os.clock()
-local staty = 35
+local staty = 36
 local statstring 
 local function extstat()
 if MANAGER.getsetting("CRK","extraval") == "1" and MANAGER.getsetting("CRK", "pass") == "1" and tpt.hud() == 1 then
@@ -2359,75 +2367,98 @@ end
 if timemin > 59 then
 timehr= timehr + 1
 end
-statstring = "Time elapsed: "..timehr.." Hr. "..timemin.." Min. "..timesec.." Sec, Elem. P:"..sim.elementCount(elem[tpt.selectedl])..", S:"..sim.elementCount(elem[tpt.selectedr])
-graphics.fillRect(6,staty-2,gfx.textSize(statstring)+1,11,10,10,10,120)
+local relativeheatvalue = "OFF"
+if MANAGER.getsetting("CRK", "relhdv") == "1" then
+relativeheatvalue = "ON"
+else
+relativeheatvalue = "OFF"
+end
+statstring = "Time elapsed: "..timehr.." Hr. "..timemin.." Min. "..timesec.." Sec, Elem. P:"..sim.elementCount(elem[tpt.selectedl])..", S:"..sim.elementCount(elem[tpt.selectedr])..", Relative heat: "..relativeheatvalue
+graphics.fillRect(6,staty-3,gfx.textSize(statstring)+1,13,10,10,10,130)
 graphics.drawText(7,staty,statstring,32,216,255,255)
 if ren.debugHUD() == 0 then
-staty = 35
+staty = 36
 else
-staty = 49
+staty = 50
 end
 end
 end
 
 local function quickset()
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
-gfx.fillCircle(5,175,8,8,105,255,105,200)
-gfx.drawText(16,173,"Quick options",105,255,105,255)
+gfx.fillCircle(14,175,8,8,10,10,10,255) -- Dark background
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 168 and tpt.mousey < 182 then
+gfx.fillCircle(14,175,8,8,105,255,105,200)
+gfx.drawText(27,173,"Advanced options",105,255,105,255)
 else
-gfx.fillCircle(5,175,8,8,105,255,105,70)
+gfx.fillCircle(14,175,8,8,105,255,105,70)
 end
-gfx.drawCircle(5,175,8,8,105,255,105,200)
 if quickmenval == 0 then
-gfx.drawText(3,170,">",105,255,105,255)
+gfx.drawText(12,171,">",105,255,105,255)
 elseif quickmenval == 1 then
-gfx.drawText(3,170,"<",105,255,105,255)
-if MANAGER.getsetting("CRK", "fancurs") == "1" then 
-gfx.fillCircle(5,200,8,8,255,85,85,190)
-else
-gfx.fillCircle(5,200,8,8,255,105,105,70)
-end
-gfx.drawText(3,196,"C",255,105,105,255)
-if slowval == 0 then
-gfx.fillCircle(5,225,8,8,105,255,105,80)
-else
-gfx.fillCircle(5,225,8,8,90,255,90,190)
-end
-gfx.drawText(3,221,"S",105,255,105,255)
-if switchval == 0 then
-gfx.fillCircle(5,250,8,8,105,105,255,80)
-else
-gfx.fillCircle(5,250,8,8,85,85,255,190)
-end
-gfx.drawText(3,246,"E",105,105,255,255)
-if MANAGER.getsetting("CRK","extraval") == "0" then
-gfx.fillCircle(5,275,8,8,155,155,155,80)
-else
-gfx.fillCircle(5,275,8,8,255,255,255,190)
-end
-gfx.drawText(3,271,"A",255,255,255,255)
+-- Dark backgrounds
+gfx.fillCircle(14,200,8,8,10,10,10,255)--
+gfx.fillCircle(14,225,8,8,10,10,10,255)--
+gfx.fillCircle(14,250,8,8,10,10,10,255)-- 
+gfx.fillCircle(14,275,8,8,10,10,10,255)-- 
+gfx.fillCircle(14,300,8,8,10,10,10,255)-- 
 
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
-gfx.drawText(16,197,"Cross-Hair",255,105,105,255)
-end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
-gfx.drawText(16,222,"Slow motion",105,255,105,255)
-end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
-if switchval == 0 then
-gfx.drawText(16,247,"Eraser",105,105,255,255)
+gfx.drawText(12,171,"<",105,255,105,255)
+if MANAGER.getsetting("CRK", "fancurs") == "1" then 
+gfx.fillCircle(14,200,8,8,255,85,85,190)
 else
-gfx.drawText(16,247,"Element/ Wall",105,105,255,255)
+gfx.fillCircle(14,200,8,8,255,105,105,70)
+end
+gfx.drawText(12,196,"C",255,105,105,255)
+if slowval == 0 then
+gfx.fillCircle(14,225,8,8,105,255,105,80)
+else
+gfx.fillCircle(14,225,8,8,90,255,90,190)
+end
+gfx.drawText(12,221,"S",105,255,105,255)
+if switchval == 0 then
+gfx.fillCircle(14,250,8,8,105,105,255,80)
+else
+gfx.fillCircle(14,250,8,8,85,85,255,190)
+end
+gfx.drawText(12,246,"E",105,105,255,255)
+if MANAGER.getsetting("CRK","extraval") == "0" then
+gfx.fillCircle(14,275,8,8,155,155,155,80)
+else
+gfx.fillCircle(14,275,8,8,255,255,255,190)
+end
+gfx.drawText(12,271,"A",255,255,255,255)
+
+if MANAGER.getsetting("CRK","relhdv") == "0" then
+gfx.fillCircle(14,300,8,8,131,0,255,80)
+else
+gfx.fillCircle(14,300,8,8,131,0,255,190)
+end
+gfx.drawText(12,296,"R",131,0,255,255)
+
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
+gfx.drawText(27,197,"Cross-Hair",255,105,105,255)
+end
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
+gfx.drawText(27,222,"Slow motion",105,255,105,255)
+end
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
+if switchval == 0 then
+gfx.drawText(27,247,"Eraser",105,105,255,255)
+else
+gfx.drawText(27,247,"Element/ Wall",105,105,255,255)
 end
 end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
-gfx.drawText(16,272,"Additional stats.",255,255,255,255)
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra information in hud
+gfx.drawText(27,272,"Additional HUD",255,255,255,255)
+end
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 292 and tpt.mousey < 312 then -- Relative heat
+gfx.drawText(27,297,"Relative heat",131,0,255,255)
 end
 end
 end
 
 local function quicksetmouse()
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 168 and tpt.mousey < 182 then
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 168 and tpt.mousey < 182 then
 if quickmenval == 0 then
 quickmenval = 1
 elseif quickmenval == 1 then
@@ -2436,7 +2467,7 @@ end
 return false
 end
 if quickmenval == 1 then
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 193 and tpt.mousey < 207 then -- Cross - hair
 if MANAGER.getsetting("CRK", "fancurs") == "0" then 
 MANAGER.savesetting("CRK", "fancurs","1") 
 elseif MANAGER.getsetting("CRK", "fancurs") == "1" then 
@@ -2444,7 +2475,7 @@ MANAGER.savesetting("CRK", "fancurs","0")
 end
 return false
 end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 217 and tpt.mousey < 232 then -- Slow motion
 if slowval == 0 then
 slowval = 1
 tpt.set_pause(1)
@@ -2455,7 +2486,7 @@ event.unregister(event.tick,slowmo)
 end
 return false
 end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 268 and tpt.mousey < 283 then -- Extra infor.
 if MANAGER.getsetting("CRK","extraval") == "0" then
 MANAGER.savesetting("CRK","extraval","1")
 event.register(event.tick,extstat)
@@ -2465,10 +2496,10 @@ event.unregister(event.tick,extstat)
 end
 return false
 end
-if tpt.mousex > 0 and tpt.mousex < 13 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 242 and tpt.mousey < 256 then -- Eraser
 if switchval == 0 then
 selectedelem = tpt.selectedl
-if selectedelem == "DEFAULT_WL_ERASE" or selectedelem == "DEFAULT_WL_DTECT" or selectedelem == "DEFAULT_WL_CNDT" or selectedelem == "DEFAULT_WL_EWALL" or selectedelem == "DEFAULT_WL_STRM"  or selectedelem == "DEFAULT_WL_FAN" or selectedelem == "DEFAULT_WL_LIQD" or selc == "DEFAULT_WL_ABSRB" or selectedelem == "DEFAULT_WL_WALL" or selectedelem ==" DEFAULT_WL_AIR" or selectedelem =="DEFAULT_WL_POWDR" or selectedelem =="DEFAULT_WL_CNDTR" or selectedelem =="DEFAULT_WL_EHOLE" or selectedelem =="DEFAULT_WL_GAS" or selectedelem =="DEFAULT_WL_GRVTY" or selectedelem =="DEFAULT_WL_ENRGY" or selectedelem =="DEFAULT_WL_NOAIR" or selectedelem =="DEFAULT_WL_STASIS"  or selectedelem =="DEFAULT_WL_CNDTW" then
+if selectedelem == "DEFAULT_WL_ERASE" or selectedelem == "DEFAULT_WL_DTECT" or selectedelem == "DEFAULT_WL_CNDT" or selectedelem == "DEFAULT_WL_EWALL" or selectedelem == "DEFAULT_WL_STRM"  or selectedelem == "DEFAULT_WL_FAN" or selectedelem == "DEFAULT_WL_LIQD" or selc == "DEFAULT_WL_ABSRB" or selectedelem == "DEFAULT_WL_WALL" or selectedelem ==" DEFAULT_WL_AIR" or selectedelem =="DEFAULT_WL_POWDR" or selectedelem =="DEFAULT_WL_CNDTR" or selectedelem =="DEFAULT_WL_EHOLE" or selectedelem =="DEFAULT_WL_ZHOLE" or selectedelem =="DEFAULT_WL_GAS" or selectedelem =="DEFAULT_WL_GRVTY" or selectedelem =="DEFAULT_WL_ENRGY" or selectedelem =="DEFAULT_WL_NOAIR" or selectedelem =="DEFAULT_WL_STASIS"  or selectedelem =="DEFAULT_WL_CNDTW" then
 tpt.selectedl = "DEFAULT_WL_ERASE"
 else
 tpt.selectedl = "DEFAULT_PT_NONE"
@@ -2477,6 +2508,19 @@ switchval = 1
 elseif switchval == 1 then
 tpt.selectedl = selectedelem
 switchval = 0
+end
+return false
+end
+if tpt.mousex > 7 and tpt.mousex < 22 and tpt.mousey > 292 and tpt.mousey < 312 then -- Relative heat
+if MANAGER.getsetting("CRK","relhdv") == "0" then
+MANAGER.savesetting("CRK", "relhdv", "1")
+ren.heatDisplayRelativeMode(true)
+tpt.display_mode(5)
+print("Relative heat display mode: ON")
+elseif MANAGER.getsetting("CRK","relhdv") == "1" then
+MANAGER.savesetting("CRK", "relhdv", "0")
+ren.heatDisplayRelativeMode(false)
+print("Relative heat display mode: OFF")
 end
 return false
 end
@@ -2512,6 +2556,10 @@ end
 if MANAGER.getsetting("CRK","pass") == "1" then
 event.register(event.tick,quickset)
 event.register(event.mousedown,quicksetmouse)
+end
+
+if MANAGER.getsetting("CRK","relhdv") == nil then --Special handling just for new features
+MANAGER.savesetting("CRK","relhdv","0")
 end
 
 if MANAGER.getsetting("CRK","al") == nil then --Defaults to prevent errors in script
@@ -2612,15 +2660,38 @@ end
 end)
 
 reset:action(function(sender)
-interface.beginConfirm(" Mod Reset help","Clicking on Reset will reset the mod back to the default state. All the lua scripts, their saved settings, saves, stamps and other data still remain intact.","Reset", 
+clearsb()
+newmenu:addComponent(rset1)
+newmenu:addComponent(rset2)
+end)
+
+rset1:action(function(sender) --Soft reset, doesn't delete anything.
+clearsb()
+interface.beginConfirm(" Mod Reset help","You have initiated soft reset. Clicking on Reset will reset the mod back to the default state. Only the mod settings will reset. Useful when some new features are added in an update.","Reset", 
 function (result)
 if result then 
 MANAGER.delsetting("CRK")
 os.remove("oldmod")
 platform.restart()
 end
+end)
+end)
+
+rset2:action(function(sender) --Soft reset, doesn't delete anything.
+clearsb()
+interface.beginConfirm(" Mod Reset help","You have initiated hard reset. Clicking on Reset will reset the mod back to the default state. Externally downloaded TPTMP and Notifications script will be deleted while other lua scripts will be unloaded, their saved settings might get deleted. Use scripts/autorunsettingsbackup.txt for recovery. Saves, stamps and other data will still remain intact.","Reset", 
+function (result)
+if result then 
+os.remove("scripts/downloaded/2 LBPHacker-TPTMulti.lua")
+os.remove("scripts/downloaded/219 Maticzpl-Notifications.lua")
+os.remove("scripts/autorunsettingsbackup.txt")--Delete the file if it already exists
+os.rename("scripts/autorunsettings.txt","scripts/autorunsettingsbackup.txt")--Rename the file for use as a backup.
+os.remove("scripts/autorunsettings.txt")
+os.remove("autorun.lua")
+os.remove("oldmod")
+platform.restart()
 end
-)
+end)
 end)
 
 function close()
@@ -2631,7 +2702,7 @@ barlength = 1
 end
 local posix2 = posix + 10
 function motwdisplay()
-if motw ~= "." then
+if motw ~= "." and onlinestatus == 1 then --Prevent black bars when offline.
 if posix > 600 then
 if posix2 > -1*(posix)then
 posix2 = posix2 - 1
@@ -8219,4 +8290,4 @@ if name == "" then
 end
 end
 notificationscript()
-failsafe = 1 -- Meant to be a global variable, used for detecting script crash
+failsafe = 1 -- Meant to be a global variable, used for detecting script crashes.

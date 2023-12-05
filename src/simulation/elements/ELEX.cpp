@@ -74,7 +74,7 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	}
 	else 
 	{
-		float frequency = 0.1045;
+		float frequency = 0.1045f;
 		cr = (int)(sin(frequency* cpart->tmp + 4) * 127 + 150);
 		cg = (int)(sin(frequency* cpart->tmp + 5) * 127 + 150);
 		cb = (int)(sin(frequency* cpart->tmp + 8) * 127 + 150);

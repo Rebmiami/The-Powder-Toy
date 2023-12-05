@@ -77,6 +77,8 @@ src>gui>search>Searchview.cpp
 (MIST, 242); Lua element 
 (SPSH, 243); Lua element 
 (RUBR, 244);
+(DFOM 245);
+(DIGS 246)
 
 For BTRY, replace this
  "if ((sim->elements[rt].Properties&PROP_CONDUCTS) && !(rt==PT_WATR||rt==PT_SLTW||rt==PT_NTCT||rt==PT_PTCT||rt==PT_INWR||rt == PT_FNTC||rt == PT_FPTC) && parts[ID(r)].life==0)"
@@ -95,3 +97,12 @@ c) Done.
 3) Open gitbash> git checkout -b vanilla (in case it fails to checkout)
 4) git checkout -b <branch name here>
 5) Push commits> push to origin> Done.
+
+13 Update release process for contributors
+Make changes and commit them to suitable branch (master is stable here and bledge is the bleeding edge one)
+Make sure to update the version number in both crackerk.lua file and in introtext.h
+Update the changelogs in Fullchangelog.txt (URS uses it to show changelogs in game)
+Push a tag with following format r.x.y where "r." initiates the build process, x and y denotes the major and minor versions respectively.
+Download the artifacts when done and put them in releases (github release named latest, this is where downloads are hosted and also where URS looks for files when updating)
+Make sure to rename the windows 32 bit binary as powder32 separately before uploading to releases in above step.
+Once done, update the parameters in pastebin file (only accessible to cracker1000 at time of writing this, might open to all in future if required). 
