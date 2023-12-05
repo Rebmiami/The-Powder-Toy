@@ -128,7 +128,7 @@ static int update(UPDATE_FUNC_ARGS)
 	float strength = BaseStrength + parts[i].tmp3 * 10;
 	if (parts[i].ctype == PT_O2)
 	{
-		strength = 1;
+		strength = 0.2f;
 	}
 
 	if (strain > strength) // Deform under immense stress from pressure
@@ -143,9 +143,17 @@ static int update(UPDATE_FUNC_ARGS)
 	}
 	// When particles are broken off of a mass of aluminium and exposed to high air velocity, break into powder.
 	if (nt == 8 && (pressureStdev + velocityAvg) / (alum + 1) > strength * 2) {
-		sim->part_change_type(i, x, y, PT_ALMP);
-		sim->parts[i].tmp = 40;
-		sim->parts[i].tmp2 = sim->rng.between(0, 6);
+		if (sim->parts[i].ctype == PT_O2)
+		{
+			// The aluminium oxide tower created by the MERC reaction shouldn't create extra particles due to the laws of thermodynamics
+			sim->kill_part(i);
+		}
+		else
+		{
+			sim->part_change_type(i, x, y, PT_ALMP);
+			sim->parts[i].tmp = 40;
+			sim->parts[i].tmp2 = sim->rng.between(0, 6);
+		}
 		return 1;
 	}
 
@@ -171,25 +179,65 @@ static int update(UPDATE_FUNC_ARGS)
 			parts[i].tmp = 1;
 		}
 
-		if (parts[i].ctype == PT_O2 && TYP(r) == PT_ALUM && sim->parts[ID(r)].ctype == PT_MERC && sim->rng.chance(std::clamp(parts[ID(r)].tmp2 - 10, 0, 3000), 3000))
+		if (parts[i].ctype == PT_O2 && TYP(r) == PT_ALUM && sim->parts[ID(r)].ctype == PT_MERC && sim->rng.chance(std::clamp(parts[ID(r)].tmp2, 0, 3000), 3000))
 		{
 			// "Traveler" position - it moves through the tower to find a suitable spot to grow from.
-			int tx = x;
-			int ty = y;
+			float tx = x + 0.5f;
+			float ty = y + 0.5f;
 			// Traveler velocity - how much it moves on each iteration if it has not found a suitable place to grow.
-			int tdx = x - rx;
-			int tdy = y - ry;
-			for (int j = 0; j < 10; j++)
+			float tdx = x - rx;
+			float tdy = y - ry;
+			
+			for (int j = 0; j < 30; j++)
 			{
+				for (int k = 0; k < 5; k++)
+				{
+					int gx = tx + sim->rng.between(-5, 5);
+					int gy = ty + sim->rng.between(-5, 5);
+					if (TYP(pmap[gy][gx]) != PT_ALUM)
+					{
+						tdx += (tx - gx - 0.5f) * 0.02f;
+						tdy += (ty - gy - 0.5f) * 0.02f;
+					}
+					if (TYP(pmap[gy][gx]) == PT_ALUM && sim->parts[ID(pmap[gy][gx])].ctype != PT_O2)
+					{
+						tdx += (tx - gx - 0.5f) * 0.1f;
+						tdy += (ty - gy - 0.5f) * 0.1f;
+					}
+				}
+
+				float mag = sqrt(pow(tdx, 2) + pow(tdy, 2));
+				if (mag == 0.f)
+				{
+					mag = 1.f;
+				}
+				tdx = tdx / mag;
+				tdy = tdy / mag;
 				tx += tdx;
 				ty += tdy;
 				int np = sim->create_part(-1, tx, ty, PT_ALUM);
 				if (np >= 0)
 				{
 					parts[np].ctype = PT_O2;
-					parts[np].tmp2 = 10;
-					parts[ID(r)].tmp2 -= 10;
+					parts[np].tmp2 = 1;
+					parts[ID(r)].tmp2 -= 1;
 					break;
+				}
+				else
+				{
+					int pp = pmap[(int)ty][(int)tx];
+					if (TYP(pp) == PT_ALUM)
+					{
+						sim->parts[ID(pp)].life = 10;
+						if (sim->parts[ID(pp)].ctype != PT_O2)
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -209,7 +257,7 @@ static int update(UPDATE_FUNC_ARGS)
 	}
 
 	// When alloyed, becomes harder to melt.
-	if (parts[i].temp > 660.32f + 273.15f + parts[i].tmp3 * 200.0f)
+	if (parts[i].temp > 660.32f + 273.15f + parts[i].tmp3 * 200.0f && parts[i].ctype != PT_O2)
 	{
 		sim->part_change_type(i,x,y,PT_LAVA);
 		parts[i].ctype = PT_ALUM;
@@ -223,7 +271,7 @@ static int update(UPDATE_FUNC_ARGS)
 static int graphics(GRAPHICS_FUNC_ARGS)
 {
 	// Appear brighter when oxidized
-	if (cpart->tmp > 0)
+	if (cpart->tmp > 0 || cpart->ctype == PT_O2)
 	{
 		*colr += 40;
 		*colg += 40;

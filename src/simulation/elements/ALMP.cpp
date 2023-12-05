@@ -111,10 +111,15 @@ static int update(UPDATE_FUNC_ARGS)
 	else
 	{
 		// Aluminium oxide can be melted back into aluminium
-		sim->part_change_type(i,x,y,PT_LAVA);
-		parts[i].ctype = PT_ALUM;
-		parts[i].tmp = 0;
-		return 1;
+		if (parts[i].temp > 2072.0f + 273.15f)
+		{
+			sim->part_change_type(i,x,y,PT_LAVA);
+			parts[i].ctype = PT_ALUM;
+			parts[i].tmp = 0;
+			parts[i].tmp2 = 0;
+			parts[i].tmp3 = 0;
+			return 1;
+		}
 	}
 	return 0;
 }
